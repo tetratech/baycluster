@@ -1,7 +1,7 @@
 # ####
 #' @title Calculate water year from given year and month 
 #' 
-#' @descriptions Water years begin on October 1 and are accorded the year
+#' @description Water years begin on October 1 and are accorded the year
 #'   associated with the ending day of the water year. For example, October 1,
 #'   2016 is in the 2017 water year.
 #'   
@@ -13,7 +13,7 @@
 #' 
 #' @return vector of water year
 #' 
-#' @seealso 
+#' @seealso \code{\link{readTextFile}}
 #' 
 #' @export
 #' 

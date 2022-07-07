@@ -1,9 +1,9 @@
 # ####
 #' @title Read text file into variable
 #' 
-#' @descriptions This function facilitates reading in text files with standard 
+#' @description This function facilitates reading in text files with standard 
 #' and non-standard headers. The two non-standard file types are 1) USGS' WRTDS
-#' WRTDS reporting file for estimated concentrations and loads and 2) USGS
+#' reporting file for estimated concentrations and loads and 2) USGS
 #' flow retrievals.
 #'   
 #' @details ...
@@ -27,7 +27,7 @@
 #' 
 #' @return data table
 #' 
-#' @seealso 
+#' @seealso \code{\link{calcQuanClass}}
 #' 
 #' @export
 #' 

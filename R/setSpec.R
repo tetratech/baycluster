@@ -1,7 +1,7 @@
 # ####
 #' @title Organize cluster analysis specifications into a list
 #' 
-#' @descriptions Organize user-provided cluster analysis specifications into a
+#' @description Organize user-provided cluster analysis specifications into a
 #'   list. And where specifications are not provided then make some default
 #'   selections.
 #'   
@@ -48,7 +48,7 @@
 #' 
 #' @return list with cluster specifications
 #' 
-#' @seealso 
+#' @seealso \code{\link{calcQuanClass}}
 #' 
 #' @export
 #' 

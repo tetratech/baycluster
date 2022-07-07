@@ -1,14 +1,15 @@
 # ####
 #' @title Calculate and return quantile class by year and month
 #' 
-#' @descriptions Calculate and return quantile class by year and month
+#' @description Calculate and return quantile class by year and month
 #'   
 #' @details 
 #' Question: Should quantiles be computed with all data and then trim
 #' un-used years data? Or should data be trimmed by year first? 
 #' 
 #' 
-#' @param data Data to analyze
+#' @param data Data table to analyze. Must have two columns: \code{dateCol} and
+#'   \code{valueCol} which contain a date and value to analyze, respectively
 #' @param dateCol Column name that contains date
 #' @param valueCol Column name that contains values to analyze for quantiles
 #' @param transform Log transform data before analysis
@@ -20,9 +21,10 @@
 #' @examples 
 #' # TBD
 #' 
-#' @return flow data read in as tibble
+#' @return data table with cross tabulation of quantiles by year and month
 #' 
-#' @seealso 
+#' @seealso \code{\link{readTextFile}}
+#' 
 #' 
 #' @importFrom rlang .data
 #' 
