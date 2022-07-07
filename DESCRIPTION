@@ -1,0 +1,34 @@
+Package: baycluster
+Type: Package
+Title: Cluster Analysis of Long-term Water Quality Trends
+Description: Developed to enable users to evaluate compare
+long-term trends using cluster analysis.
+Author: Elgin Perry, Jon Harcum, Erik W Leppo
+Version: 0.0.0.9001  
+Maintainer: Jon Harcum <Jon.Harcum@tetratech.com>
+Depends:
+    R (>= 3.5.0)
+License: GPL-3    
+LazyData: TRUE
+RoxygenNote: 7.1.2
+Encoding: UTF-8
+Imports:
+    tidyverse,
+    lubridate,
+    knitr,
+    mgcv,
+    pander 
+Suggests:
+    devtools, 
+    markdown,
+    rmarkdown,
+    testthat
+URL: https://github.com/tetratech/baycluster
+BugReports: https://github.com/tetratech/baycluster/issues
+VignetteBuilder: knitr
+Collate: calcQuanClass.R
+     calcWaterYear.R
+     readTextFile.R
+     setSpec.R
+     headers2.R
+     zzz.R
