@@ -24,7 +24,7 @@ calcWaterYear <- function(month,year) {
     # correct type of file must be specified
     `%notin%` <- Negate(`%in%`)
     
-    x<-stopifnot(
+    stopifnot(
       month %notin% c(1:12)
     )
   } # end ~ error trap

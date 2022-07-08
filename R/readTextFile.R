@@ -9,8 +9,8 @@
 #' @details ...
 #' 
 #' 
-#' @param fileName Name of input file
-#' @param filePath File path
+#' @param fileName Name of input file as character array
+#' @param filePath File path as character array
 #' @param fileType Indicates what type of file structure is expected. Set
 #'   \code{fileType = "WRTDS"} or \code{fileType = "flow"} to use specialized
 #'   settings built into function.  \code{fileType = "standard"} is default
@@ -60,7 +60,7 @@ readTextFile <- function(fileName
   # ----< Error trap >----
   {
     # correct type of file must be specified
-    x<-stopifnot(
+    stopifnot(
       fileType %in% sk$type
     )
   } # end ~ error trap

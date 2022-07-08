@@ -55,7 +55,7 @@ calcQuanClass <- function(data
   # ----< Error trap >----
   {
     # dateCol and valueCol must exist and be Date and numeric fields, respectively
-    x<-stopifnot(
+    stopifnot(
       dateCol %in% names(data) 
       , valueCol %in% names(data)
       , lubridate::is.Date(pull(data, var = dateCol))
