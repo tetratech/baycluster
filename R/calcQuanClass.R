@@ -10,13 +10,16 @@
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{dateCol} and
 #'   \code{valueCol} which contain a date and value to analyze, respectively
-#' @param dateCol Column name that contains date
-#' @param valueCol Column name that contains values to analyze for quantiles
-#' @param transform Log transform data before analysis
-#' @param probabilities Vector of probabilities to analyze
+#' @param dateCol Column name that contains date, e.g., \code{dateCol =
+#'   SampleDate}
+#' @param valueCol Column name that contains values to analyze for quantiles,
+#'   e.g., \code{valueCol = Concentrations}
+#' @param transform Log transform values before analysis
+#' @param probabilities Vector of increasing probabilities to analyze. 
 #' @param startYear First year to maintain in returned data set
 #' @param endYear Last year to maintain in returned data set
-#' @param yearType "calendar" or "water" year 
+#' @param yearType Indicate whether to perform analysis on a "calendar" or
+#'   "water" year
 #'  
 #' @examples 
 #' # TBD
@@ -31,8 +34,8 @@
 #' @export
 #' 
 calcQuanClass <- function(data 
-  , dateCol = "date"
-  , valueCol = "flow"
+  , dateCol = date
+  , valueCol = flow
   , transform = TRUE
   , probabilities = seq(0,1,0.25)
   , startYear
@@ -42,8 +45,8 @@ calcQuanClass <- function(data
   # ----< testing >----
   {
     if (FALSE) {
-      dateCol = "date"
-      valueCol = "flow"
+      dateCol = date
+      valueCol = flow
       transform = TRUE  # FALSE
       probabilities = seq(0,1,0.25)
       startYear = 1994
@@ -55,12 +58,12 @@ calcQuanClass <- function(data
   # ----< Error trap >----
   {
     # dateCol and valueCol must exist and be Date and numeric fields, respectively
-    x<-stopifnot(
-      dateCol %in% names(data) 
-      , valueCol %in% names(data)
-      , lubridate::is.Date(pull(data, var = dateCol))
-      , is.numeric(pull(data, var = valueCol))
-    )
+    stopifnot(
+      deparse(substitute(dateCol)) %in% names(data) 
+      , deparse(substitute(valueCol)) %in% names(data)
+      , lubridate::is.Date(dplyr::pull(data[ , deparse(substitute(dateCol))]))
+      , is.numeric(dplyr::pull(data[ , deparse(substitute(valueCol))]))
+      )
   } # end ~ error trap
   
   # ----< Set month processing order based on yearType >----
@@ -74,22 +77,17 @@ calcQuanClass <- function(data
     data1 <- data %>%
       
       # down-select to columns with date and value
-      # select(., !!sym(dateCol), !!sym(valueCol)) %>%
-      select(., .data[[dateCol]], .data[[valueCol]]) %>%
+      select(., {{dateCol}}, {{valueCol}}) %>%
       
       # calculations
       mutate(.
         # extract year and month
-        # , year  = lubridate::year(!!sym(dateCol))
-        # , month = lubridate::month(!!sym(dateCol))
-        , year  = lubridate::year(.data[[dateCol]])
-        , month = lubridate::month(.data[[dateCol]])
+        , year  = lubridate::year({{dateCol}})
+        , month = lubridate::month({{dateCol}})
         
         # log transform if option is selected
-        # , value = case_when(transform ~ log(!!sym(valueCol))
-        #   , TRUE ~ !!sym(valueCol))
-        , value = case_when(transform ~ log(.data[[valueCol]])
-          , TRUE ~ .data[[valueCol]])) 
+        , value = case_when(transform ~ log({{valueCol}})
+          , TRUE ~ {{valueCol}})) 
       
     # adjust year when water year selected
     if (tolower(yearType)== "water") {
