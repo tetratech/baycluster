@@ -13,13 +13,14 @@ readTextFile(
 )
 }
 \arguments{
-\item{fileName}{Name of input file}
+\item{fileName}{Name of input file as character array}
 
-\item{filePath}{File path}
+\item{filePath}{File path as character array. Setting \code{filePath = ".."}
+reads from the current working directory}
 
 \item{fileType}{Indicates what type of file structure is expected. Set
 \code{fileType = "WRTDS"} or \code{fileType = "flow"} to use specialized
-settings built into function.  \code{fileType = "standard"} is default
+settings built into the function.  \code{fileType = "standard"} is the default
 setting for typical comma or tab delimited text files with the header
 as the first line.}
 

@@ -6,8 +6,8 @@
 \usage{
 calcQuanClass(
   data,
-  dateCol = "date",
-  valueCol = "flow",
+  dateCol = date,
+  valueCol = flow,
   transform = TRUE,
   probabilities = seq(0, 1, 0.25),
   startYear,
@@ -19,19 +19,22 @@ calcQuanClass(
 \item{data}{Data table to analyze. Must have two columns: \code{dateCol} and
 \code{valueCol} which contain a date and value to analyze, respectively}
 
-\item{dateCol}{Column name that contains date}
+\item{dateCol}{Column name that contains date, e.g., \code{dateCol =
+SampleDate}}
 
-\item{valueCol}{Column name that contains values to analyze for quantiles}
+\item{valueCol}{Column name that contains values to analyze for quantiles,
+e.g., \code{valueCol = Concentrations}}
 
-\item{transform}{Log transform data before analysis}
+\item{transform}{Log transform values before analysis}
 
-\item{probabilities}{Vector of probabilities to analyze}
+\item{probabilities}{Vector of increasing probabilities to analyze.}
 
 \item{startYear}{First year to maintain in returned data set}
 
 \item{endYear}{Last year to maintain in returned data set}
 
-\item{yearType}{"calendar" or "water" year}
+\item{yearType}{Indicate whether to perform analysis on a "calendar" or
+"water" year}
 }
 \value{
 data table with cross tabulation of quantiles by year and month

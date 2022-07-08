@@ -5,27 +5,34 @@
 #'   associated with the ending day of the water year. For example, October 1,
 #'   2016 is in the 2017 water year.
 #'   
-#' @param month month must be from 1-12
 #' @param year year
+#' @param month month must be from 1-12
 #' 
 #' @examples 
-#' # TBD
+#' \dontrun{
+#' dat0 <- tidyr::tibble( a = seq(as.Date('2022-06-10'), as.Date('2023-03-01'), by = "30 days"))
+#' 
+#' dat0 <- calcYearMonth(dat0
+#'   , dateCol = a
+#'   , yearCol = Year
+#'   , monthCol = theMonth)
+#' 
+#' dat0$WY <- calcWaterYear(dat0$Year, dat0$theMonth)
+#' }
 #' 
 #' @return vector of water year
 #' 
-#' @seealso \code{\link{readTextFile}}
+#' @seealso \code{\link{readTextFile}} \code{\link{calcYearMonth}}
 #' 
 #' @export
 #' 
-calcWaterYear <- function(month,year) {
+calcWaterYear <- function(year, month) {
   
   # ----< Error trap >----
   {
-    # correct type of file must be specified
-    `%notin%` <- Negate(`%in%`)
-    
+    # stop if months from 1:12
     stopifnot(
-      month %notin% c(1:12)
+      month %in% c(1:12)
     )
   } # end ~ error trap
   
