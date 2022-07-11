@@ -6,7 +6,7 @@
 \usage{
 createBasePred(
   startYear = 1990,
-  endYear = lubridate::year(Sys.Date()),
+  endYear = year(Sys.Date()),
   monthGrid = 1:12,
   dayGrid = 15,
   month.adj = NA
@@ -25,14 +25,16 @@ createBasePred(
 }
 \value{
 data table with base prediction data set
-year - year (calendar basis)  
-month - month  
-day - day of month  
-date - date  
-dyear - date expressed as decimal year  
-doy - day of year (calendar basis)  
-year.adj - year (adjusted based on month.adj)  
-doy.adj - day of year (adjusted based on year.adj)
+\itemize{
+\item year - year (calendar basis)   
+\item month - month   
+\item day - day of month   
+\item date - date   
+\item dyear - date expressed as decimal year   
+\item doy - day of year (calendar basis)   
+\item year.adj - year (adjusted based on month.adj)   
+\item doy.adj - day of year (adjusted based on year.adj)  
+}
 }
 \description{
 Constructs the base prediction data set for GAM clusters and

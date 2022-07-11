@@ -35,23 +35,30 @@
 #' }
 #' 
 #' @return data table with base prediction data set
-#' year - year (calendar basis)  
-#' month - month  
-#' day - day of month  
-#' date - date  
-#' dyear - date expressed as decimal year  
-#' doy - day of year (calendar basis)  
-#' year.adj - year (adjusted based on month.adj)  
-#' doy.adj - day of year (adjusted based on year.adj)  
+#' \itemize{
+#' \item year - year (calendar basis)   
+#' \item month - month   
+#' \item day - day of month   
+#' \item date - date   
+#' \item dyear - date expressed as decimal year   
+#' \item doy - day of year (calendar basis)   
+#' \item year.adj - year (adjusted based on month.adj)   
+#' \item doy.adj - day of year (adjusted based on year.adj)  
+#' }
 #' 
 #' @seealso \code{\link{readTextFile}}
 #' 
 #' @importFrom rlang .data
+#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
+#' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
+#' @importFrom tibble tibble as_tibble
+#' @importFrom knitr kable 
 #' 
 #' @export
 #' 
 createBasePred <- function(startYear = 1990
-  , endYear = lubridate::year(Sys.Date())
+  , endYear = year(Sys.Date())
   , monthGrid = 1:12
   , dayGrid = 15
   , month.adj = NA) {
@@ -70,9 +77,9 @@ createBasePred <- function(startYear = 1990
       mutate(.
         
         # compute date, decimal date, and day of year
-        , date  = lubridate::ymd(paste(year, month, day, sep = "-")) # date
-        , dyear = lubridate::decimal_date(date)                      # decimal year
-        , doy   = lubridate::yday(date)                              # day of year
+        , date  = ymd(paste(year, month, day, sep = "-")) # date
+        , dyear = decimal_date(date)                      # decimal year
+        , doy   = yday(date)                              # day of year
         
         , year.adj = year
         , doy.adj = doy
@@ -105,7 +112,7 @@ createBasePred <- function(startYear = 1990
     
   } # end ~ Make year.adj for alternative year types
   
-  # Make doy.adjustments for alternative year types ####
+  # Make doy.adj for alternative year types ####
   {
     data <- data %>%
       filter(., between(year.adj , startYear , endYear))
@@ -113,8 +120,8 @@ createBasePred <- function(startYear = 1990
     # ** do not combine with above because unique(month) cannot be calculated
     data <- data %>%
       mutate(.
-        , d1  = as.numeric(date - lubridate::make_date(year, unique(month)[1], 1) )+1
-        , d2 = as.numeric(date - lubridate::make_date(year-1, unique(month)[1], 1))+1
+        , d1  = as.numeric(date - make_date(year, unique(month)[1], 1) )+1
+        , d2 = as.numeric(date - make_date(year-1, unique(month)[1], 1))+1
         , doy.adj = case_when( between(d1,1,366) ~ d1
           , between(d2,1,366) ~ d2
           , TRUE ~ NA_real_)
@@ -132,8 +139,8 @@ createBasePred <- function(startYear = 1990
         , monthGrid = monthGrid
         , dayGrid = dayGrid
         , month.adj = month.adj
-        , firstDay = lubridate::floor_date(min(data$date), unit = "month")
-        , lastDay = lubridate::ceiling_date(max(data$date), unit = "month")-1
+        , firstDay = floor_date(min(data$date), unit = "month")
+        , lastDay = ceiling_date(max(data$date), unit = "month")-1
         , month.order = unique(data$month)
       )
   } # end ~ Add attributes documenting prediction data set creation
