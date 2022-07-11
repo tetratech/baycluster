@@ -4,7 +4,7 @@ Title: Cluster Analysis of Long-term Water Quality Trends
 Description: Developed to enable users to evaluate compare
     long-term trends using cluster analysis. 
 Author: Elgin Perry, Jon Harcum, Erik W Leppo
-Version: 0.0.0.9004
+Version: 0.0.0.9006
 Maintainer: Jon Harcum <Jon.Harcum@tetratech.com>
 Depends:
     R (>= 3.5.0)
@@ -13,26 +13,31 @@ LazyData: TRUE
 RoxygenNote: 7.2.0
 Encoding: UTF-8
 Imports:
-    tidyverse,
-    tidyr,
-    dplyr,
-    lubridate,
-    magrittr,
-    knitr,
-    mgcv,
-    pander,
-    rlang
+  tidyverse,
+  tidyr,
+  dplyr,
+  ggplot2,
+  tibble,
+  readr,
+  lubridate,
+  magrittr,
+  knitr,
+  mgcv,
+  pander,
+  rlang
 Suggests:
-    devtools, 
-    markdown,
-    rmarkdown,
-    testthat
-URL: https://github.com/tetratech/baycluster
-BugReports: https://github.com/tetratech/baycluster/issues
+  devtools, 
+  markdown,
+  rmarkdown,
+  testthat
+URL: https://github.com/jharcum/baycluster
+BugReports: https://github.com/jharcum/baycluster/issues
 VignetteBuilder: knitr
 Collate: calcQuanClass.R
      calcWaterYear.R
      calcYearMonth.R
+     chkRDAfiles.R
+     createBasePred.R
      readTextFile.R
      setSpec.R
      headers2.R

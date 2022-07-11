@@ -29,5 +29,5 @@ below using the `remotes` package.
 
 ``` r
 if(!require(remotes)){install.packages("remotes")}  #install if needed
-install_github("tetratech/baycluster", force = TRUE, build_vignettes = TRUE)
+install_github("jharcum/baycluster", force = TRUE, build_vignettes = TRUE)
 ```
