@@ -30,6 +30,14 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
+#' @importFrom rlang .data
+#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
+#' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
+#' @importFrom tibble tibble as_tibble
+#' @importFrom knitr kable 
+#' @importFrom readr read_lines read_delim
+#' 
 #' @export
 #' 
 readTextFile <- function(fileName
@@ -96,7 +104,7 @@ readTextFile <- function(fileName
   {
     data <- read_delim(file = fname
       , col_names = NA
-      , skip      = dplyr::pull(skip + sk[iType,"chk1"])
+      , skip      = pull(skip + sk[iType,"chk1"])
       , na        = c("", "NA")    
       , trim_ws   = TRUE
       , show_col_types = FALSE
@@ -108,7 +116,7 @@ readTextFile <- function(fileName
       # when user-supplied column names are *NOT* provided
       data1 <- read_delim(file = fname
         , col_names = NA
-        , skip    = dplyr::pull(skip + sk[iType,"chk2"])
+        , skip    =  pull(skip + sk[iType,"chk2"])
         , na      = "NA"    
         , trim_ws = TRUE
         , show_col_types = FALSE

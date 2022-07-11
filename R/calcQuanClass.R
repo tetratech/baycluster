@@ -30,6 +30,12 @@
 #' 
 #' 
 #' @importFrom rlang .data
+#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
+#' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
+#' @importFrom tibble tibble as_tibble
+#' @importFrom knitr kable 
+
 #' 
 #' @export
 #' 
@@ -61,8 +67,8 @@ calcQuanClass <- function(data
     stopifnot(
       deparse(substitute(dateCol)) %in% names(data) 
       , deparse(substitute(valueCol)) %in% names(data)
-      , lubridate::is.Date(dplyr::pull(data[ , deparse(substitute(dateCol))]))
-      , is.numeric(dplyr::pull(data[ , deparse(substitute(valueCol))]))
+      , is.Date(pull(data[ , deparse(substitute(dateCol))]))
+      , is.numeric(pull(data[ , deparse(substitute(valueCol))]))
       )
   } # end ~ error trap
   
@@ -82,8 +88,8 @@ calcQuanClass <- function(data
       # calculations
       mutate(.
         # extract year and month
-        , year  = lubridate::year({{dateCol}})
-        , month = lubridate::month({{dateCol}})
+        , year  = year({{dateCol}})
+        , month = month({{dateCol}})
         
         # log transform if option is selected
         , value = case_when(transform ~ log({{valueCol}})
