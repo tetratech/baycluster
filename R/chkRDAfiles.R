@@ -81,11 +81,12 @@ chkRDAfiles <- function(
   # ----< Create data table of files to look for >----
   {
     file.log <- 
-      tibble(station = stationVec
+      tibble(expand.grid(station = stationVec
         , wqParm = wqParm
-        , layer = layer) %>%
+        , layer = layer)) %>%
       mutate(.
-        , fileName = paste0(paste(station, wqParm, layer, sep = "_"),".rda")
+        , fileBase = paste(station, wqParm, layer, sep = "_")
+        , fileName = paste0(fileBase,".rda")
         , fileExists = file.exists(file.path(rdaFolder, wqParm, fileName))
         , gamOptionEvalAvail = NA_character_
         , gamOptionSel = NA_character_
@@ -103,7 +104,7 @@ chkRDAfiles <- function(
         # When a gamResult file exists: ####
         
         # Load the gam result 
-        load(file.path(rdaFolder, wqParm, file.log[k1,"fileName"]))
+        load(file.path(rdaFolder, unlist(file.log[k1,"wqParm"]), file.log[k1,"fileName"]))
         
         # Find all gamOption## in gamResult ####
         x1 <- names(gamResult)[substr(names(gamResult), 1, 9) == "gamOutput"]
@@ -142,6 +143,17 @@ chkRDAfiles <- function(
       
     } # end ~ for (k1 in 1:NROW(file.log))
     
+    # Determine Concerns about date range of data ####
+    file.log <- file.log %>%
+        mutate(.
+          , dataMinDateQC = case_when(dataMinDate <= make_date(startYear,1,1) %m+% months(month_threshold) ~ "Ok"
+          , dataMinDate > make_date(startYear,1,1) %m+% months(month_threshold) ~ "Concern"
+            , TRUE ~ NA_character_)
+          , dataMaxDateQC = case_when(dataMaxDate >= make_date(endYear,12,31) %m-% months(month_threshold) ~ "Ok"
+            , dataMaxDate < make_date(endYear,12,31) %m-% months(month_threshold) ~ "Concern"
+            , TRUE ~ NA_character_) 
+        )
+    
   } # end ~ File available | GAM # | dates
   
   # ----< Organize plot settings >----
@@ -161,40 +173,39 @@ chkRDAfiles <- function(
     site1 <- file.log %>%
       filter(., fileExists & is.na(gamOptionSel))
     
-    # Extract station and date info to ggplot ready table  ####
+    
+    # Determine Concerns about date range of data ####
     file.log.toPlot <- bind_rows(
       # data not collected early enough
       file.log %>%
         mutate(.
           , Date = dataMinDate
           , Type = "Minimum"
-          , Warning = case_when(dataMinDate <= make_date(startYear,1,1) %m+% months(month_threshold) ~ "Ok"
-            , TRUE ~ "Concern")
+          , Warning = dataMinDateQC
         ) %>%
-        select(., station, Date, Type, Warning)
+        select(., station, fileBase, Date, Type, Warning)
       
       # data not collected recently enough
       , file.log %>%
-        filter(., ) %>%
         mutate(.
           , Date = dataMaxDate
           , Type = "Maximum"
-          , Warning = case_when(dataMaxDate >= make_date(endYear,12,31) %m-% months(month_threshold) ~ "Ok"
-            , TRUE ~ "Concern")
+          , Warning = dataMaxDateQC
         ) %>%
-        select(., station, Date, Type, Warning)
+        select(., station, fileBase, Date, Type, Warning)
     )
     
-    file.log.toPlot$station <- as.factor(file.log.toPlot$station)
+    file.log.toPlot$fileBase <- factor(file.log.toPlot$fileBase
+      , levels = file.log$fileBase)
     
   } # end ~ Organize plot settings
   
   # ----< plot data >----
   {
-    p <- ggplot(file.log.toPlot, aes(x=station, y=Date, shape = Type, fill = Warning)) +
+    p <- ggplot(file.log.toPlot, aes(x=fileBase, y=Date, shape = Type, fill = Warning)) +
       theme_bw() +
       ylab("Date") +
-      xlab("Station") +
+      xlab("Station + wqParm + layer") +
       scale_y_date(limits = ylim, expand = expansion(mult = c(0.2, 0.2))) +
       theme(axis.text.x = element_text(angle = 90, hjust = 0)) +
       # add startYear and endYear for reference 
@@ -206,27 +217,36 @@ chkRDAfiles <- function(
       scale_fill_manual(values=c("red", "white"),
         guide = guide_legend(override.aes = list(shape=21, size=4))) + 
       # Highlight stations with no data file found in magenta
-      geom_vline(data= site0, aes(xintercept = station), color=alpha("magenta", 0.3), size=5) + 
+      geom_vline(data= site0, aes(xintercept = fileBase), color=alpha("magenta", 0.3), size=5) + 
       # Highlight stations with a data file but no eligble gam found in yellow
-      geom_vline(data= site1, aes(xintercept = station), color=alpha("yellow", 0.3), size=5) + 
+      geom_vline(data= site1, aes(xintercept = fileBase), color=alpha("yellow", 0.3), size=5) + 
       # Fill in station/dates that do not meet date threshold
       labs(title = "GAM File Availability"
-        , subtitle = paste0("Parameter: ",wqParm," , Layer: ",layer)
+        , subtitle = paste0("Parameter: "
+          , paste0(wqParm, "", collapse = ", ")
+          , "   Layer: "
+          , paste0(layer, "", collapse = ", ")
+          )
         , caption = "Puple: File not found.\nYellow: Correct GAM not found.") +
       labs(shape = "Date", fill = "Condition")
   } # end ~ plot data
   
-  .F(paste0("GAM file availability (parameter: ",wqParm," , layer: ",layer,")."))
+  .F("GAM file availability.")
   suppressWarnings(print(p))
   
   # ----< output report >----
   {
-    .T(paste0("GAM file availability (parameter: ",wqParm," , layer: ",layer,")."))
+    .T(paste0("GAM file availability (parameter: "
+      , paste0(wqParm, "", collapse = ", ")
+      , ",   layer: "
+      , paste0(layer, "", collapse = ", ")
+      , ").") , t="e")
     print(kable(file.log[,c("station", "fileName", "fileExists"
-      , "gamOptionEvalAvail", "gamOptionSel", "dataMinDate", "dataMaxDate")]
+      , "gamOptionEvalAvail", "gamOptionSel", "dataMinDate", "dataMinDateQC"
+      , "dataMaxDate", "dataMaxDateQC")]
       , col.names = c("Station", "File", "Exist?", "Available", "Selected"
-        , "Min. Date", "Max. Date")
-      , align=c("l","l","l","l","l","r","r")))
+        , "Min. Date", "QC",  "Max. Date", "QC")
+      , align=c("l","l","l","l","l","r","l","r","l")))
   } # end ~ output report
   
   return(file.log)

@@ -4,8 +4,15 @@
 #' @description Calculate and return quantile class by year and month
 #'   
 #' @details 
-#' Question: Should quantiles be computed with all data and then trim
-#' un-used years data? Or should data be trimmed by year first? 
+#' Quantiles are computed using all provided data, i.e., long-term
+#' quantiles. The \code{startYear} and \code{endYear} limit the returned
+#' data table to the desired year. 
+#' 
+#' Setting \code{probabilities} to \code{seq(0, 1, length.out = 5)} results in
+#' probabilities being set to 0, 0.25, 0.50, 0.75, and 1.00; This leads to four
+#' (4) classes being assigned where the leftmost interval corresponds to level
+#' one, the next leftmost to level two and so on. Setting \code{length.out = 6}
+#' will yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
 #' 
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{dateCol} and
@@ -20,6 +27,7 @@
 #' @param endYear Last year to maintain in returned data set
 #' @param yearType Indicate whether to perform analysis on a "calendar" or
 #'   "water" year
+#' @param report Indicate whether to print table
 #'  
 #' @examples 
 #' # TBD
@@ -43,10 +51,11 @@ calcQuanClass <- function(data
   , dateCol = date
   , valueCol = flow
   , transform = TRUE
-  , probabilities = seq(0,1,0.25)
+  , probabilities = seq(0, 1, length.out = 5)
   , startYear
   , endYear
-  , yearType = "calendar") { 
+  , yearType = "calendar"
+  , report = TRUE) { 
   
   # ----< testing >----
   {

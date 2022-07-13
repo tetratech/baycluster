@@ -11,7 +11,7 @@
 
 \item{n}{table number}
 
-\item{t}{emphasis or stong}
+\item{t}{emphasis or strong}
 }
 \value{
 n/a
