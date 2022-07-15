@@ -24,6 +24,8 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
+#' @importFrom grDevices col2rgb colours
+#' 
 #' @export
 #' 
 hexColor2Name <- function(hexCol) { 

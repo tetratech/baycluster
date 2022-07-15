@@ -109,7 +109,7 @@ calcQuanClass <- function(data
     
     # adjust year when water year selected
     if (tolower(yearType)== "water") {
-      data1$year <- calcWaterYear(yearIn = data1$year, monthIn = data1$month)
+      data1 <- calcWaterYear(data1, "year", "month", "year")
     }
     
   } # end ~ Create data set for analysis

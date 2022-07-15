@@ -1,12 +1,16 @@
 # ####
-#' @title Calculate water year from given year and month 
+#' @title Add water year from given year and month to a data table
 #' 
 #' @description Water years begin on October 1 and are accorded the year
 #'   associated with the ending day of the water year. For example, October 1,
 #'   2016 is in the 2017 water year.
 #'   
-#' @param yearIn year
-#' @param monthIn month must be from 1-12
+#' @param data Data table to analyze. Must have two column: \code{yearCol} and
+#'   \code{monthCol}
+#' @param yearCol Column name that contains year data
+#' @param monthCol Column name that contains month data
+#' @param wateryearCol Column name to store water year. If left as NA, then
+#'   yearCol will be overwritten.
 #' 
 #' @examples 
 #' \dontrun{
@@ -17,7 +21,7 @@
 #'   , yearCol = "Year"
 #'   , monthCol = "theMonth")
 #' 
-#' dat0$WY <- calcWaterYear(dat0$Year, dat0$theMonth)
+#' dat0 <- calcWaterYear(dat0, "Year", "theMonth", "WY")
 #' }
 #' 
 #' @return vector of water year
@@ -26,25 +30,34 @@
 #' 
 #' @export
 #' 
-calcWaterYear <- function(yearIn, monthIn) {
+calcWaterYear <- function(data
+  , yearCol = "year"
+  , monthCol = "month"
+  , wateryearCol = NA) {
   
-  # yearIn = data1$year; monthIn=data1$month
-  # tmp <- tibble(year = yearIn, month = monthIn)
-  
+  # ---- < set wateryearCol to overwrite yearCol if not provided >---
+  {
+    if (any(is.na(wateryearCol))) {
+      wateryearCol = yearCol
+    }
+  }
+
   # ----< Error trap >----
   {
-    
-    # stop if months from 1:12
+    # yearCol and monthCol must exist in data
     stopifnot(
-      monthIn %in% 1:12
+      yearCol %in% names(data) 
+      , monthCol %in% names(data) 
+      , unlist(data[ , monthCol]) %in% 1:12
     )
   } # end ~ error trap
   
+  
   # ----< Calculate water year >----
   {
-    yearOut <- yearIn + monthIn %in% 10:12
+    data[ , wateryearCol] <- data[ , yearCol] + unlist(data[ , monthCol]) %in% 10:12
   }
   
-  return(yearOut)
+  return(data)
   
 } # end ~ function: calcWaterYear
