@@ -4,10 +4,12 @@
 \alias{outSummStat}
 \title{Output summary statistics about table into table}
 \usage{
-outSummStat(data)
+outSummStat(data, tblFTout = FALSE)
 }
 \arguments{
 \item{data}{table variable}
+
+\item{tblFTout}{set to TRUE to output formatted tables}
 }
 \value{
 # returns flextable list
@@ -20,7 +22,11 @@ date fields. Character arrays are summarized.
 ...
 }
 \examples{
-# TBD
+\dontrun{
+
+outSummStat(iris)
+
+}
 
 }
 \seealso{

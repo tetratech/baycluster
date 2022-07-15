@@ -17,12 +17,10 @@
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{dateCol} and
 #'   \code{valueCol} which contain a date and value to analyze, respectively
-#' @param dateCol Column name that contains date, e.g., \code{dateCol =
-#'   SampleDate}
-#' @param valueCol Column name that contains values to analyze for quantiles,
-#'   e.g., \code{valueCol = Concentrations}
+#' @param dateCol Column name that contains date
+#' @param valueCol Column name that contains values for analyzing for quantiles
 #' @param transform Log transform values before analysis
-#' @param probabilities Vector of increasing probabilities to analyze. 
+#' @param numClasses Number of classes for computing quantiles 
 #' @param startYear First year to maintain in returned data set
 #' @param endYear Last year to maintain in returned data set
 #' @param yearType Indicate whether to perform analysis on a "calendar" or
@@ -48,10 +46,10 @@
 #' @export
 #' 
 calcQuanClass <- function(data 
-  , dateCol = date
-  , valueCol = flow
+  , dateCol = "date"
+  , valueCol = "flow"
   , transform = TRUE
-  , probabilities = seq(0, 1, length.out = 5)
+  , numClasses = 4
   , startYear
   , endYear
   , yearType = "calendar"
@@ -60,10 +58,10 @@ calcQuanClass <- function(data
   # ----< testing >----
   {
     if (FALSE) {
-      dateCol = date
-      valueCol = flow
+      dateCol = "date"
+      valueCol = "flow"
       transform = TRUE  # FALSE
-      probabilities = seq(0,1,0.25)
+      numClasses = 4
       startYear = 1994
       endYear = 2020
       yearType = "calendar" # "water"
@@ -74,12 +72,17 @@ calcQuanClass <- function(data
   {
     # dateCol and valueCol must exist and be Date and numeric fields, respectively
     stopifnot(
-      deparse(substitute(dateCol)) %in% names(data) 
-      , deparse(substitute(valueCol)) %in% names(data)
-      , is.Date(pull(data[ , deparse(substitute(dateCol))]))
-      , is.numeric(pull(data[ , deparse(substitute(valueCol))]))
+      dateCol %in% names(data) 
+      , valueCol %in% names(data)
+      , is.Date(pull(data[ , dateCol]))
+      , is.numeric(pull(data[ , valueCol]))
       )
   } # end ~ error trap
+  
+  # ----< Compute even sized probability classes >----
+  {
+    probabilities <- seq(0, 1, length.out = numClasses+1)
+  }
   
   # ----< Set month processing order based on yearType >----
   {
@@ -92,22 +95,23 @@ calcQuanClass <- function(data
     data1 <- data %>%
       
       # down-select to columns with date and value
-      select(., {{dateCol}}, {{valueCol}}) %>%
+      select(., .data[[dateCol]], .data[[valueCol]] ) %>%
       
       # calculations
       mutate(.
         # extract year and month
-        , year  = year({{dateCol}})
-        , month = month({{dateCol}})
+        , year  = year(.data[[dateCol]])
+        , month = month(.data[[dateCol]])
         
         # log transform if option is selected
-        , value = case_when(transform ~ log({{valueCol}})
-          , TRUE ~ {{valueCol}})) 
-      
+        , value = case_when(transform ~ log(.data[[valueCol]])
+          , TRUE ~ .data[[valueCol]])) 
+    
     # adjust year when water year selected
     if (tolower(yearType)== "water") {
-      data1[,"year"] <- calcWaterYear(month, year)
+      data1$year <- calcWaterYear(yearIn = data1$year, monthIn = data1$month)
     }
+    
   } # end ~ Create data set for analysis
   
   # ----< Process data at annual level >----
@@ -166,5 +170,19 @@ calcQuanClass <- function(data
     rename(., Year = year
       , YearAvg = avg)
   } # end ~ Filter final data set down
+  
+  # ----< Add attributes to final data set >----
+  {
+    ffyr <- ffyr %>%
+      structure(out.attrs = NULL
+        , numClasses = numClasses
+        , monOrder   = monOrder
+        , yearType   = yearType
+        , transform  = transform
+        , valueCol   = valueCol
+        , dateCol    = dateCol)
+  } # end ~ add attributes
+  
+  return(ffyr)
   
 } # end ~ function: calcQuanClass

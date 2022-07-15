@@ -8,9 +8,14 @@
 #' 
 #' 
 #' @param data table variable
+#' @param tblFTout set to TRUE to output formatted tables
 #' 
 #' @examples 
-#' # TBD
+#' \dontrun{
+#' 
+#' outSummStat(iris)
+#' 
+#' }
 #' 
 #' @return 
 #' # returns flextable list
@@ -18,23 +23,31 @@
 #' @seealso \code{\link{calcQuanClass}}
 #' 
 #' @importFrom rlang .data
-#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
-#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by rename_with
-#' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
-#' @importFrom tidyr pivot_wider pivot_longer 
+#' @importFrom lubridate ymd decimal_date yday year month is.Date
+#' @importFrom lubridate %m+% %m-% make_date  floor_date ceiling_date
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename 
+#' @importFrom dplyr group_by rename_with distinct relocate left_join arrange
+#' @importFrom dplyr  between pull summarise ungroup across ends_with   
+#' @importFrom tidyr pivot_wider pivot_longer
 #' @importFrom tibble tibble as_tibble rownames_to_column is_tibble
 #' @importFrom readr read_lines read_delim
-#' @importFrom flextable flextable align fontsize font padding theme_box set_caption
+#' @importFrom flextable flextable align fontsize font padding theme_box set_caption flextable_to_rmd
 #' @importFrom officer run_autonum
+#' @importFrom stats quantile
 #' 
 #' @export
 #' 
-outSummStat <- function(data) {
+outSummStat <- function(data, tblFTout = FALSE) {
   
-  boo.numeric = TRUE
-  boo.character = TRUE
-  boo.date = TRUE
-  FT1 <- FT2 <- FT3 <- NA
+  # initialize return variables
+  x.numSum <- x.dateSum <- x.charSum <- NA
+  
+  # initialize formatted output options
+  if (tblFTout) {
+    outtblFT.numeric <- outtblFT.character <- outtblFT.date <- TRUE
+  } else {
+    outtblFT.numeric <- outtblFT.character <- outtblFT.date <- FALSE  
+  }
   
   # determine character, numeric and date fields
   i1 <- sapply(data, is.character) 
@@ -43,7 +56,6 @@ outSummStat <- function(data) {
   
   # ----< numeric fields >----
   {
-    
     if (sum(i2) > 0) {
       
       # summary statistics function
@@ -51,7 +63,8 @@ outSummStat <- function(data) {
         tibble(x = quantile(x, q, na.rm = dropNA), q = q)
       }
       
-      FT2 <- data %>% 
+      # apply summary statistic function
+      x.numSum <- data %>% 
         summarise(across( where(is.numeric), ~ quibble(.x, c(0, 0.25, 0.50, 0.75, 1.0), 
           dropNA = TRUE)), .groups = 'drop') %>% 
         tidyr::unnest(where(is_tibble), names_repair = 'unique', names_sep = "_") %>%
@@ -62,54 +75,75 @@ outSummStat <- function(data) {
         pivot_wider(., names_from = rowname) %>%
         rename(., Variable=name, Min=`1`, Q25=`2`, Med=`3`, Q75=`4`, Max=`5`) 
       
-      FT2 <- flextable::flextable(FT2) %>%
-        flextable::align(align = "right", part = "all") %>%
-        flextable::fontsize(size=11, part = "all") %>%
-        flextable::font(fontname = "Calibri", part = "all") %>%
-        flextable::padding(padding = 1, part = "all") %>%
-        flextable::theme_box() %>%
-        flextable::set_caption("Summary statistics-numeric fields"
-          , autonum = officer::run_autonum(seq_id = "tab", pre_label = "Table: ", bkm = "anytable"))
-    }    
-  }
+      # output formatted table    
+      if (outtblFT.numeric)  {
+        tblFT1(x.num
+          , tblTitle = "Summary statistics-numeric fields"
+          , tblPre_label = "Table: "
+          , tblFontName = "Calibri"
+          , tblFontSize = 11
+          , tblTheme = "box"
+          , tblOutput = TRUE
+          , tblReturn = FALSE
+          , tbltoRMD = TRUE)
+      }
+    }
+  } # end ~ numeric
   
   # ----< date fields >----
   {
-    
     if (sum(i3) > 0) {
       
+      # create a 5-number summary for date fields      
       x <- data.frame(unclass(summary(data[,i3])), check.names = FALSE, stringsAsFactors = FALSE)
       x <- data.frame(x[c(1,2,3,5,6), ])
       rownames(x) <- NULL
       names(x) <- names(data)[i3]
       x <- as.data.frame(do.call(cbind, lapply(x, substring, first=9)))
-      x <- suppressMessages(as_tibble(cbind(nms = names(x), t(x)), .name_repair = 'unique'))
-      names(x) <- c("Variable", "Min", "Q25", "Med", "Q75", "Max")
-      x
+      x.dateSum <- suppressMessages(as_tibble(cbind(nms = names(x), t(x)), .name_repair = 'unique'))
+      names(x.dateSum) <- c("Variable", "Min", "Q25", "Med", "Q75", "Max")
       
-      FT3 <- flextable::flextable(x) %>%
-        flextable::align(align = "right", part = "all") %>%
-        flextable::fontsize(size=11, part = "all") %>%
-        flextable::font(fontname = "Calibri", part = "all") %>%
-        flextable::padding(padding = 1, part = "all") %>%
-        flextable::theme_box() %>% 
-        flextable::set_caption("Summary statistics-date fields"
-          , autonum = officer::run_autonum(seq_id = "tab", pre_label = "Table: ", bkm = "anytable"))
-      
-    } 
-  }
-  
+      # output formatted table
+      if (outtblFT.date) {
+        tblFT1(x.dateSum
+          , tblTitle = "Summary statistics-date fields"
+          , tblPre_label = "Table: "
+          , tblFontName = "Calibri"
+          , tblFontSize = 11
+          , tblTheme = "box"
+          , tblOutput = TRUE
+          , tblReturn = FALSE
+          , tbltoRMD = TRUE)
+      }
+    }
+  } # end ~ date fields
+
   # ----< character fields >----
   {
-    # need to do something here.
+    if (sum(i3) > 0) {
+     
+      x.charSum <- header(data[ , i3])
+      
+      if (outtblFT.character) {
+        tblFT1(x.charSum
+          , tblTitle = "Header-character fields"
+          , tblPre_label = "Table: "
+          , tblFontName = "Calibri"
+          , tblFontSize = 11
+          , tblTheme = "box"
+          , tblOutput = TRUE
+          , tblReturn = FALSE)
+      }
+    }
   }
-  
-  if (boo.numeric & sum(i2) > 0) print(FT2)
-  if (boo.date & sum(i3) > 0) print(FT3)
-  
-  
-  # return stuff
-  FT.return <- list(char = FT1, num = FT2, date = FT3 ) 
+
+    
+  # return summary statistics
+  FT.return <- list(char = x.charSum, num = x.numSum, date = x.dateSum ) 
   return(FT.return)
   
-}
+} # end ~ function: outSummStat
+
+
+
+

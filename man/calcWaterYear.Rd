@@ -4,12 +4,12 @@
 \alias{calcWaterYear}
 \title{Calculate water year from given year and month}
 \usage{
-calcWaterYear(year, month)
+calcWaterYear(yearIn, monthIn)
 }
 \arguments{
-\item{year}{year}
+\item{yearIn}{year}
 
-\item{month}{month must be from 1-12}
+\item{monthIn}{month must be from 1-12}
 }
 \value{
 vector of water year
@@ -24,9 +24,9 @@ Water years begin on October 1 and are accorded the year
 dat0 <- tidyr::tibble( a = seq(as.Date('2022-06-10'), as.Date('2023-03-01'), by = "30 days"))
 
 dat0 <- calcYearMonth(dat0
-  , dateCol = a
-  , yearCol = Year
-  , monthCol = theMonth)
+  , dateCol = "a"
+  , yearCol = "Year"
+  , monthCol = "theMonth")
 
 dat0$WY <- calcWaterYear(dat0$Year, dat0$theMonth)
 }
