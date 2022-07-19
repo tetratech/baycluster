@@ -77,15 +77,12 @@ outSummStat <- function(data, tblFTout = FALSE) {
       
       # output formatted table    
       if (outtblFT.numeric)  {
-        tblFT1(x.num
+        tblFT1(x.numSum
           , tblTitle = "Summary statistics-numeric fields"
           , tblPre_label = "Table: "
           , tblFontName = "Calibri"
           , tblFontSize = 11
-          , tblTheme = "box"
-          , tblOutput = TRUE
-          , tblReturn = FALSE
-          , tbltoRMD = TRUE)
+          , tblTheme = "box")
       }
     }
   } # end ~ numeric
@@ -110,10 +107,7 @@ outSummStat <- function(data, tblFTout = FALSE) {
           , tblPre_label = "Table: "
           , tblFontName = "Calibri"
           , tblFontSize = 11
-          , tblTheme = "box"
-          , tblOutput = TRUE
-          , tblReturn = FALSE
-          , tbltoRMD = TRUE)
+          , tblTheme = "box")
       }
     }
   } # end ~ date fields
@@ -130,9 +124,7 @@ outSummStat <- function(data, tblFTout = FALSE) {
           , tblPre_label = "Table: "
           , tblFontName = "Calibri"
           , tblFontSize = 11
-          , tblTheme = "box"
-          , tblOutput = TRUE
-          , tblReturn = FALSE)
+          , tblTheme = "box")
       }
     }
   }

@@ -10,10 +10,7 @@ tblFT1(
   tblPre_label = NA,
   tblFontName = NA,
   tblFontSize = NA,
-  tblTheme = NA,
-  tblOutput = TRUE,
-  tblReturn = FALSE,
-  tbltoRMD = FALSE
+  tblTheme = NA
 )
 }
 \arguments{
@@ -28,12 +25,6 @@ tblFT1(
 \item{tblFontSize}{font size}
 
 \item{tblTheme}{table theme}
-
-\item{tblOutput}{TRUE to output table}
-
-\item{tblReturn}{TRUE to return formatted table}
-
-\item{tbltoRMD}{TRUE to apply flextable_to_rmd(...)}
 }
 \value{
 # may return flextable

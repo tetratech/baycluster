@@ -2,110 +2,17 @@
 % Please edit documentation in R/setSpec.R
 \name{setSpec}
 \alias{setSpec}
-\title{Organize cluster analysis specifications into a list}
+\title{Create (or update) specification list for cluster analysis}
 \usage{
-setSpec(
-  projRoot,
-  gamRoot,
-  wqParm,
-  waterBody,
-  slayer,
-  gamNumbr,
-  startYear,
-  endYear,
-  idVar,
-  profVar,
-  rowAdj,
-  scale,
-  grpCnt,
-  grpCol,
-  statVec,
-  statLab,
-  monVec,
-  monLab,
-  filename = NA,
-  monOrd = NA,
-  yrOrd = NA,
-  dataOut = NA,
-  subGrps = FALSE,
-  addFlow,
-  flowFile,
-  flowLab = "Flow",
-  datSource,
-  datFile,
-  lineOne,
-  grpLab = NA,
-  yearType = "calendar"
-)
+setSpec(c.spec = list(), ...)
 }
 \arguments{
-\item{projRoot}{root folder for analysis}
+\item{c.spec}{list for storing cluster analysis specifications}
 
-\item{gamRoot}{folder where output from baytrends is stored. There should be
-subfolders in this folder with names corresponding to the various parameters
-of interest. For example, if \code{wqParm} is set to \code{"chla"}, then there should 
-be a subdirectory under the \code{gamRoot} folder called \code{chla}.}
-
-\item{wqParm}{parameter to be analyzed}
-
-\item{waterBody}{waterBody}
-
-\item{slayer}{slayer}
-
-\item{gamNumbr}{gamNumbr}
-
-\item{startYear}{First year of data to be used in cluster analysis}
-
-\item{endYear}{Last year of data to be used in cluster analysis}
-
-\item{idVar}{Variable that identifies the rows of the cluster matrix, i.e. items that are clustered}
-
-\item{profVar}{Variable that becomes columns of the cluster matrix, i.e. attribute to cluster}
-
-\item{rowAdj}{rowAdj}
-
-\item{scale}{scale}
-
-\item{grpCnt}{grpCnt}
-
-\item{grpCol}{grpCol}
-
-\item{statVec}{statVec}
-
-\item{statLab}{statLab}
-
-\item{monVec}{monVec}
-
-\item{monLab}{monLab}
-
-\item{filename}{filename=NA}
-
-\item{monOrd}{monOrd=NA,}
-
-\item{yrOrd}{yrOrd=NA,}
-
-\item{dataOut}{dataOut=NA,}
-
-\item{subGrps}{subGrps=FALSE,}
-
-\item{addFlow}{addFlow,}
-
-\item{flowFile}{flowFile,}
-
-\item{flowLab}{flowLab='Flow',}
-
-\item{datSource}{datSource}
-
-\item{datFile}{datFile,}
-
-\item{lineOne}{lineOne,}
-
-\item{grpLab}{grpLab=NA,}
-
-\item{yearType}{yearType = 'calendar'}
+\item{...}{specifications needed to run cluster analysis -- see details}
 }
 \value{
-list with cluster specifications
+list
 }
 \description{
 Organize user-provided cluster analysis specifications into a
@@ -113,10 +20,47 @@ Organize user-provided cluster analysis specifications into a
   selections.
 }
 \details{
-TBD
+...
+potVar projRoot root folder for analysis
+potVar gamRoot folder where output from baytrends is stored. There should be
+  subfolders in this folder with names corresponding to the various parameters
+  of interest. For example, if \code{wqParm} is set to \code{"chla"}, then there should 
+  be a subdirectory under the \code{gamRoot} folder called \code{chla}. 
+potVar wqParm parameter to be analyzed
+potVar waterBody waterBody
+potVar slayer slayer
+potVar gamNumbr gamNumbr
+potVar startYear First year of data to be used in cluster analysis
+potVar endYear Last year of data to be used in cluster analysis
+potVar idVar Variable that identifies the rows of the cluster matrix, i.e. items that are clustered 
+potVar profVar Variable that becomes columns of the cluster matrix, i.e. attribute to cluster
+potVar rowAdj rowAdj
+potVar scale  scale
+potVar grpCnt grpCnt
+potVar grpCol grpCol
+potVar statVec statVec
+potVar statLab statLab
+potVar monVec monVec
+potVar monLab monLab
+potVar filename filename=NA
+potVar monOrd monOrd=NA,
+potVar yrOrd yrOrd=NA,
+potVar dataOut dataOut=NA,
+potVar subGrps subGrps=FALSE,
+potVar addFlow addFlow,
+potVar flowFile flowFile,
+potVar flowLab flowLab='Flow',
+potVar datSource datSource
+potVar datFile datFile,
+potVar lineOne lineOne,
+potVar grpLab grpLab=NA,
+potVar yearType yearType = 'calendar'
 }
 \examples{
-# TBD
+\dontrun{
+#TBD
+
+}
 
 }
 \seealso{

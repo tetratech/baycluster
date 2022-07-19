@@ -34,3 +34,4 @@ barplot(1:grpCnt, col=grpCol, names.arg=grpCol)
 \seealso{
 \code{\link{calcQuanClass}}
 }
+\keyword{internal}

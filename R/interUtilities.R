@@ -21,6 +21,7 @@
 #' }
 #' 
 #' @return named color
+#' @keywords internal
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
@@ -45,3 +46,84 @@ hexColor2Name <- function(hexCol) {
   hexColor2Name.return <- bestMatch[1]
   
 }
+
+
+# ####
+#' @title Create a list of all arguments passed to function
+#' 
+#' @description Create a list of all arguments passed to function
+#'   
+#' @details Derived from https://stackoverflow.com/questions/66329835/using-r-how-to-get-all-parameters-passed-into-a-function-with-their-values
+#' 
+#' 
+#' @examples 
+#' \dontrun{
+#' 
+#' adebo.deepSearch = function(z, pi_0 = 0.3, families=list(), ... ) {
+#'   args = grabFunctionParameters();
+#'   names(args)
+#'   return(args )
+#' }
+#' 
+#' X <- adebo.deepSearch(z=4, a=345, families = list(a=34, b=545), myList = list(a=34, b=545))
+#' }
+#' 
+#' @return list of arguments
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+grabFunctionParameters <- function() {
+  pf <- parent.frame()    
+  args_names <- ls(envir = pf, all.names = TRUE, sorted = FALSE)
+  if("..." %in% args_names) {
+    dots <- eval(quote(list(...)), envir = pf)
+  }  else {
+    dots = list()
+  }
+  args_names <- sapply(setdiff(args_names, "..."), as.name)
+  if(length(args_names)) {
+    not_dots <- lapply(args_names, eval, envir = pf) 
+  } else {
+    not_dots <- list()
+  }
+  out <- c(not_dots, dots)
+  out[names(out) != ""]                                 
+}   
+
+# ####
+#' @title Convert vector to a single character
+#' 
+#' @description Convert vector to a single character
+#'   
+#' @details ...
+#' 
+#' @param x vector to be strung together
+#' @param sep separator between elements of vector
+#' 
+#' @examples 
+#' \dontrun{
+#' M <- 1:10
+#' vec.strg(M)
+#' 
+#' }
+#' 
+#' @return character
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+# converts a vector to single string character
+vec.strg <- function(x, sep=", ") {
+  vec.strg <- paste0(x, "", collapse = sep)   
+  return(vec.strg)
+} # end of vec.strg
+
+
+

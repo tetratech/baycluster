@@ -12,9 +12,6 @@
 #' @param tblFontName table font
 #' @param tblFontSize font size
 #' @param tblTheme table theme
-#' @param tblOutput TRUE to output table
-#' @param tblReturn TRUE to return formatted table 
-#' @param tbltoRMD TRUE to apply flextable_to_rmd(...)
 #' 
 #' @examples 
 #' \dontrun{
@@ -28,10 +25,11 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
-#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by rename_with
+#' @importFrom dplyr %>% mutate select filter 
 #' @importFrom flextable flextable align fontsize font padding  set_caption flextable_to_rmd
 #' @importFrom flextable theme_box theme_vanilla theme_booktabs
 #' @importFrom officer run_autonum
+#' @importFrom rstudioapi getActiveDocumentContext isAvailable
 #' 
 #' @export
 #' 
@@ -40,15 +38,16 @@ tblFT1 <- function(data
   , tblPre_label = NA   # "Table: "
   , tblFontName = NA    # "Calibri"
   , tblFontSize = NA    # 11
-  , tblTheme = NA       # "box"
-  , tblOutput = TRUE
-  , tblReturn = FALSE
-  , tbltoRMD = FALSE
+  , tblTheme = NA       # "box" 
   ) {
+  
+  # ----< Interactive >----
+  isInteractive <- isAvailable()
+  ctxt <- getActiveDocumentContext()
+  isRmd <- ifelse(grepl("\\.Rmd$", ctxt$path), TRUE, FALSE)
   
   # ----< create flextable >----
   FT <- flextable(data) %>%
-    align(align = "right", part = "all") %>%
     padding(padding = 1, part = "all") 
   
   # ----< customize font name >----
@@ -76,18 +75,16 @@ tblFT1 <- function(data
   # ----< customize table title >----
   if (!is.na(tblTitle)) {
     FT <- set_caption(FT, caption = tblTitle
-      , autonum = officer::run_autonum(seq_id = "tab", pre_label = tblPre_label, bkm = "anytable"))
+      , autonum = run_autonum(seq_id = "tab", pre_label = tblPre_label, bkm = "anytable"))
   }
   
-  # ----< customize output >----
-  if (tblOutput) {
-    if (tbltoRMD) {
-      flextable_to_rmd(FT)  
-    } else {
-      FT
-    }
+  # # ----< customize output >----
+  if (isInteractive) {
+    print(FT, preview = "html")
+  } else {
+    flextable_to_rmd(FT)  
   }
   
-  if (tblReturn) return(FT)
-  
+  return(FT)
+
 }
