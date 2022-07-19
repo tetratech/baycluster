@@ -22,7 +22,7 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
-#' @importFrom rlang .data
+#' @importFrom rlang .data := 
 #' @importFrom lubridate ymd decimal_date yday year month is.Date
 #' @importFrom lubridate %m+% %m-% make_date  floor_date ceiling_date
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename 

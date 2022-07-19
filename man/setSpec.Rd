@@ -20,41 +20,38 @@ Organize user-provided cluster analysis specifications into a
   selections.
 }
 \details{
-...
-potVar projRoot root folder for analysis
-potVar gamRoot folder where output from baytrends is stored. There should be
-  subfolders in this folder with names corresponding to the various parameters
-  of interest. For example, if \code{wqParm} is set to \code{"chla"}, then there should 
-  be a subdirectory under the \code{gamRoot} folder called \code{chla}. 
-potVar wqParm parameter to be analyzed
-potVar waterBody waterBody
-potVar slayer slayer
-potVar gamNumbr gamNumbr
-potVar startYear First year of data to be used in cluster analysis
-potVar endYear Last year of data to be used in cluster analysis
-potVar idVar Variable that identifies the rows of the cluster matrix, i.e. items that are clustered 
-potVar profVar Variable that becomes columns of the cluster matrix, i.e. attribute to cluster
-potVar rowAdj rowAdj
-potVar scale  scale
-potVar grpCnt grpCnt
-potVar grpCol grpCol
-potVar statVec statVec
-potVar statLab statLab
-potVar monVec monVec
-potVar monLab monLab
-potVar filename filename=NA
-potVar monOrd monOrd=NA,
-potVar yrOrd yrOrd=NA,
-potVar dataOut dataOut=NA,
-potVar subGrps subGrps=FALSE,
-potVar addFlow addFlow,
-potVar flowFile flowFile,
-potVar flowLab flowLab='Flow',
-potVar datSource datSource
-potVar datFile datFile,
-potVar lineOne lineOne,
-potVar grpLab grpLab=NA,
-potVar yearType yearType = 'calendar'
+Below is the list of arguments needed to run a cluster analysis:
+\itemize{
+\item analysisTitle - Analysis title 
+\item analysisDate - Analysis date 
+\item datSource - Type of analysis 
+\item projFolder - Project folder 
+\item gamFolder - GAM folder 
+\item datFolder - Input data folder 
+\item outFolder - Output data folder 
+\item statFile - Station file name 
+\item startYear - Start year 
+\item endYear - End year 
+\item monthGrid - Months included 
+\item dayGrid - Days of month 
+\item monthAdj - Month adjustment 
+\item statVec - Station list 
+\item wqParm - Water quality parameter 
+\item wqLayer - Layer 
+\item gamNumbr - GAM #'s 
+\item idVar - Items that are to be clustered
+\item profVar - Attribute to cluster by 
+\item grpCnt - Number of cluster 
+\item dataTrans - Data transformation 
+\item dataCenter - Data centering 
+\item monthGracePeriod - Grace period 
+\item exCovIncl - Include exogenous covariate 
+\item exCovFolder - Ex. Cov. Folder 
+\item exCovLab - Ex. Cov. Label 
+\item exCovFile - Ex. Cov. File 
+\item exCovClass - Ex. Cov. # classes 
+\item exCovTrans - Ex. Cov. Transformation 
+}
 }
 \examples{
 \dontrun{

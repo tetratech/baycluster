@@ -11,11 +11,11 @@
 #' Set \code{dayGrid = 15} to set up data set for the 15th of every month.
 #' \code{dayGrid = c(10,20)} would set up data set for the 10 and 20th of every month.
 #' 
-#' Set \code{month.adj = NA} results in analysis performed on a calendar year.
-#' Setting \code{month.adj = c(10, 11, 12)} would result in analysis being set
+#' Set \code{monthAdj = NA} results in analysis performed on a calendar year.
+#' Setting \code{monthAdj = c(10, 11, 12)} would result in analysis being set
 #' up for a water year basis, making October 1 the first day of the year. This
 #' is accomplished by computing year.adj as the calendar year plus 1 ("+1") for
-#' months 10-12. If \code{month.adj = c(-1, -2, -3)} (note the negative values),
+#' months 10-12. If \code{monthAdj = c(-1, -2, -3)} (note the negative values),
 #' then year.adj is set to the calendar year minus 1 ("-1") for months 1-3. This
 #' has the effect of making April 1 the first day of the year in this example.
 #' 
@@ -23,7 +23,7 @@
 #' @param endYear End year of analysis (scalar)
 #' @param monthGrid vector of months to include in analysis
 #' @param dayGrid days of month to make predictions 
-#' @param month.adj month adjustment to accommodate water year analyses
+#' @param monthAdj month adjustment to accommodate water year analyses
 #'  
 #' @examples 
 #' \dontrun{
@@ -31,7 +31,7 @@
 #'  , endYear = 2016
 #'  , monthGrid = 1:12
 #'  , dayGrid = c(10,20)
-#'  , month.adj = c(10,11,12))
+#'  , monthAdj = c(10,11,12))
 #' }
 #' 
 #' @return data table with base prediction data set
@@ -42,13 +42,13 @@
 #' \item date - date   
 #' \item dyear - date expressed as decimal year   
 #' \item doy - day of year (calendar basis)   
-#' \item year.adj - year (adjusted based on month.adj)   
+#' \item year.adj - year (adjusted based on monthAdj)   
 #' \item doy.adj - day of year (adjusted based on year.adj)  
 #' }
 #' 
 #' @seealso \code{\link{readTextFile}}
 #' 
-#' @importFrom rlang .data
+#' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
@@ -61,7 +61,7 @@ createBasePred <- function(startYear = 1990
   , endYear = year(Sys.Date())
   , monthGrid = 1:12
   , dayGrid = 15
-  , month.adj = NA) {
+  , monthAdj = NA) {
   
   # ----< Create base prediction data set >----
   
@@ -89,16 +89,16 @@ createBasePred <- function(startYear = 1990
   
   # Make year.adj for alternative year types ####
   {
-    # advance year by 1 for all months listed in month.adj assuming first month.adj
+    # advance year by 1 for all months listed in monthAdj assuming first monthAdj
     # is positive; otherwise decrease year by 1
-    # month.adj <- c(10, 11, 12) # good for water year
-    # month.adj <- c(-1, -2, -3) # good for growing season year  
-    if (exists("month.adj") && !(any(is.na(month.adj)) | is.null(month.adj))) {
+    # monthAdj <- c(10, 11, 12) # good for water year
+    # monthAdj <- c(-1, -2, -3) # good for growing season year  
+    if (exists("monthAdj") && !(any(is.na(monthAdj)) | is.null(monthAdj))) {
       data <- data %>%
         mutate(.
           , year.adj = case_when(
-            month.adj[1] > 0 ~ year + month %in% abs(month.adj)
-            , month.adj[1] < 0 ~ year - month %in% abs(month.adj)
+            monthAdj[1] > 0 ~ year + month %in% abs(monthAdj)
+            , monthAdj[1] < 0 ~ year - month %in% abs(monthAdj)
             , TRUE ~ year 
           )
         )
@@ -138,7 +138,7 @@ createBasePred <- function(startYear = 1990
         , endYear = endYear
         , monthGrid = monthGrid
         , dayGrid = dayGrid
-        , month.adj = month.adj
+        , monthAdj = monthAdj
         , firstDay = floor_date(min(data$date), unit = "month")
         , lastDay = ceiling_date(max(data$date), unit = "month")-1
         , month.order = unique(data$month)

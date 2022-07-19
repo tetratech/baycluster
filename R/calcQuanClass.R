@@ -35,7 +35,7 @@
 #' @seealso \code{\link{readTextFile}}
 #' 
 #' 
-#' @importFrom rlang .data
+#' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
