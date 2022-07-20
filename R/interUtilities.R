@@ -126,4 +126,33 @@ vec.strg <- function(x, sep=", ") {
 } # end of vec.strg
 
 
-
+# ####
+#' @title Extract components from list or table to parent environment
+#' 
+#' @description Extract components from list or table to parent environment
+#'   
+#' @details ...
+#' 
+#' @param listvar name of target list or table
+#' @param v vector of variables to extract from list or table
+#' 
+#' @examples 
+#' \dontrun{
+#' # TBD
+#' 
+#' }
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+extract <- function(listvar, v) {
+  
+  for(nam in v) {eval(parse(text=paste0(nam," <- listvar$",nam)))}  
+  rm(nam, listvar, v)
+  argList <- grabFunctionParameters()   # create list of function arguments  
+  invisible( list2env(argList, parent.frame() ) )
+  
+} # end ~ function: extract

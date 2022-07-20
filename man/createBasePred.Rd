@@ -32,8 +32,8 @@ data table with base prediction data set
 \item date - date   
 \item dyear - date expressed as decimal year   
 \item doy - day of year (calendar basis)   
-\item year.adj - year (adjusted based on monthAdj)   
-\item doy.adj - day of year (adjusted based on year.adj)  
+\item yearAdj - year (adjusted based on monthAdj)   
+\item doyAdj - day of year (adjusted based on yearAdj)  
 }
 }
 \description{
@@ -50,9 +50,9 @@ Set \code{dayGrid = 15} to set up data set for the 15th of every month.
 Set \code{monthAdj = NA} results in analysis performed on a calendar year.
 Setting \code{monthAdj = c(10, 11, 12)} would result in analysis being set
 up for a water year basis, making October 1 the first day of the year. This
-is accomplished by computing year.adj as the calendar year plus 1 ("+1") for
+is accomplished by computing yearAdj as the calendar year plus 1 ("+1") for
 months 10-12. If \code{monthAdj = c(-1, -2, -3)} (note the negative values),
-then year.adj is set to the calendar year minus 1 ("-1") for months 1-3. This
+then yearAdj is set to the calendar year minus 1 ("-1") for months 1-3. This
 has the effect of making April 1 the first day of the year in this example.
 }
 \examples{

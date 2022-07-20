@@ -5,22 +5,25 @@
 \title{Check RDA files to confirm availability of GAM results}
 \usage{
 chkRDAfiles(
-  stationVec,
-  wqParm,
-  layer,
-  gamNumbr = c(23, 3, 2),
-  startYear = 1990,
-  endYear = year(Sys.Date()),
-  rdaFolder = "..",
-  month_threshold = 2
+  c.spec = NULL,
+  stationVec = NULL,
+  wqParm = NULL,
+  wqLayer = NULL,
+  gamNumbr = NULL,
+  startYear = NULL,
+  endYear = NULL,
+  gamFolder = NULL,
+  month_threshold = NULL
 )
 }
 \arguments{
+\item{c.spec}{cluster specification file}
+
 \item{stationVec}{Vector of stations to analyze}
 
 \item{wqParm}{Parameter abbreviation to evaluate}
 
-\item{layer}{Layer abbreviation to evaluate}
+\item{wqLayer}{Layer abbreviation to evaluate}
 
 \item{gamNumbr}{GAM option to evaluate}
 
@@ -28,7 +31,7 @@ chkRDAfiles(
 
 \item{endYear}{End year of analysis (scalar)}
 
-\item{rdaFolder}{Folder location of GAM results from baytrends}
+\item{gamFolder}{Folder location of GAM results from baytrends}
 
 \item{month_threshold}{Threshold for flagging acceptable data range (see details)}
 }
@@ -42,20 +45,20 @@ Based on a station list, year range, water quality variable,
 }
 \details{
 It is presumed that a series of baytrends operations
-have been run and the results for an individual "station|parameter|layer"
+have been run and the results for an individual "station|parameter|wqLayer"
 have been stored as separate rda files in a folder passed as the variable
-\code{rdaFolder} as depicted below.
+\code{gamFolder} as depicted below.
 
-\code{rdaFolder/tn/TF3.1E_tn_surf.rda}\cr  
-\code{rdaFolder/tn/TF3.2E_tn_surf.rda}\cr 
-\code{rdaFolder/tn/...}\cr
-\code{rdaFolder/do/TF3.1E_do_surf.rda}\cr
-\code{rdaFolder/do/TF3.2E_do_surf.rda}\cr 
-\code{rdaFolder/do/...}\cr
+\code{gamFolder/tn/TF3.1E_tn_surf.rda}\cr  
+\code{gamFolder/tn/TF3.2E_tn_surf.rda}\cr 
+\code{gamFolder/tn/...}\cr
+\code{gamFolder/do/TF3.1E_do_surf.rda}\cr
+\code{gamFolder/do/TF3.2E_do_surf.rda}\cr 
+\code{gamFolder/do/...}\cr
            
-The values of \code{station}, \code{wqParm}, and \code{layer} are used to 
+The values of \code{station}, \code{wqParm}, and \code{wqLayer} are used to 
 construct the file name convention of: "station_wqParm_layer.rda". Under the 
-folder \code{rdaFolder}, subfolders are organized by \code{wqParm}. 
+folder \code{gamFolder}, subfolders are organized by \code{wqParm}. 
 
 \code{gamNumbr} is used to define which GAM formula to use in the analysis.
 Setting \code{gamNumbr = c(23, 3, 2)} would result in preferentially
@@ -63,7 +66,7 @@ selecting \code{gamOutput23}, then \code{gamOutput3}, and finally \code{gamOutpu
 
 \code{startYear} and \code{endYear} are the planned beginning and ending
 period of the cluster analysis. This function checks to confirm that a 
-particular combination of \code{station}, \code{wqParm}, and \code{layer} 
+particular combination of \code{station}, \code{wqParm}, and \code{wqLayer} 
 had monitoring data for the full period or record, i.e., \code{startYear}-01-01 
 to \code{endYear}-12-31. 
 

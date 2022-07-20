@@ -8,7 +8,7 @@ calcQuanClass(
   data,
   dateCol = "date",
   valueCol = "flow",
-  transform = TRUE,
+  transform = logtrans,
   numClasses = 4,
   startYear,
   endYear,
@@ -24,7 +24,7 @@ calcQuanClass(
 
 \item{valueCol}{Column name that contains values for analyzing for quantiles}
 
-\item{transform}{Log transform values before analysis}
+\item{transform}{if set to "logtrans" then values are log transformed before analysis}
 
 \item{numClasses}{Number of classes for computing quantiles}
 

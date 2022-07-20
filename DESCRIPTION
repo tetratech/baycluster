@@ -4,7 +4,7 @@ Title: Cluster Analysis of Long-term Water Quality Trends
 Description: Developed to enable users to evaluate compare
     long-term trends using cluster analysis. 
 Author: Elgin Perry, Jon Harcum, Erik W Leppo
-Version: 0.0.0.9011
+Version: 0.0.0.9018
 Maintainer: Jon Harcum <Jon.Harcum@tetratech.com>
 Depends:
     R (>= 3.5.0)
@@ -45,13 +45,18 @@ Collate: calcQuanClass.R
      calcYearMonth.R
      chkRDAfiles.R
      createBasePred.R
+     createPredGAM.R
      data.R
      headers2.R
      interUtilities.R
      outSummStat.R
      readTextFile.R
      setSpec.R
-     setSpecCheck.R
-     setSpecBuildout.R
+     setSpecChk.R
+     setSpecChkGAM.R
+     setSpecChkWRTDS.R
+     setSpecCmp.R
+     setSpecCmpGAM.R
+     setSpecCmpWRTDS.R
      tblFT1.R
      zzz.R

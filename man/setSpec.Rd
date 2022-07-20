@@ -2,56 +2,28 @@
 % Please edit documentation in R/setSpec.R
 \name{setSpec}
 \alias{setSpec}
-\title{Create (or update) specification list for cluster analysis}
+\title{Create (or update) specification list for cluster analysis using
+  predictions from GAM results}
 \usage{
 setSpec(c.spec = list(), ...)
 }
 \arguments{
-\item{c.spec}{list for storing cluster analysis specifications}
+\item{c.spec}{list for storing specifications for cluster analysis}
 
-\item{...}{specifications needed to run cluster analysis -- see details}
+\item{...}{specifications needed to run cluster analysis -- see details for
+list of needed variables}
 }
 \value{
 list
 }
 \description{
-Organize user-provided cluster analysis specifications into a
-  list. And where specifications are not provided then make some default
-  selections.
+Create (or update) specification list for cluster analysis using
+  predictions from GAM results. (Future updates for WRTDS files.)
 }
 \details{
-Below is the list of arguments needed to run a cluster analysis:
-\itemize{
-\item analysisTitle - Analysis title 
-\item analysisDate - Analysis date 
-\item datSource - Type of analysis 
-\item projFolder - Project folder 
-\item gamFolder - GAM folder 
-\item datFolder - Input data folder 
-\item outFolder - Output data folder 
-\item statFile - Station file name 
-\item startYear - Start year 
-\item endYear - End year 
-\item monthGrid - Months included 
-\item dayGrid - Days of month 
-\item monthAdj - Month adjustment 
-\item statVec - Station list 
-\item wqParm - Water quality parameter 
-\item wqLayer - Layer 
-\item gamNumbr - GAM #'s 
-\item idVar - Items that are to be clustered
-\item profVar - Attribute to cluster by 
-\item grpCnt - Number of cluster 
-\item dataTrans - Data transformation 
-\item dataCenter - Data centering 
-\item monthGracePeriod - Grace period 
-\item exCovIncl - Include exogenous covariate 
-\item exCovFolder - Ex. Cov. Folder 
-\item exCovLab - Ex. Cov. Label 
-\item exCovFile - Ex. Cov. File 
-\item exCovClass - Ex. Cov. # classes 
-\item exCovTrans - Ex. Cov. Transformation 
-}
+See \code{\link{c.specQC}} for list of variables needed to be passed. 
+
+TBD: expand to include list of variables added to the list
 }
 \examples{
 \dontrun{

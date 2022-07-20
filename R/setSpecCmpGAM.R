@@ -1,7 +1,7 @@
 # ####
-#' @title Add supporting variables to c.spec
+#' @title Complete c.spec with GAM-specific supporting variables
 #' 
-#' @description Add supporting variables to c.spec
+#' @description Complete c.spec with GAM-specific supporting variables
 #'   
 #' @details 
 #' ... 
@@ -11,7 +11,7 @@
 #' @examples 
 #' # TBD
 #' 
-#' @return n/a
+#' @return list
 #' 
 #' @keywords internal
 #' 
@@ -20,53 +20,30 @@
 #' 
 #' @importFrom tibble tibble as_tibble 
 #' @importFrom scales col_numeric
+#' @importFrom assertthat not_empty see_if
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' 
 #' @export
 #' 
-setSpecBuildout <- function(c.spec) {
+setSpecCmpGAM <- function(c.spec) {
   
+  # ----< extract needed variables >----
   varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
     , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
     , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
-  for(nam in varsNeeded) {eval(parse(text=paste0(nam," <- c.spec$",nam)))}
+  extract(c.spec, varsNeeded)
   
-  # Station setup: labels and order based on statVec ####
-  statDF <- tibble(ord = 1:length(statVec)
-    , statVec
-    , lab = statVec)
-  
-  # Year setup: labels and order based on startYear and endYear ####
-  yearVec = startYear:endYear
-  yearDF <- tibble(ord = 1:length(yearVec)
-    , yearVec
-    , lab =  paste(yearVec))
-  
-  # Month setup: vector, labels and order based on monthGrid and monthAdj ####
-  monthVec <- monthGrid
-  if (exists("monthAdj") && !(any(is.na(monthAdj)) | is.null(monthAdj))) {
-    if (monthAdj[1] > 0) {
-      monthOrd <- c(monthVec[monthVec %in% monthAdj], monthVec[!(monthVec %in% monthAdj)])
-    } else {
-      monthOrd <- c(monthVec[!(monthVec %in% abs(monthAdj))], monthVec[(monthVec %in% abs(monthAdj))])
-    }
-  } else {
-    monthOrd <- NA
-  }
-  monthDF <- tibble(ord = 1:length(monthOrd)
-    , monthVec = monthOrd
-    , lab = month.abb[monthOrd])
-  
-  # Plot Variable ####
+  # ----< Plot Variable >----
   pltVar <- paste(wqParm,"pred",sep=".") 
   
-  # Cluster group and colors ####
+  # ----< Cluster group and colors >----
   grpCol <- rev(rainbow(grpCnt))
   grpCol <- tapply(grpCol, grpCol, hexColor2Name)
   attr(grpCol, "dimnames") <- NULL
   grpDF  <- tibble(lab = paste("Group",1:grpCnt)
     ,  col = grpCol)
 
-  # Cluster group and colors ####
+  # ----< Cluster group and colors >----
   exCovColFct <- scales::col_numeric(
     palette = c("red","lightblue","blue")
     , na.color = NA
@@ -77,14 +54,14 @@ setSpecBuildout <- function(c.spec) {
   exCovDF <- tibble(lab = paste("Class",1:exCovClass)
     , col = exCovCol)
   
-  # ID variable label ####
+  # ----< ID variable label >----
   if (length(idVar)==2) {
     idVarLab <- vec.strg(idVar,sep='&')
   } else {
       idVarLab <- paste(idVar)
   }
   
-  # output file names ####
+  # ----< output file names >----
   if (is.null(filename)) {
     filename <- paste("Cluster",analysisTitle,wqLayer,wqParm,"of"
       , idVarLab,"by",profVar,startYear,endYear,sep="_")
@@ -95,7 +72,7 @@ setSpecBuildout <- function(c.spec) {
       , idVarLab,"by",profVar,startYear,endYear,sep="_")
   }
   
-  # build base prediction data set ####
+  # ----< build base prediction data set >----
   
   basePred <- createBasePred(
     startYear = startYear,
@@ -103,11 +80,23 @@ setSpecBuildout <- function(c.spec) {
     monthGrid = monthGrid,
     dayGrid = dayGrid,
     monthAdj = monthAdj
-  )
+  ) %>%
+    structure( out.attrs = NULL
+      , dateCreated = NULL
+      , startYear = NULL
+      , endYear = NULL
+      , monthGrid = NULL
+      , dayGrid = NULL
+      , monthAdj = NULL
+      , firstDay = NULL
+      , lastDay = NULL
+      , month.order = NULL
+    )
   
-  # append variables to list for return ####
+  
+  # ----< append variables to list for return >----
   vars2append <- c("pltVar", "idVarLab", "filename", "dataOut"
-    , "statDF", "yearDF", "monthDF",  "grpDF", "exCovDF", "basePred")
+    , "grpDF", "exCovDF", "basePred")
 
   for (var in vars2append) {
     c.spec[[var]] <- eval(parse(text=var))
@@ -115,7 +104,7 @@ setSpecBuildout <- function(c.spec) {
   
   return(c.spec)
   
-}
+} # end ~ function: setSpecCmpGAM
 
 
 

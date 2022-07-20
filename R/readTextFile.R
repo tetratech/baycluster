@@ -44,7 +44,7 @@ readTextFile <- function(fileName
   , filePath = ".."
   , fileType = "standard"
   , colNames = NA
-  , report = TRUE) {
+  , report = FALSE) {
   
   # ----< testing >----
   {

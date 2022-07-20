@@ -1,45 +1,17 @@
 # ####
-#' @title Create (or update) specification list for cluster analysis
+#' @title Create (or update) specification list for cluster analysis using
+#'   predictions from GAM results
 #' 
-#' @description Organize user-provided cluster analysis specifications into a
-#'   list. And where specifications are not provided then make some default
-#'   selections.
+#' @description Create (or update) specification list for cluster analysis using
+#'   predictions from GAM results. (Future updates for WRTDS files.)
 #'   
-#' @details Below is the list of arguments needed to run a cluster analysis:
-#' \itemize{
-#' \item analysisTitle - Analysis title 
-#' \item analysisDate - Analysis date 
-#' \item datSource - Type of analysis 
-#' \item projFolder - Project folder 
-#' \item gamFolder - GAM folder 
-#' \item datFolder - Input data folder 
-#' \item outFolder - Output data folder 
-#' \item statFile - Station file name 
-#' \item startYear - Start year 
-#' \item endYear - End year 
-#' \item monthGrid - Months included 
-#' \item dayGrid - Days of month 
-#' \item monthAdj - Month adjustment 
-#' \item statVec - Station list 
-#' \item wqParm - Water quality parameter 
-#' \item wqLayer - Layer 
-#' \item gamNumbr - GAM #'s 
-#' \item idVar - Items that are to be clustered
-#' \item profVar - Attribute to cluster by 
-#' \item grpCnt - Number of cluster 
-#' \item dataTrans - Data transformation 
-#' \item dataCenter - Data centering 
-#' \item monthGracePeriod - Grace period 
-#' \item exCovIncl - Include exogenous covariate 
-#' \item exCovFolder - Ex. Cov. Folder 
-#' \item exCovLab - Ex. Cov. Label 
-#' \item exCovFile - Ex. Cov. File 
-#' \item exCovClass - Ex. Cov. # classes 
-#' \item exCovTrans - Ex. Cov. Transformation 
-#' }
+#' @details See \code{\link{c.specQC}} for list of variables needed to be passed. 
 #' 
-#' @param c.spec list for storing cluster analysis specifications
-#' @param ... specifications needed to run cluster analysis -- see details
+#' TBD: expand to include list of variables added to the list
+#' 
+#' @param c.spec list for storing specifications for cluster analysis 
+#' @param ... specifications needed to run cluster analysis -- see details for
+#'   list of needed variables
 #' 
 #' @examples 
 #' \dontrun{
@@ -61,45 +33,67 @@
 #'
 setSpec <- function(c.spec = list(), ...) {
   
-  c.spec2 <- grabFunctionParameters()   # create list of function arguments
-  c.spec2$c.spec <- NULL                # drop c.spec from list
-
-  # find common variable names between arguments passed to those in original c.spec ####
-  varCommon <- intersect(names(c.spec2), names(c.spec))
-  
-  # down-select common variables to those with updates ####
-  chk <- logical(length = length(varCommon))
-  for (k1 in 1:length(varCommon)) {
-    var = varCommon[k1]
-    chk[k1] = length(unlist(c.spec[var])) != length(unlist(c.spec2[var])) ||
-      unlist(c.spec[var]) != unlist(c.spec2[var])
-  }
-  varCommonDifferent <- varCommon[chk]
-  
-  # find new variables passed as argument  ####
-  varNew <- setdiff(names(c.spec2), names(c.spec))
-  
-  # update c.spec based on changed variables and new variables ####
-  c.spec[c(varCommonDifferent, varNew)] <- c.spec2[c(varCommonDifferent, varNew)]
-  
-  # create table of changes ####
-  df <- tibble(Variable = c(varCommonDifferent, varNew)) %>%
-    left_join(., c.specQC, by = "Variable") %>%
-    select(., Variable, Description) %>%
-    mutate(., Settings = NA_character_)
-
-  for (k1 in 1:NROW(df)) {
-    df[k1, "Settings"] <- vec.strg(as.character(unlist(c.spec[[unlist(df[k1, "Variable"])]])))
+  # ----< Create list of arguments passed in function >----
+  {
+    c.spec2 <- grabFunctionParameters()      
+    c.spec2$c.spec <- NULL                # drop c.spec from list
   }
   
-  # print the updates out ####
-  FT <- tblFT1(df)
+  # ----< Find updates of existing variables >----
+  {
+    # find common variable names between arguments passed to those in original c.spec ####
+    varCommon <- intersect(names(c.spec2), names(c.spec))
+    
+    # down-select common variables to those with updates ####
+    chk <- logical(length = length(varCommon))
+    for (k1 in 1:length(varCommon)) {
+      var = varCommon[k1]
+      chk[k1] = length(unlist(c.spec[var])) != length(unlist(c.spec2[var])) ||
+        unlist(c.spec[var]) != unlist(c.spec2[var])
+    }
+    
+    # variables with updates ####    
+    varCommonDifferent <- varCommon[chk]
+    
+  }
   
-  # do rudimentary checking ####
-  setSpecCheck(c.spec)
+  # ----< Find new variables >---- 
+  {
+    varNew <- setdiff(names(c.spec2), names(c.spec))
+  }
   
-  # build out c.spec ####
-  c.spec <- setSpecBuildout(c.spec)
-
+  # ----< Update c.spec >----
+  {
+    # updates based on changed variables and new variables 
+    c.spec[c(varCommonDifferent, varNew)] <- c.spec2[c(varCommonDifferent, varNew)]
+  }
+  
+  # ----< Create table of changes >---- 
+  {
+    # create table
+    df <- tibble(Variable = c(varCommonDifferent, varNew)) %>%
+      left_join(., c.specQC, by = "Variable") %>%
+      select(., Variable, Description) %>%
+      mutate(., Settings = NA_character_)
+    
+    for (k1 in 1:NROW(df)) {
+      df[k1, "Settings"] <- vec.strg(as.character(unlist(c.spec[[unlist(df[k1, "Variable"])]])))
+    }
+    
+    # print the updates out ####
+    FT <- tblFT1(df)
+  }
+  
+  # ----< Check c.spec >----
+  {
+    setSpecChk(c.spec)
+  }
+  
+  # ----< build out c.spec >----
+  {
+    c.spec <- setSpecCmp(c.spec)
+  }
+  
   return(c.spec)
-}
+  
+} # end ~ function: setSpec

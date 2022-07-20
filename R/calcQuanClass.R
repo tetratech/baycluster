@@ -19,7 +19,7 @@
 #'   \code{valueCol} which contain a date and value to analyze, respectively
 #' @param dateCol Column name that contains date
 #' @param valueCol Column name that contains values for analyzing for quantiles
-#' @param transform Log transform values before analysis
+#' @param transform if set to "logtrans" then values are log transformed before analysis
 #' @param numClasses Number of classes for computing quantiles 
 #' @param startYear First year to maintain in returned data set
 #' @param endYear Last year to maintain in returned data set
@@ -48,26 +48,14 @@
 calcQuanClass <- function(data 
   , dateCol = "date"
   , valueCol = "flow"
-  , transform = TRUE
+  , transform = logtrans
   , numClasses = 4
   , startYear
   , endYear
   , yearType = "calendar"
   , report = TRUE) { 
   
-  # ----< testing >----
-  {
-    if (FALSE) {
-      dateCol = "date"
-      valueCol = "flow"
-      transform = TRUE  # FALSE
-      numClasses = 4
-      startYear = 1994
-      endYear = 2020
-      yearType = "calendar" # "water"
-    }
-  } # end ~ testing
-  
+
   # ----< Error trap >----
   {
     # dateCol and valueCol must exist and be Date and numeric fields, respectively
@@ -103,8 +91,8 @@ calcQuanClass <- function(data
         , year  = year(.data[[dateCol]])
         , month = month(.data[[dateCol]])
         
-        # log transform if option is selected
-        , value = case_when(transform ~ log(.data[[valueCol]])
+        # transform if option is selected
+        , value = case_when(transform == "logtrans" ~ log(.data[[valueCol]])
           , TRUE ~ .data[[valueCol]])) 
     
     # adjust year when water year selected
@@ -171,17 +159,6 @@ calcQuanClass <- function(data
       , YearAvg = avg)
   } # end ~ Filter final data set down
   
-  # ----< Add attributes to final data set >----
-  {
-    ffyr <- ffyr %>%
-      structure(out.attrs = NULL
-        , numClasses = numClasses
-        , monOrder   = monOrder
-        , yearType   = yearType
-        , transform  = transform
-        , valueCol   = valueCol
-        , dateCol    = dateCol)
-  } # end ~ add attributes
   
   return(ffyr)
   
