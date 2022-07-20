@@ -9,7 +9,7 @@ readTextFile(
   filePath = "..",
   fileType = "standard",
   colNames = NA,
-  report = TRUE
+  report = FALSE
 )
 }
 \arguments{

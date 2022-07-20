@@ -4,22 +4,28 @@
 #' @description Calculate and return quantile class by year and month
 #'   
 #' @details 
-#' Question: Should quantiles be computed with all data and then trim
-#' un-used years data? Or should data be trimmed by year first? 
+#' Quantiles are computed using all provided data, i.e., long-term
+#' quantiles. The \code{startYear} and \code{endYear} limit the returned
+#' data table to the desired year. 
+#' 
+#' Setting \code{probabilities} to \code{seq(0, 1, length.out = 5)} results in
+#' probabilities being set to 0, 0.25, 0.50, 0.75, and 1.00; This leads to four
+#' (4) classes being assigned where the leftmost interval corresponds to level
+#' one, the next leftmost to level two and so on. Setting \code{length.out = 6}
+#' will yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
 #' 
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{dateCol} and
 #'   \code{valueCol} which contain a date and value to analyze, respectively
-#' @param dateCol Column name that contains date, e.g., \code{dateCol =
-#'   SampleDate}
-#' @param valueCol Column name that contains values to analyze for quantiles,
-#'   e.g., \code{valueCol = Concentrations}
-#' @param transform Log transform values before analysis
-#' @param probabilities Vector of increasing probabilities to analyze. 
+#' @param dateCol Column name that contains date
+#' @param valueCol Column name that contains values for analyzing for quantiles
+#' @param transform if set to "logtrans" then values are log transformed before analysis
+#' @param numClasses Number of classes for computing quantiles 
 #' @param startYear First year to maintain in returned data set
 #' @param endYear Last year to maintain in returned data set
 #' @param yearType Indicate whether to perform analysis on a "calendar" or
 #'   "water" year
+#' @param report Indicate whether to print table
 #'  
 #' @examples 
 #' # TBD
@@ -29,7 +35,7 @@
 #' @seealso \code{\link{readTextFile}}
 #' 
 #' 
-#' @importFrom rlang .data
+#' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
@@ -40,37 +46,31 @@
 #' @export
 #' 
 calcQuanClass <- function(data 
-  , dateCol = date
-  , valueCol = flow
-  , transform = TRUE
-  , probabilities = seq(0,1,0.25)
+  , dateCol = "date"
+  , valueCol = "flow"
+  , transform = logtrans
+  , numClasses = 4
   , startYear
   , endYear
-  , yearType = "calendar") { 
+  , yearType = "calendar"
+  , report = TRUE) { 
   
-  # ----< testing >----
-  {
-    if (FALSE) {
-      dateCol = date
-      valueCol = flow
-      transform = TRUE  # FALSE
-      probabilities = seq(0,1,0.25)
-      startYear = 1994
-      endYear = 2020
-      yearType = "calendar" # "water"
-    }
-  } # end ~ testing
-  
+
   # ----< Error trap >----
   {
     # dateCol and valueCol must exist and be Date and numeric fields, respectively
     stopifnot(
-      deparse(substitute(dateCol)) %in% names(data) 
-      , deparse(substitute(valueCol)) %in% names(data)
-      , is.Date(pull(data[ , deparse(substitute(dateCol))]))
-      , is.numeric(pull(data[ , deparse(substitute(valueCol))]))
+      dateCol %in% names(data) 
+      , valueCol %in% names(data)
+      , is.Date(pull(data[ , dateCol]))
+      , is.numeric(pull(data[ , valueCol]))
       )
   } # end ~ error trap
+  
+  # ----< Compute even sized probability classes >----
+  {
+    probabilities <- seq(0, 1, length.out = numClasses+1)
+  }
   
   # ----< Set month processing order based on yearType >----
   {
@@ -83,22 +83,23 @@ calcQuanClass <- function(data
     data1 <- data %>%
       
       # down-select to columns with date and value
-      select(., {{dateCol}}, {{valueCol}}) %>%
+      select(., .data[[dateCol]], .data[[valueCol]] ) %>%
       
       # calculations
       mutate(.
         # extract year and month
-        , year  = year({{dateCol}})
-        , month = month({{dateCol}})
+        , year  = year(.data[[dateCol]])
+        , month = month(.data[[dateCol]])
         
-        # log transform if option is selected
-        , value = case_when(transform ~ log({{valueCol}})
-          , TRUE ~ {{valueCol}})) 
-      
+        # transform if option is selected
+        , value = case_when(transform == "logtrans" ~ log(.data[[valueCol]])
+          , TRUE ~ .data[[valueCol]])) 
+    
     # adjust year when water year selected
     if (tolower(yearType)== "water") {
-      data1[,"year"] <- calcWaterYear(month, year)
+      data1 <- calcWaterYear(data1, "year", "month", "year")
     }
+    
   } # end ~ Create data set for analysis
   
   # ----< Process data at annual level >----
@@ -157,5 +158,8 @@ calcQuanClass <- function(data
     rename(., Year = year
       , YearAvg = avg)
   } # end ~ Filter final data set down
+  
+  
+  return(ffyr)
   
 } # end ~ function: calcQuanClass

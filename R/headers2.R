@@ -165,7 +165,7 @@
 #'
 #' @param text text of table title
 #' @param n table number
-#' @param t emphasis or stong
+#' @param t emphasis or strong
 #' @examples
 #' text<-"Hello World!"
 #' .T(text)

@@ -2,14 +2,20 @@
 % Please edit documentation in R/calcWaterYear.R
 \name{calcWaterYear}
 \alias{calcWaterYear}
-\title{Calculate water year from given year and month}
+\title{Add water year from given year and month to a data table}
 \usage{
-calcWaterYear(year, month)
+calcWaterYear(data, yearCol = "year", monthCol = "month", wateryearCol = NA)
 }
 \arguments{
-\item{year}{year}
+\item{data}{Data table to analyze. Must have two column: \code{yearCol} and
+\code{monthCol}}
 
-\item{month}{month must be from 1-12}
+\item{yearCol}{Column name that contains year data}
+
+\item{monthCol}{Column name that contains month data}
+
+\item{wateryearCol}{Column name to store water year. If left as NA, then
+yearCol will be overwritten.}
 }
 \value{
 vector of water year
@@ -24,11 +30,11 @@ Water years begin on October 1 and are accorded the year
 dat0 <- tidyr::tibble( a = seq(as.Date('2022-06-10'), as.Date('2023-03-01'), by = "30 days"))
 
 dat0 <- calcYearMonth(dat0
-  , dateCol = a
-  , yearCol = Year
-  , monthCol = theMonth)
+  , dateCol = "a"
+  , yearCol = "Year"
+  , monthCol = "theMonth")
 
-dat0$WY <- calcWaterYear(dat0$Year, dat0$theMonth)
+dat0 <- calcWaterYear(dat0, "Year", "theMonth", "WY")
 }
 
 }

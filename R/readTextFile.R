@@ -31,11 +31,11 @@
 #' @seealso \code{\link{calcQuanClass}}
 #' 
 #' @importFrom rlang .data
-#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
+#' @importFrom lubridate ymd decimal_date yday year month is.Date
+#' @importFrom lubridate %m+% %m-% make_date  floor_date ceiling_date
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
-#' @importFrom tibble tibble as_tibble
-#' @importFrom knitr kable 
+#' @importFrom tibble tibble as_tibble is_tibble
 #' @importFrom readr read_lines read_delim
 #' 
 #' @export
@@ -44,7 +44,7 @@ readTextFile <- function(fileName
   , filePath = ".."
   , fileType = "standard"
   , colNames = NA
-  , report = TRUE) {
+  , report = FALSE) {
   
   # ----< testing >----
   {
@@ -117,7 +117,7 @@ readTextFile <- function(fileName
       data1 <- read_delim(file = fname
         , col_names = NA
         , skip    =  pull(skip + sk[iType,"chk2"])
-        , na      = "NA"    
+        , na      = c("", "NA")   
         , trim_ws = TRUE
         , show_col_types = FALSE
         , n_max = 1
@@ -134,24 +134,9 @@ readTextFile <- function(fileName
   
   # ----< summary data report >----
   {
-    if (report) {
-      
-      # determine character, numeric and date fields
-      i1 <- sapply(data, is.character) 
-      i2 <- sapply(data, is.numeric) 
-      i3 <- sapply(data, lubridate::is.Date) 
-      
-      print(summary(data[, i2|i3]))
-      
-      for (k1 in names(data)[i1]) {
-        if ((length(table(data[,k1]))) > 10) {
-          print("First 10 ...")
-          print(knitr::kable(table(data[,k1])[1:min(10,length(table(data[,k1])))]))
-        } else {
-          print(knitr::kable(table(data[,k1])))
-        }
-      }
-    }
+    
+    if (report)  print("Report: Future development.")
+    
   } # end ~ summary data report
   
   return(data)

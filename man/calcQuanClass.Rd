@@ -6,28 +6,27 @@
 \usage{
 calcQuanClass(
   data,
-  dateCol = date,
-  valueCol = flow,
-  transform = TRUE,
-  probabilities = seq(0, 1, 0.25),
+  dateCol = "date",
+  valueCol = "flow",
+  transform = logtrans,
+  numClasses = 4,
   startYear,
   endYear,
-  yearType = "calendar"
+  yearType = "calendar",
+  report = TRUE
 )
 }
 \arguments{
 \item{data}{Data table to analyze. Must have two columns: \code{dateCol} and
 \code{valueCol} which contain a date and value to analyze, respectively}
 
-\item{dateCol}{Column name that contains date, e.g., \code{dateCol =
-SampleDate}}
+\item{dateCol}{Column name that contains date}
 
-\item{valueCol}{Column name that contains values to analyze for quantiles,
-e.g., \code{valueCol = Concentrations}}
+\item{valueCol}{Column name that contains values for analyzing for quantiles}
 
-\item{transform}{Log transform values before analysis}
+\item{transform}{if set to "logtrans" then values are log transformed before analysis}
 
-\item{probabilities}{Vector of increasing probabilities to analyze.}
+\item{numClasses}{Number of classes for computing quantiles}
 
 \item{startYear}{First year to maintain in returned data set}
 
@@ -35,6 +34,8 @@ e.g., \code{valueCol = Concentrations}}
 
 \item{yearType}{Indicate whether to perform analysis on a "calendar" or
 "water" year}
+
+\item{report}{Indicate whether to print table}
 }
 \value{
 data table with cross tabulation of quantiles by year and month
@@ -43,8 +44,15 @@ data table with cross tabulation of quantiles by year and month
 Calculate and return quantile class by year and month
 }
 \details{
-Question: Should quantiles be computed with all data and then trim
-un-used years data? Or should data be trimmed by year first?
+Quantiles are computed using all provided data, i.e., long-term
+quantiles. The \code{startYear} and \code{endYear} limit the returned
+data table to the desired year. 
+
+Setting \code{probabilities} to \code{seq(0, 1, length.out = 5)} results in
+probabilities being set to 0, 0.25, 0.50, 0.75, and 1.00; This leads to four
+(4) classes being assigned where the leftmost interval corresponds to level
+one, the next leftmost to level two and so on. Setting \code{length.out = 6}
+will yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
 }
 \examples{
 # TBD

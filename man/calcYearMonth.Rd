@@ -4,20 +4,17 @@
 \alias{calcYearMonth}
 \title{Add year and month to data table}
 \usage{
-calcYearMonth(data, dateCol = date, yearCol = year, monthCol = month)
+calcYearMonth(data, dateCol = "date", yearCol = "year", monthCol = "month")
 }
 \arguments{
 \item{data}{Data table to analyze. Must have one column: \code{dateCol} which
 contains a date to analyze}
 
-\item{dateCol}{Column name that contains date, e.g., \code{dateCol =
-SampleDate}}
+\item{dateCol}{Column name that contains date}
 
-\item{yearCol}{Column name to store year data, e.g., \code{yearCol =
-SampleYear}}
+\item{yearCol}{Column name to store year data}
 
-\item{monthCol}{Column name to store month data, e.g., \code{monthCol =
-SampleMonth}}
+\item{monthCol}{Column name to store month data}
 }
 \value{
 data table with values for year and month added
@@ -31,9 +28,9 @@ Based on a data table with a date field, add year and month
 dat0 <- tidyr::tibble( a = seq(as.Date('2022-06-10'), as.Date('2023-03-01'), by = "30 days"))
 
 dat0 <- calcYearMonth(dat0
-  , dateCol = a
-  , yearCol = Year
-  , monthCol = theMonth)
+  , dateCol = "a"
+  , yearCol = "Year"
+  , monthCol = "theMonth")
 
 dat0$WY <- calcWaterYear(dat0$Year, dat0$theMonth)
 }
