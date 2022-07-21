@@ -19,7 +19,7 @@ data table with full prediction data set
 \item year - year for cluster 
 \item month - month   
 \item day - day of month   
-\item pred - prediction
+\item value - prediction
 }
 }
 \description{

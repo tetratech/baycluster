@@ -1,9 +1,9 @@
 # ####
-#' @title Create (or update) specification list for cluster analysis using
-#'   predictions from GAM results
+#' @title Create (or update) specification list for cluster analysis 
 #' 
-#' @description Create (or update) specification list for cluster analysis using
-#'   predictions from GAM results. (Future updates for WRTDS files.)
+#' @description Create (or update) specification list for cluster analysis.
+#'   Currently developed for using predictions from GAM results. (Future updates
+#'   for WRTDS files.)
 #'   
 #' @details See \code{\link{c.specQC}} for list of variables needed to be passed. 
 #' 
