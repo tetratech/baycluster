@@ -35,4 +35,25 @@ setSpecChkGAM <- function(c.spec) {
   }
   
   
+  # ----< FUTURE DEVELOPMENT: Notify user of 1 wqParm limitation >----
+  if ( not_empty(c.spec[["wqParm"]]) ) {
+    if (length(c.spec[["wqParm"]]) > 1) {
+      warning(simpleWarning(paste("Ok to include more than one water quality parameter for the moment,\n"
+      , " but we'll downselect to the first item for cluster analysis later.")))
+    }
+  } else {
+    warning(simpleWarning(paste("wqParm"," variable not provided but is needed")))
+  }
+  
+  # ----< FUTURE DEVELOPMENT: Notify user of 1 wqLayer limitation >----
+  if ( not_empty(c.spec[["wqLayer"]]) ) {
+    if (length(c.spec[["wqLayer"]]) > 1) {
+      warning(simpleWarning(paste("Ok to include more than one layer for the moment,\n"
+        , " but we'll downselect to the first item for cluster analysis later.")))
+    }
+  } else {
+    warning(simpleWarning(paste("wqLayer"," variable not provided but is needed")))
+  }
+
+  
 } # end ~ function: setSpecChkGAM

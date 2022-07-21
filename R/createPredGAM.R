@@ -22,7 +22,7 @@
 #' \item year - year for cluster 
 #' \item month - month   
 #' \item day - day of month   
-#' \item pred - prediction
+#' \item value - prediction
 #' }
 #' 
 #' @seealso \code{\link{readTextFile}}
@@ -66,7 +66,7 @@ createPredGAM <- function(c.spec) {
           , flw_sal  = 0)
       
       # make prediction ####
-      pred0$pred <- predict(gamResult[[paste0("gamOutput",chkRDA$gamOptionSel[k1])]][["gamRslt"]]
+      pred0$value <- predict(gamResult[[paste0("gamOutput",chkRDA$gamOptionSel[k1])]][["gamRslt"]]
         , newdata = pred0)
       
       # compile predictions ####
@@ -80,7 +80,7 @@ createPredGAM <- function(c.spec) {
     
     # down select final prediction data set to minimum columns ####
     pred <- pred %>%
-      select(., station, wqParm, wqLayer, year, yearAdj, month, day, pred) %>%
+      select(., station, wqParm, wqLayer, year, yearAdj, month, day, value) %>%
       rename(., yearCal = year, year=yearAdj)
     
   } # end ~ create predictions

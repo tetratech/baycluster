@@ -2,8 +2,7 @@
 % Please edit documentation in R/setSpec.R
 \name{setSpec}
 \alias{setSpec}
-\title{Create (or update) specification list for cluster analysis using
-  predictions from GAM results}
+\title{Create (or update) specification list for cluster analysis}
 \usage{
 setSpec(c.spec = list(), ...)
 }
@@ -17,8 +16,9 @@ list of needed variables}
 list
 }
 \description{
-Create (or update) specification list for cluster analysis using
-  predictions from GAM results. (Future updates for WRTDS files.)
+Create (or update) specification list for cluster analysis.
+  Currently developed for using predictions from GAM results. (Future updates
+  for WRTDS files.)
 }
 \details{
 See \code{\link{c.specQC}} for list of variables needed to be passed. 
