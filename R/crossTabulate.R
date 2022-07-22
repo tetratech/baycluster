@@ -42,6 +42,7 @@
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
 #' @importFrom tibble tibble as_tibble 
+#' @importFrom tidyr unite
 #' 
 #' @export
 #'
@@ -98,6 +99,10 @@ crossTabulate <- function(c.spec, data) {
     mn <- apply(data1[, 2:NCOL(data1)],1,mean, na.rm=TRUE)
     data1[, 2:NCOL(data1)] = sweep(data1[, 2:NCOL(data1)], MARGIN = 1, STATS = rowMeans(data1[, 2:NCOL(data1)]))
   }
+  
+  # ----< convert data1 to data frame and add rownames >----
+  data1 <- as.data.frame(data1)
+  rownames(data1) <- data1[ ,1]
   
   return(data1)
   

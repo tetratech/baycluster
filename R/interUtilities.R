@@ -16,8 +16,11 @@
 #' grpCnt <- 5
 #' 
 #' grpCol <- rev(rainbow(grpCnt))
-#' grpCol <- tapply(grpCol, grpCol, hexColor2Name)
-#' barplot(1:grpCnt, col=grpCol, names.arg=grpCol)
+#' 
+#' grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
+#'   mutate(., grpCol = scales::hue_pal()(grpCnt)) %>%
+#'   mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
+#' with(grpDF, barplot(1:grpCnt, col=grpCol, names.arg=grpCol))
 #' }
 #' 
 #' @return named color

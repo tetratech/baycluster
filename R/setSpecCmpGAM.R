@@ -19,7 +19,7 @@
 #' 
 #' 
 #' @importFrom tibble tibble as_tibble 
-#' @importFrom scales col_numeric
+#' @importFrom scales col_numeric hue_pal
 #' @importFrom assertthat not_empty see_if
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' 
@@ -37,11 +37,9 @@ setSpecCmpGAM <- function(c.spec) {
   pltVar <- paste(wqParm,"pred",sep=".") 
   
   # ----< Cluster group and colors >----
-  grpCol <- rev(rainbow(grpCnt))
-  grpCol <- tapply(grpCol, grpCol, hexColor2Name)
-  attr(grpCol, "dimnames") <- NULL
-  grpDF  <- tibble(lab = paste("Group",1:grpCnt)
-    ,  col = grpCol)
+  grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
+    mutate(., grpCol = scales::hue_pal()(grpCnt)) %>%
+    mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
 
   # ----< Cluster group and colors >----
   exCovColFct <- scales::col_numeric(
