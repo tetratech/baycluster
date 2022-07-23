@@ -153,7 +153,7 @@ vec.strg <- function(x, sep=", ") {
 #' 
 pry <- function(listvar, v=NA) {
 
-  if (is.na(v)) {
+  if (any(is.na(v))) {
     v <- names(v)
   }
     
@@ -166,3 +166,29 @@ pry <- function(listvar, v=NA) {
 
 
 
+# ####
+#' @title capitalize first letter of words separated by blanks in a character string
+#' 
+#' @description capitalize first letter of words separated by blanks in a character string
+#'   
+#' @details ...
+#' 
+#' @param x character string
+#' 
+#' @examples 
+#' \dontrun{
+#' # TBD
+#' 
+#' }
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+simpleCap <- function(x) { # 
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1, 1)), substring(s, 2),
+    sep = "", collapse = " ")
+}

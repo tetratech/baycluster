@@ -4,12 +4,14 @@
 \alias{crossTabulate}
 \title{Cross tabulate data.}
 \usage{
-crossTabulate(c.spec, data)
+crossTabulate(c.spec, data, retData = 1)
 }
 \arguments{
 \item{c.spec}{list for storing specifications for cluster analysis}
 
 \item{data}{input data to be cross tabulated}
+
+\item{retData}{1: return wide data, 2: return list of wide and long data}
 }
 \value{
 cross tabulate data table

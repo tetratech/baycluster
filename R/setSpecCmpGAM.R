@@ -41,16 +41,14 @@ setSpecCmpGAM <- function(c.spec) {
     mutate(., grpCol = rev(scales::hue_pal()(grpCnt))) %>%
     mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
 
-  # ----< Cluster group and colors >----
+  # ----< Exogenous Covariate Cluster group and colors >----
   exCovColFct <- scales::col_numeric(
     palette = c("red","lightblue","blue")
     , na.color = NA
     , domain = c(1,exCovClass))
-  exCovCol <- exCovColFct(1:exCovClass)
-  exCovCol <- tapply(exCovCol, exCovCol, hexColor2Name)
-  attr(exCovCol, "dimnames") <- NULL
-  exCovDF <- tibble(lab = paste("Class",1:exCovClass)
-    , col = exCovCol)
+  exCovDF <- tibble(lab = paste("Class",1:exCovClass)) %>%
+    mutate(., exCovCol = exCovColFct(1:exCovClass)) %>%
+    mutate(., exCovCol = apply(as.data.frame(exCovCol), 1, hexColor2Name)) 
   
   # ----< ID variable label >----
   if (length(idVar)==2) {

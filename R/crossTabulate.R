@@ -26,6 +26,7 @@
 #' 
 #' @param c.spec list for storing specifications for cluster analysis 
 #' @param data input data to be cross tabulated
+#' @param retData 1: return wide data, 2: return list of wide and long data
 #' 
 #' @examples 
 #' \dontrun{
@@ -46,7 +47,7 @@
 #' 
 #' @export
 #'
-crossTabulate <- function(c.spec, data) {
+crossTabulate <- function(c.spec, data, retData=1) {
   
   # ----< FUTURE DEVELOPMENT limitations >----
   {
@@ -121,8 +122,12 @@ crossTabulate <- function(c.spec, data) {
   }
   
   # ----< return wide and long formatted data >----
-  
-  lst <- list(dataW=data1, dataL = data)
+ 
+  if (retData == 1) {
+    lst <- data1
+  } else {
+    lst <- list(dataW=data1, dataL = data)
+  }
   
   return(lst)
   
