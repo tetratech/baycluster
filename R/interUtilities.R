@@ -130,14 +130,14 @@ vec.strg <- function(x, sep=", ") {
 
 
 # ####
-#' @title Extract components from list or table to parent environment
+#' @title pry components from list or table to parent environment
 #' 
-#' @description Extract components from list or table to parent environment
+#' @description pry components from list or table to parent environment
 #'   
 #' @details ...
 #' 
 #' @param listvar name of target list or table
-#' @param v vector of variables to extract from list or table
+#' @param v vector of variables to pry from list or table
 #' 
 #' @examples 
 #' \dontrun{
@@ -151,11 +151,18 @@ vec.strg <- function(x, sep=", ") {
 #' 
 #' @export
 #' 
-extract <- function(listvar, v) {
-  
+pry <- function(listvar, v=NA) {
+
+  if (is.na(v)) {
+    v <- names(v)
+  }
+    
   for(nam in v) {eval(parse(text=paste0(nam," <- listvar$",nam)))}  
   rm(nam, listvar, v)
   argList <- grabFunctionParameters()   # create list of function arguments  
   invisible( list2env(argList, parent.frame() ) )
   
-} # end ~ function: extract
+} # end ~ function: pry
+
+
+

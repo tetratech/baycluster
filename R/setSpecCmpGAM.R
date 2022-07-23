@@ -31,14 +31,14 @@ setSpecCmpGAM <- function(c.spec) {
   varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
     , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
     , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
-  extract(c.spec, varsNeeded)
+  pry(c.spec, varsNeeded)
   
   # ----< Plot Variable >----
   pltVar <- paste(wqParm,"pred",sep=".") 
   
   # ----< Cluster group and colors >----
   grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
-    mutate(., grpCol = scales::hue_pal()(grpCnt)) %>%
+    mutate(., grpCol = rev(scales::hue_pal()(grpCnt))) %>%
     mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
 
   # ----< Cluster group and colors >----

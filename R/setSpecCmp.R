@@ -31,7 +31,7 @@ setSpecCmp <- function(c.spec) {
   varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
     , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
     , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
-  extract(c.spec, varsNeeded)
+  pry(c.spec, varsNeeded)
   
   # ----< Station setup: labels and order based on statVec >----
   statDF <- tibble(ord = 1:length(statVec)
