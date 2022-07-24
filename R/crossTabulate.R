@@ -126,7 +126,7 @@ crossTabulate <- function(c.spec, data, retData=1) {
   if (retData == 1) {
     lst <- data1
   } else {
-    lst <- list(dataW=data1, dataL = data)
+    lst <- list(dataW=data1, dataL = data, data.mn=data.mn)
   }
   
   return(lst)

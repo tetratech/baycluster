@@ -32,11 +32,17 @@ setSpecCmp <- function(c.spec) {
     , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
     , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
   pry(c.spec, varsNeeded)
-  
+
   # ----< Station setup: labels and order based on statVec >----
   statDF <- tibble(statOrd = 1:length(statVec)
     , statVec
     , statLab = statVec)
+  
+  if ("stations" %in% names(c.spec)) {
+    stations <- c.spec$stations
+    varFound <- grep("station", names(stations), ignore.case = TRUE , value = TRUE)
+    statDF <- merge(statDF, stations, by.x = "statVec", by.y = varFound, all.x = TRUE)
+  }
   
   # ----< Year setup: labels and order based on startYear and endYear >----
   yearVec = startYear:endYear

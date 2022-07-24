@@ -35,7 +35,7 @@ setSpec <- function(c.spec = list(), ...) {
   
   # ----< Create list of arguments passed in function >----
   {
-    c.spec2 <- grabFunctionParameters()      
+    c.spec2 <- grabFunctionParameters()    
     c.spec2$c.spec <- NULL                # drop c.spec from list
   }
   
@@ -43,7 +43,7 @@ setSpec <- function(c.spec = list(), ...) {
   {
     # find common variable names between arguments passed to those in original c.spec ####
     varCommon <- intersect(names(c.spec2), names(c.spec))
-    
+
     # down-select common variables to those with updates ####
     chk <- logical(length = length(varCommon))
     for (k1 in 1:length(varCommon)) {
