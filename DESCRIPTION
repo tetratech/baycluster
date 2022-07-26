@@ -4,7 +4,7 @@ Title: Cluster Analysis of Long-term Water Quality Trends
 Description: Developed to enable users to evaluate compare
     long-term trends using cluster analysis. 
 Author: Elgin Perry, Jon Harcum, Erik W Leppo
-Version: 0.0.0.9024
+Version: 0.0.0.9027
 Maintainer: Jon Harcum <Jon.Harcum@tetratech.com>
 Depends:
     R (>= 3.5.0)
@@ -41,9 +41,11 @@ URL: https://github.com/jharcum/baycluster
 BugReports: https://github.com/jharcum/baycluster/issues
 VignetteBuilder: knitr
 Collate: calcQuanClass.R
+     calcTotWSS.R
      calcWaterYear.R
      calcYearMonth.R
      chkRDAfiles.R
+     clusterData.R
      createBasePred.R
      createPredGAM.R
      crossTabulate.R

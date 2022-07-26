@@ -91,6 +91,17 @@ crossTabulate <- function(c.spec, data, retData=1) {
       select(., {{prof}}, {{id}}, value) %>%                          # keep needed var
       group_by(., .data[[prof]], .data[[id]]) %>%                    # group
       summarise(., value=mean(value), .groups = "keep")
+    
+    # substitute prof var idLev for idLab
+    profLev <- as.character(c.spec$idLev[[prof]])
+    profLab <- as.character(c.spec$idLab[[prof]])
+    
+    if (is.numeric(data[[prof]])) {
+      data[[prof]] <- as.character(data[[prof]])
+    }
+
+    Lev2Lab <- function(x) profLab[x == profLev]
+    data[[prof]] <- sapply(data[[prof]],Lev2Lab)  
   }
   
   # ----< center data if requested >----
@@ -119,6 +130,9 @@ crossTabulate <- function(c.spec, data, retData=1) {
     # convert to data frame and add rownames 
     data1 <- as.data.frame(data1)
     rownames(data1) <- data1[ ,1]
+    
+    # sort data columns to match prof var order
+    data1 <- data1[, c(id, paste0(pltVar, profLab))]
   }
   
   # ----< return wide and long formatted data >----

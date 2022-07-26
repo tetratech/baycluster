@@ -6,25 +6,24 @@
 #' @details 
 #' Quantiles are computed using all provided data, i.e., long-term
 #' quantiles. The \code{startYear} and \code{endYear} limit the returned
-#' data table to the desired year. 
+#' data table to the desired years. 
 #' 
-#' Setting \code{probabilities} to \code{seq(0, 1, length.out = 5)} results in
-#' probabilities being set to 0, 0.25, 0.50, 0.75, and 1.00; This leads to four
-#' (4) classes being assigned where the leftmost interval corresponds to level
-#' one, the next leftmost to level two and so on. Setting \code{length.out = 6}
-#' will yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
-#' 
+#' Setting \code{numClasses = 4} results in probabilities being set to 0, 0.25,
+#' 0.50, 0.75, and 1.00 for purposes of classification. This leads to four (4)
+#' classes being assigned where the leftmost interval corresponds to level one,
+#' the next leftmost to level two and so on. Setting \code{numClasses = 5} will
+#' yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{dateCol} and
 #'   \code{valueCol} which contain a date and value to analyze, respectively
 #' @param dateCol Column name that contains date
 #' @param valueCol Column name that contains values for analyzing for quantiles
-#' @param transform if set to "logtrans" then values are log transformed before analysis
+#' @param transform if \code{transform = "logtrans"}, then values are log transformed before analysis
 #' @param numClasses Number of classes for computing quantiles 
 #' @param startYear First year to maintain in returned data set
 #' @param endYear Last year to maintain in returned data set
-#' @param yearType Indicate whether to perform analysis on a "calendar" or
-#'   "water" year
+#' @param monthAdj Adjustment to months, setting to \code{monthAdj = c(10,11,12)} is
+#'   equivalent to calling for water year. 
 #' @param report Indicate whether to print table
 #'  
 #' @examples 
@@ -51,8 +50,8 @@ calcQuanClass <- function(data
   , transform = logtrans
   , numClasses = 4
   , startYear
-  , endYear
-  , yearType = "calendar"
+  , endYear 
+  , monthAdj = NA
   , report = TRUE) { 
   
 
@@ -72,10 +71,21 @@ calcQuanClass <- function(data
     probabilities <- seq(0, 1, length.out = numClasses+1)
   }
   
-  # ----< Set month processing order based on yearType >----
+  # ----< Set month processing order based on monthAdj >----
   {
-  monOrder <- case_when(tolower(yearType)== "water" ~ c(10:12,1:9)
-    , TRUE ~ 1:12)
+    
+    # initialize
+    monthOrder <- monthVec <- 1:12
+    
+    # process if there are any non-NA monthAdj values
+    if (any(!is.na(monthAdj))) {
+      if (monthAdj[1] > 0) {
+        monthOrder <- c(monthVec[monthVec %in% monthAdj], monthVec[!(monthVec %in% monthAdj)])
+      } else {
+        monthOrder <- c(monthVec[!(monthVec %in% abs(monthAdj))], monthVec[(monthVec %in% abs(monthAdj))])
+      }
+    }
+    
   } # end ~ Set month processing order
   
   # ----< Create data set for analysis >----
@@ -95,9 +105,13 @@ calcQuanClass <- function(data
         , value = case_when(transform == "logtrans" ~ log(.data[[valueCol]])
           , TRUE ~ .data[[valueCol]])) 
     
-    # adjust year when water year selected
-    if (tolower(yearType)== "water") {
-      data1 <- calcWaterYear(data1, "year", "month", "year")
+    # adjust year when monthAdj is specified (see note 1 for previous water year processing)
+    if (any(!is.na(monthAdj))) {
+      if (monthAdj[1] > 1) {
+        data1[ , "year"] <- data1[ , "year"] + unlist(data1[ , "month"]) %in% monthAdj
+      } else {
+        data1[ , "year"] <- data1[ , "year"] - unlist(data1[ , "month"]) %in% abs(monthAdj)
+      }
     }
     
   } # end ~ Create data set for analysis
@@ -127,7 +141,7 @@ calcQuanClass <- function(data
       ungroup(.)
 
     # process each month ####  
-    for(mon in monOrder) {
+    for(mon in monthOrder) {
       
       # extract one month
       ff1mo <- ffmo %>%
@@ -159,7 +173,7 @@ calcQuanClass <- function(data
       , YearAvg = avg)
   } # end ~ Filter final data set down
   
-  
   return(ffyr)
   
 } # end ~ function: calcQuanClass
+  

@@ -44,6 +44,9 @@ setSpecCmp <- function(c.spec) {
     statDF <- merge(statDF, stations, by.x = "statVec", by.y = varFound, all.x = TRUE)
   }
   
+  statDF <- statDF %>%
+    arrange(., statOrd)
+  
   # ----< Year setup: labels and order based on startYear and endYear >----
   yearVec = startYear:endYear
   yearDF <- tibble(yearOrd = 1:length(yearVec)
@@ -51,19 +54,18 @@ setSpecCmp <- function(c.spec) {
     , yearLab =  paste(yearVec))
   
   # ----< Month setup: vector, labels and order based on monthGrid and monthAdj >----
-  monthVec <- monthGrid
-  if (exists("monthAdj") && !(any(is.na(monthAdj)) | is.null(monthAdj))) {
+  monthOrd <- monthVec <- monthGrid
+  if (any(!is.na(monthAdj))) {
     if (monthAdj[1] > 0) {
       monthOrd <- c(monthVec[monthVec %in% monthAdj], monthVec[!(monthVec %in% monthAdj)])
     } else {
       monthOrd <- c(monthVec[!(monthVec %in% abs(monthAdj))], monthVec[(monthVec %in% abs(monthAdj))])
     }
-  } else {
-    monthOrd <- monthGrid
   }
-  monthDF <- tibble(monthOrd = 1:length(monthOrd)
+  monthDF <- tibble(monthOrd.1 = 1:length(monthOrd)
     , monthVec = monthOrd
-    , monthLab = month.abb[monthOrd])
+    , monthLab = month.abb[monthOrd]) %>%
+    rename(., monthOrd = monthOrd.1)
   
   # ----< creating these lists makes it easy to switch between clustering by years, months, or stations. >----
   idLev <- list(
