@@ -31,36 +31,55 @@ setSpecCmp <- function(c.spec) {
   varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
     , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
     , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
-  extract(c.spec, varsNeeded)
-  
+  pry(c.spec, varsNeeded)
+
   # ----< Station setup: labels and order based on statVec >----
-  statDF <- tibble(ord = 1:length(statVec)
+  statDF <- tibble(statOrd = 1:length(statVec)
     , statVec
-    , lab = statVec)
+    , statLab = statVec)
+  
+  if ("stations" %in% names(c.spec)) {
+    stations <- c.spec$stations
+    varFound <- grep("station", names(stations), ignore.case = TRUE , value = TRUE)
+    statDF <- merge(statDF, stations, by.x = "statVec", by.y = varFound, all.x = TRUE)
+  } 
+  
+  statDF <- statDF %>%
+    arrange(., statOrd) 
   
   # ----< Year setup: labels and order based on startYear and endYear >----
   yearVec = startYear:endYear
-  yearDF <- tibble(ord = 1:length(yearVec)
+  yearDF <- tibble(yearOrd = 1:length(yearVec)
     , yearVec
-    , lab =  paste(yearVec))
+    , yearLab =  paste(yearVec))
   
   # ----< Month setup: vector, labels and order based on monthGrid and monthAdj >----
-  monthVec <- monthGrid
-  if (exists("monthAdj") && !(any(is.na(monthAdj)) | is.null(monthAdj))) {
+  monthOrd <- monthVec <- monthGrid
+  if (any(!is.na(monthAdj))) {
     if (monthAdj[1] > 0) {
       monthOrd <- c(monthVec[monthVec %in% monthAdj], monthVec[!(monthVec %in% monthAdj)])
     } else {
       monthOrd <- c(monthVec[!(monthVec %in% abs(monthAdj))], monthVec[(monthVec %in% abs(monthAdj))])
     }
-  } else {
-    monthOrd <- NA
   }
-  monthDF <- tibble(ord = 1:length(monthOrd)
+  monthDF <- tibble(monthOrd.1 = 1:length(monthOrd)
     , monthVec = monthOrd
-    , lab = month.abb[monthOrd])
+    , monthLab = month.abb[monthOrd]) %>%
+    rename(., monthOrd = monthOrd.1)
+  
+  # ----< creating these lists makes it easy to switch between clustering by years, months, or stations. >----
+  idLev <- list(
+    year = yearDF$yearVec
+    , month = monthDF$monthVec
+    , station = statDF$statVec)
+  
+  idLab <- list(
+    year = yearDF$yearLab
+    , month = monthDF$monthLab
+    , station = statDF$statLab)
   
   # ----< append variables to list for return >----
-  vars2append <- c("statDF", "yearDF", "monthDF")
+  vars2append <- c("statDF", "yearDF", "monthDF", "idLev", "idLab")
   
   for (var in vars2append) {
     c.spec[[var]] <- eval(parse(text=var))

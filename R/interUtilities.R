@@ -16,8 +16,11 @@
 #' grpCnt <- 5
 #' 
 #' grpCol <- rev(rainbow(grpCnt))
-#' grpCol <- tapply(grpCol, grpCol, hexColor2Name)
-#' barplot(1:grpCnt, col=grpCol, names.arg=grpCol)
+#' 
+#' grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
+#'   mutate(., grpCol = scales::hue_pal()(grpCnt)) %>%
+#'   mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
+#' with(grpDF, barplot(1:grpCnt, col=grpCol, names.arg=grpCol))
 #' }
 #' 
 #' @return named color
@@ -127,14 +130,14 @@ vec.strg <- function(x, sep=", ") {
 
 
 # ####
-#' @title Extract components from list or table to parent environment
+#' @title pry components from list or table to parent environment
 #' 
-#' @description Extract components from list or table to parent environment
+#' @description pry components from list or table to parent environment
 #'   
 #' @details ...
 #' 
 #' @param listvar name of target list or table
-#' @param v vector of variables to extract from list or table
+#' @param v vector of variables to pry from list or table
 #' 
 #' @examples 
 #' \dontrun{
@@ -148,11 +151,122 @@ vec.strg <- function(x, sep=", ") {
 #' 
 #' @export
 #' 
-extract <- function(listvar, v) {
-  
+pry <- function(listvar, v=NA) {
+
+  if (any(is.na(v))) {
+    v <- names(v)
+  }
+    
   for(nam in v) {eval(parse(text=paste0(nam," <- listvar$",nam)))}  
   rm(nam, listvar, v)
   argList <- grabFunctionParameters()   # create list of function arguments  
   invisible( list2env(argList, parent.frame() ) )
   
-} # end ~ function: extract
+} # end ~ function: pry
+
+
+
+# ####
+#' @title capitalize first letter of words separated by blanks in a character string
+#' 
+#' @description capitalize first letter of words separated by blanks in a character string
+#'   
+#' @details ...
+#' 
+#' @param x character string
+#' 
+#' @examples 
+#' \dontrun{
+#' # TBD
+#' 
+#' }
+#' 
+#' @return character
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+simpleCap <- function(x) { 
+  s <- strsplit(x, " ")[[1]]
+  s <- paste(toupper(substring(s, 1, 1)), substring(s, 2),
+    sep = "", collapse = " ")
+  return(s)
+}
+
+# ####
+#' @title capitalize first letter of character string
+#' 
+#' @description capitalize first letter of character string
+#'   
+#' @details ...
+#' 
+#' @param cs character string
+#' 
+#' @examples 
+#' \dontrun{
+#' # TBD
+#' 
+#' }
+#' 
+#' @return character
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+firstCap <- function(cs) {  
+  cs <- tolower(cs)
+  cs <- paste0(toupper(substr(cs,1,1)),substring(cs,2))
+  return(cs)
+}
+
+
+# ####
+#' @title capitalize first letter of words separated by blanks in a character string
+#' 
+#' @description capitalize first letter of words separated by blanks in a
+#'   character string and checks to make sure other letters are lower case
+#'   
+#' @details ...
+#' 
+#' @param cs character string
+#' 
+#' @examples 
+#' \dontrun{
+#' # TBD
+#' 
+#' }
+#' 
+#' @return character
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+firstCapAll <- function(cs) {
+  cs.return <- cs
+  if (length(cs)==1) {
+    cs.split <- unlist(strsplit(cs,' '))
+    cs.split <- firstCap(cs.split)
+    cs.return <- vec.strg(cs.split, " ")
+  } else {
+    if(length(cs)> 1) {
+      cs.split <- strsplit(cs,' ')
+      for (i in 1:length(cs)) { 
+        cs.return[i] <- vec.strg(firstCap(cs.split[[i]]), " ")
+      }
+    }
+  }
+  
+  return(cs.return)
+}
+
+
+

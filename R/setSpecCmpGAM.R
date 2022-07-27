@@ -19,7 +19,7 @@
 #' 
 #' 
 #' @importFrom tibble tibble as_tibble 
-#' @importFrom scales col_numeric
+#' @importFrom scales col_numeric hue_pal
 #' @importFrom assertthat not_empty see_if
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' 
@@ -31,28 +31,24 @@ setSpecCmpGAM <- function(c.spec) {
   varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
     , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
     , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
-  extract(c.spec, varsNeeded)
+  pry(c.spec, varsNeeded)
   
   # ----< Plot Variable >----
   pltVar <- paste(wqParm,"pred",sep=".") 
   
   # ----< Cluster group and colors >----
-  grpCol <- rev(rainbow(grpCnt))
-  grpCol <- tapply(grpCol, grpCol, hexColor2Name)
-  attr(grpCol, "dimnames") <- NULL
-  grpDF  <- tibble(lab = paste("Group",1:grpCnt)
-    ,  col = grpCol)
+  grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
+    mutate(., grpCol = rev(scales::hue_pal()(grpCnt))) %>%
+    mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
 
-  # ----< Cluster group and colors >----
+  # ----< Exogenous Covariate Cluster group and colors >----
   exCovColFct <- scales::col_numeric(
     palette = c("red","lightblue","blue")
     , na.color = NA
     , domain = c(1,exCovClass))
-  exCovCol <- exCovColFct(1:exCovClass)
-  exCovCol <- tapply(exCovCol, exCovCol, hexColor2Name)
-  attr(exCovCol, "dimnames") <- NULL
-  exCovDF <- tibble(lab = paste("Class",1:exCovClass)
-    , col = exCovCol)
+  exCovDF <- tibble(lab = paste("Class",1:exCovClass)) %>%
+    mutate(., exCovCol = exCovColFct(1:exCovClass)) %>%
+    mutate(., exCovCol = apply(as.data.frame(exCovCol), 1, hexColor2Name)) 
   
   # ----< ID variable label >----
   if (length(idVar)==2) {

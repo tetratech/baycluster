@@ -41,7 +41,7 @@ createPredGAM <- function(c.spec) {
   
   # ----< extract needed variables from c.spec >----
   varsNeeded <- c("gamFolder", "chkRDA", "basePred")
-  extract(c.spec, varsNeeded)
+  pry(c.spec, varsNeeded)
 
   # ----< create predictions >----
   {
