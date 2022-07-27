@@ -34,22 +34,18 @@ setSpecCmp <- function(c.spec) {
   pry(c.spec, varsNeeded)
 
   # ----< Station setup: labels and order based on statVec >----
-  print(statVec)
   statDF <- tibble(statOrd = 1:length(statVec)
     , statVec
     , statLab = statVec)
-  print(statDF)
   
   if ("stations" %in% names(c.spec)) {
     stations <- c.spec$stations
     varFound <- grep("station", names(stations), ignore.case = TRUE , value = TRUE)
     statDF <- merge(statDF, stations, by.x = "statVec", by.y = varFound, all.x = TRUE)
-  }
-  print(statDF)
+  } 
   
   statDF <- statDF %>%
-    arrange(., statOrd)
-  print(statDF)
+    arrange(., statOrd) 
   
   # ----< Year setup: labels and order based on startYear and endYear >----
   yearVec = startYear:endYear
