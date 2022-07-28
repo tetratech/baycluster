@@ -5,23 +5,23 @@
 \title{Create base prediction data set for GAM clusters}
 \usage{
 createBasePred(
-  startYear = 1990,
-  endYear = year(Sys.Date()),
-  monthGrid = 1:12,
-  dayGrid = 15,
-  monthAdj = NA
+  start_year = 1990,
+  end_year = year(Sys.Date()),
+  month_grid = 1:12,
+  day_grid = 15,
+  month_adj = NA
 )
 }
 \arguments{
-\item{startYear}{Begin year of analysis (scalar)}
+\item{start_year}{Begin year of analysis (scalar)}
 
-\item{endYear}{End year of analysis (scalar)}
+\item{end_year}{End year of analysis (scalar)}
 
-\item{monthGrid}{vector of months to include in analysis}
+\item{month_grid}{vector of months to include in analysis}
 
-\item{dayGrid}{days of month to make predictions}
+\item{day_grid}{days of month to make predictions}
 
-\item{monthAdj}{month adjustment to accommodate water year analyses}
+\item{month_adj}{month adjustment to accommodate water year analyses}
 }
 \value{
 data table with base prediction data set
@@ -32,8 +32,8 @@ data table with base prediction data set
 \item date - date   
 \item dyear - date expressed as decimal year   
 \item doy - day of year (calendar basis)   
-\item yearAdj - year (adjusted based on monthAdj)   
-\item doyAdj - day of year (adjusted based on yearAdj)  
+\item year_adj - year (adjusted based on month_adj)   
+\item doy_adj - day of year (adjusted based on year_adj)  
 }
 }
 \description{
@@ -41,27 +41,27 @@ Constructs the base prediction data set for GAM clusters and
   includes dates, days of year, decimal year, etc.
 }
 \details{
-Set \code{monthGrid = 1:12} to include all months of the year. \code{monthGrid
+Set \code{month_grid = 1:12} to include all months of the year. \code{month_grid
 = 6:9} would only include June through September.  
 
-Set \code{dayGrid = 15} to set up data set for the 15th of every month.
-\code{dayGrid = c(10,20)} would set up data set for the 10 and 20th of every month.
+Set \code{day_grid = 15} to set up data set for the 15th of every month.
+\code{day_grid = c(10,20)} would set up data set for the 10 and 20th of every month.
 
-Set \code{monthAdj = NA} results in analysis performed on a calendar year.
-Setting \code{monthAdj = c(10, 11, 12)} would result in analysis being set
+Set \code{month_adj = NA} results in analysis performed on a calendar year.
+Setting \code{month_adj = c(10, 11, 12)} would result in analysis being set
 up for a water year basis, making October 1 the first day of the year. This
-is accomplished by computing yearAdj as the calendar year plus 1 ("+1") for
-months 10-12. If \code{monthAdj = c(-1, -2, -3)} (note the negative values),
-then yearAdj is set to the calendar year minus 1 ("-1") for months 1-3. This
+is accomplished by computing year_adj as the calendar year plus 1 ("+1") for
+months 10-12. If \code{month_adj = c(-1, -2, -3)} (note the negative values),
+then year_adj is set to the calendar year minus 1 ("-1") for months 1-3. This
 has the effect of making April 1 the first day of the year in this example.
 }
 \examples{
 \dontrun{
-basePred <- createBasePred(startYear = 2015
- , endYear = 2016
- , monthGrid = 1:12
- , dayGrid = c(10,20)
- , monthAdj = c(10,11,12))
+basePred <- createBasePred(start_year = 2015
+ , end_year = 2016
+ , month_grid = 1:12
+ , day_grid = c(10,20)
+ , month_adj = c(10,11,12))
 }
 
 }

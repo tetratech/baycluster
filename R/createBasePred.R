@@ -5,33 +5,33 @@
 #'   includes dates, days of year, decimal year, etc.
 #'   
 #' @details 
-#' Set \code{monthGrid = 1:12} to include all months of the year. \code{monthGrid
+#' Set \code{month_grid = 1:12} to include all months of the year. \code{month_grid
 #' = 6:9} would only include June through September.  
 #' 
-#' Set \code{dayGrid = 15} to set up data set for the 15th of every month.
-#' \code{dayGrid = c(10,20)} would set up data set for the 10 and 20th of every month.
+#' Set \code{day_grid = 15} to set up data set for the 15th of every month.
+#' \code{day_grid = c(10,20)} would set up data set for the 10 and 20th of every month.
 #' 
-#' Set \code{monthAdj = NA} results in analysis performed on a calendar year.
-#' Setting \code{monthAdj = c(10, 11, 12)} would result in analysis being set
+#' Set \code{month_adj = NA} results in analysis performed on a calendar year.
+#' Setting \code{month_adj = c(10, 11, 12)} would result in analysis being set
 #' up for a water year basis, making October 1 the first day of the year. This
-#' is accomplished by computing yearAdj as the calendar year plus 1 ("+1") for
-#' months 10-12. If \code{monthAdj = c(-1, -2, -3)} (note the negative values),
-#' then yearAdj is set to the calendar year minus 1 ("-1") for months 1-3. This
+#' is accomplished by computing year_adj as the calendar year plus 1 ("+1") for
+#' months 10-12. If \code{month_adj = c(-1, -2, -3)} (note the negative values),
+#' then year_adj is set to the calendar year minus 1 ("-1") for months 1-3. This
 #' has the effect of making April 1 the first day of the year in this example.
 #' 
-#' @param startYear Begin year of analysis (scalar)
-#' @param endYear End year of analysis (scalar)
-#' @param monthGrid vector of months to include in analysis
-#' @param dayGrid days of month to make predictions 
-#' @param monthAdj month adjustment to accommodate water year analyses
+#' @param start_year Begin year of analysis (scalar)
+#' @param end_year End year of analysis (scalar)
+#' @param month_grid vector of months to include in analysis
+#' @param day_grid days of month to make predictions 
+#' @param month_adj month adjustment to accommodate water year analyses
 #'  
 #' @examples 
 #' \dontrun{
-#' basePred <- createBasePred(startYear = 2015
-#'  , endYear = 2016
-#'  , monthGrid = 1:12
-#'  , dayGrid = c(10,20)
-#'  , monthAdj = c(10,11,12))
+#' basePred <- createBasePred(start_year = 2015
+#'  , end_year = 2016
+#'  , month_grid = 1:12
+#'  , day_grid = c(10,20)
+#'  , month_adj = c(10,11,12))
 #' }
 #' 
 #' @return data table with base prediction data set
@@ -42,8 +42,8 @@
 #' \item date - date   
 #' \item dyear - date expressed as decimal year   
 #' \item doy - day of year (calendar basis)   
-#' \item yearAdj - year (adjusted based on monthAdj)   
-#' \item doyAdj - day of year (adjusted based on yearAdj)  
+#' \item year_adj - year (adjusted based on month_adj)   
+#' \item doy_adj - day of year (adjusted based on year_adj)  
 #' }
 #' 
 #' @seealso \code{\link{readTextFile}}
@@ -57,11 +57,11 @@
 #' 
 #' @export
 #' 
-createBasePred <- function(startYear = 1990
-  , endYear = year(Sys.Date())
-  , monthGrid = 1:12
-  , dayGrid = 15
-  , monthAdj = NA) {
+createBasePred <- function(start_year = 1990
+  , end_year = year(Sys.Date())
+  , month_grid = 1:12
+  , day_grid = 15
+  , month_adj = NA) {
   
   # ----< Create base prediction data set >----
   
@@ -70,7 +70,7 @@ createBasePred <- function(startYear = 1990
     # Include an additional year at the beginning and end to account for alternative
     # year starts
     data <- 
-      as_tibble(expand.grid((startYear-1):(endYear+1), monthGrid, dayGrid)) %>%
+      as_tibble(expand.grid((start_year-1):(end_year+1), month_grid, day_grid)) %>%
       rename(., year = Var1, month = Var2, day = Var3) %>%
       
       # create date-related fields 
@@ -81,24 +81,24 @@ createBasePred <- function(startYear = 1990
         , dyear = decimal_date(date)                      # decimal year
         , doy   = yday(date)                              # day of year
         
-        , yearAdj = year
-        , doyAdj = doy
+        , year_adj = year
+        , doy_adj = doy
       ) %>%
       arrange(., date)
   } # end ~ make a grid of year ...
   
-  # Make yearAdj for alternative year types ####
+  # Make year_adj for alternative year types ####
   {
-    # advance year by 1 for all months listed in monthAdj assuming first monthAdj
+    # advance year by 1 for all months listed in month_adj assuming first month_adj
     # is positive; otherwise decrease year by 1
-    # monthAdj <- c(10, 11, 12) # good for water year
-    # monthAdj <- c(-1, -2, -3) # good for growing season year  
-    if (exists("monthAdj") && !(any(is.na(monthAdj)) | is.null(monthAdj))) {
+    # month_adj <- c(10, 11, 12) # good for water year
+    # month_adj <- c(-1, -2, -3) # good for growing season year  
+    if (exists("month_adj") && !(any(is.na(month_adj)) | is.null(month_adj))) {
       data <- data %>%
         mutate(.
-          , yearAdj = case_when(
-            monthAdj[1] > 0 ~ year + month %in% abs(monthAdj)
-            , monthAdj[1] < 0 ~ year - month %in% abs(monthAdj)
+          , year_adj = case_when(
+            month_adj[1] > 0 ~ year + month %in% abs(month_adj)
+            , month_adj[1] < 0 ~ year - month %in% abs(month_adj)
             , TRUE ~ year 
           )
         )
@@ -107,41 +107,41 @@ createBasePred <- function(startYear = 1990
     # Trim data set for year | calc adjust doy
     {
       data <- data %>%
-        filter(., between(yearAdj , startYear , endYear))
+        filter(., between(year_adj , start_year , end_year))
     }
     
-  } # end ~ Make yearAdj for alternative year types
+  } # end ~ Make year_adj for alternative year types
   
-  # Make doyAdj for alternative year types ####
+  # Make doy_adj for alternative year types ####
   {
     data <- data %>%
-      filter(., between(yearAdj , startYear , endYear))
+      filter(., between(year_adj , start_year , end_year))
     
     # ** do not combine with above because unique(month) cannot be calculated
     data <- data %>%
       mutate(.
         , d1  = as.numeric(date - make_date(year, unique(month)[1], 1) )+1
         , d2 = as.numeric(date - make_date(year-1, unique(month)[1], 1))+1
-        , doyAdj = case_when( between(d1,1,366) ~ d1
+        , doy_adj = case_when( between(d1,1,366) ~ d1
           , between(d2,1,366) ~ d2
           , TRUE ~ NA_real_)
       ) %>%
       select(., -d1, -d2)
-  } # end ~ Make doyAdjustments for alternative year types
+  } # end ~ Make doy_adjustments for alternative year types
   
   # Add attributes documenting prediction data set creation ####
   {
     data <- data %>%
       structure( out.attrs = NULL
-        , dateCreated = Sys.time()
-        , startYear = startYear
-        , endYear = endYear
-        , monthGrid = monthGrid
-        , dayGrid = dayGrid
-        , monthAdj = monthAdj
-        , firstDay = floor_date(min(data$date), unit = "month")
-        , lastDay = ceiling_date(max(data$date), unit = "month")-1
-        , month.order = unique(data$month)
+        , date_created = Sys.time()
+        , start_year = start_year
+        , end_year = end_year
+        , month_grid = month_grid
+        , day_grid = day_grid
+        , month_adj = month_adj
+        , first_day = floor_date(min(data$date), unit = "month")
+        , last_day = ceiling_date(max(data$date), unit = "month")-1
+        , month_order = unique(data$month)
       )
   } # end ~ Add attributes documenting prediction data set creation
   

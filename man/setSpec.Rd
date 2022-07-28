@@ -21,7 +21,7 @@ Create (or update) specification list for cluster analysis.
   for WRTDS files.)
 }
 \details{
-See \code{\link{c.specQC}} for list of variables needed to be passed. 
+See \code{\link{c.spec_qc}} for list of variables needed to be passed. 
 
 TBD: expand to include list of variables added to the list
 }

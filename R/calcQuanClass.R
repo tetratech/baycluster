@@ -10,15 +10,17 @@
 #' 
 #' Setting \code{numClasses = 4} results in probabilities being set to 0, 0.25,
 #' 0.50, 0.75, and 1.00 for purposes of classification. This leads to four (4)
-#' classes being assigned where the leftmost interval corresponds to level one,
-#' the next leftmost to level two and so on. Setting \code{numClasses = 5} will
-#' yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
+#' classes being assigned where the leftmost interval corresponds to level one
+#' and the lowest numerical values, the next leftmost to level two and so on.
+#' Setting \code{numClasses = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
+#' 0.8, 1.0.
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{dateCol} and
 #'   \code{valueCol} which contain a date and value to analyze, respectively
 #' @param dateCol Column name that contains date
 #' @param valueCol Column name that contains values for analyzing for quantiles
-#' @param transform if \code{transform = "logtrans"}, then values are log transformed before analysis
+#' @param transform.type if \code{transform.type = "logtransform"}, then values are
+#'   log transformed before analysis
 #' @param numClasses Number of classes for computing quantiles 
 #' @param startYear First year to maintain in returned data set
 #' @param endYear Last year to maintain in returned data set
@@ -47,7 +49,7 @@
 calcQuanClass <- function(data 
   , dateCol = "date"
   , valueCol = "flow"
-  , transform = logtrans
+  , transform.type = "logtransform"
   , numClasses = 4
   , startYear
   , endYear 
@@ -102,7 +104,7 @@ calcQuanClass <- function(data
         , month = month(.data[[dateCol]])
         
         # transform if option is selected
-        , value = case_when(transform == "logtrans" ~ log(.data[[valueCol]])
+        , value = case_when(transform.type == "logtrans" ~ log(.data[[valueCol]])
           , TRUE ~ .data[[valueCol]])) 
     
     # adjust year when monthAdj is specified (see note 1 for previous water year processing)

@@ -8,7 +8,7 @@ calcQuanClass(
   data,
   dateCol = "date",
   valueCol = "flow",
-  transform = logtrans,
+  transform.type = "logtransform",
   numClasses = 4,
   startYear,
   endYear,
@@ -24,7 +24,8 @@ calcQuanClass(
 
 \item{valueCol}{Column name that contains values for analyzing for quantiles}
 
-\item{transform}{if \code{transform = "logtrans"}, then values are log transformed before analysis}
+\item{transform.type}{if \code{transform.type = "logtransform"}, then values are
+log transformed before analysis}
 
 \item{numClasses}{Number of classes for computing quantiles}
 
@@ -50,9 +51,10 @@ data table to the desired years.
 
 Setting \code{numClasses = 4} results in probabilities being set to 0, 0.25,
 0.50, 0.75, and 1.00 for purposes of classification. This leads to four (4)
-classes being assigned where the leftmost interval corresponds to level one,
-the next leftmost to level two and so on. Setting \code{numClasses = 5} will
-yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
+classes being assigned where the leftmost interval corresponds to level one
+and the lowest numerical values, the next leftmost to level two and so on.
+Setting \code{numClasses = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
+0.8, 1.0.
 }
 \examples{
 # TBD
