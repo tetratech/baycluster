@@ -32,6 +32,8 @@ clusterMapLabel(
 \item{lab_col}{label color}
 
 \item{lab_size}{label size}
+
+\item{h_just}{horizontal justification parameter}
 }
 \value{
 map object

@@ -66,7 +66,7 @@ createPredGAM <- function(c.spec) {
           , flw_sal  = 0)
       
       # make prediction ####
-      pred0$value <- predict(gamResult[[paste0("gamOutput",chk_rda$gamOptionSel[k1])]][["gamRslt"]]
+      pred0$value <- predict(gamResult[[paste0("gamOutput",chk_rda$gam_option_sel[k1])]][["gamRslt"]]
         , newdata = pred0)
       
       # compile predictions ####

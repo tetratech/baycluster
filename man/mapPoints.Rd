@@ -43,8 +43,6 @@ mapPoints(
 \item{map_coord_ratio}{map coordinate ratio}
 
 \item{boo_tidal}{flag to indicate tidal}
-
-\item{fl_grp_fill}{**Un-used**}
 }
 \value{
 map object

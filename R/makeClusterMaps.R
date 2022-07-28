@@ -12,6 +12,7 @@
 #' @param y_space change in vertical location between lines
 #' @param lab_col label color
 #' @param lab_size label size
+#' @param h_just horizontal justification parameter
 #' 
 #' @examples 
 #' \dontrun{
@@ -30,7 +31,8 @@
 #' 
 #' @export
 #' 
-clusterMapLabel <- function(cmap,lat,lon,lab_txt,x_space=0,y_space=0,lab_col="black",lab_size=8, h_just=0)
+clusterMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0
+  , lab_col="black", lab_size=8, h_just=0)
 {
   x1 <- lon
   y1 <- lat
@@ -117,7 +119,6 @@ clusterMap <- function(grp_data, grp_lab,grp_col, leg_title = "Station Grouping"
 #' @param col_lat column name with latitude data
 #' @param col_lon column name with longitude data
 #' @param col_grp column name with group colors
-#' @param fl_grp_fill **Un-used**
 #' @param leg_pos legend position
 #' @param leg_title legend title
 #' @param leg_labs legend labels
@@ -148,7 +149,6 @@ mapPoints <- function(pts
   , col_lat = "latitude"
   , col_lon = "longitude"
   , col_grp = NA
-  # , fl_grp_fill = NULL
   , leg_pos = "bottom"
   , leg_title = NULL
   , leg_labs = NULL
