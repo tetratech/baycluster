@@ -16,9 +16,9 @@
 #' @return data table with full prediction data set
 #' \itemize{
 #' \item station - 
-#' \item wqParm - 
-#' \item wqLayer - 
-#' \item yearCal - year (calendar basis)   
+#' \item wq_parm - 
+#' \item wq_layer - 
+#' \item year_cal - year (calendar basis)   
 #' \item year - year for cluster 
 #' \item month - month   
 #' \item day - day of month   
@@ -40,33 +40,33 @@
 createPredGAM <- function(c.spec) {
   
   # ----< extract needed variables from c.spec >----
-  varsNeeded <- c("gamFolder", "chkRDA", "basePred")
+  varsNeeded <- c("gam_folder", "chk_rda", "base_pred")
   pry(c.spec, varsNeeded)
 
   # ----< create predictions >----
   {
-    # downselect basePred to minimum data ####
-    basePred0 <- basePred %>%
-      select(., year, yearAdj, month, day, doy, dyear)
+    # downselect base_pred to minimum data ####
+    base_pred0 <- base_pred %>%
+      select(., year, year_adj, month, day, doy, dyear)
     
-    # for each row in chkRDA ####
-    for (k1 in 1:NROW(chkRDA)) {
+    # for each row in chk_rda ####
+    for (k1 in 1:NROW(chk_rda)) {
       
       # load gamResult from baytrends output
-      load(file.path(gamFolder, chkRDA$wqParm[k1], chkRDA$fileName[k1]))
+      load(file.path(gam_folder, chk_rda$wq_parm[k1], chk_rda$file_name[k1]))
       
       # expand base prediction data set for ith row ####
-      pred0 <- basePred0 %>%
+      pred0 <- base_pred0 %>%
         mutate(.
-          , station  = chkRDA$station[k1]
-          , wqParm   = chkRDA$wqParm[k1]
-          , wqLayer  = chkRDA$wqLayer[k1]
+          , station  = chk_rda$station[k1]
+          , wq_parm   = chk_rda$wq_parm[k1]
+          , wq_layer  = chk_rda$wq_layer[k1]
           , cyear    = dyear - gamResult$iSpec$centerYear
           , intervention = tail(gamResult$iSpec$intervenList$intervention,1)
           , flw_sal  = 0)
       
       # make prediction ####
-      pred0$value <- predict(gamResult[[paste0("gamOutput",chkRDA$gamOptionSel[k1])]][["gamRslt"]]
+      pred0$value <- predict(gamResult[[paste0("gamOutput",chk_rda$gam_option_sel[k1])]][["gamRslt"]]
         , newdata = pred0)
       
       # compile predictions ####
@@ -80,8 +80,8 @@ createPredGAM <- function(c.spec) {
     
     # down select final prediction data set to minimum columns ####
     pred <- pred %>%
-      select(., station, wqParm, wqLayer, year, yearAdj, month, day, value) %>%
-      rename(., yearCal = year, year=yearAdj)
+      select(., station, wq_parm, wq_layer, year, year_adj, month, day, value) %>%
+      rename(., year_cal = year, year=year_adj)
     
   } # end ~ create predictions
   

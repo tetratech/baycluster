@@ -78,11 +78,11 @@ outSummStat <- function(data, tblFTout = FALSE) {
       # output formatted table    
       if (outtblFT.numeric)  {
         tblFT1(x.numSum
-          , tblTitle = "Summary statistics-numeric fields"
-          , tblPre_label = "Table: "
-          , tblFontName = "Calibri"
-          , tblFontSize = 11
-          , tblTheme = "box")
+          , tbl_title = "Summary statistics-numeric fields"
+          , tbl_pre_label = "Table: "
+          , tbl_font_name = "Calibri"
+          , tbl_font_size = 11
+          , tbl_theme = "box")
       }
     }
   } # end ~ numeric
@@ -103,11 +103,11 @@ outSummStat <- function(data, tblFTout = FALSE) {
       # output formatted table
       if (outtblFT.date) {
         tblFT1(x.dateSum
-          , tblTitle = "Summary statistics-date fields"
-          , tblPre_label = "Table: "
-          , tblFontName = "Calibri"
-          , tblFontSize = 11
-          , tblTheme = "box")
+          , tbl_title = "Summary statistics-date fields"
+          , tbl_pre_label = "Table: "
+          , tbl_font_name = "Calibri"
+          , tbl_font_size = 11
+          , tbl_theme = "box")
       }
     }
   } # end ~ date fields
@@ -120,11 +120,11 @@ outSummStat <- function(data, tblFTout = FALSE) {
       
       if (outtblFT.character) {
         tblFT1(x.charSum
-          , tblTitle = "Header-character fields"
-          , tblPre_label = "Table: "
-          , tblFontName = "Calibri"
-          , tblFontSize = 11
-          , tblTheme = "box")
+          , tbl_title = "Header-character fields"
+          , tbl_pre_label = "Table: "
+          , tbl_font_name = "Calibri"
+          , tbl_font_size = 11
+          , tbl_theme = "box")
       }
     }
   }

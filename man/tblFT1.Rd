@@ -6,25 +6,25 @@
 \usage{
 tblFT1(
   data,
-  tblTitle = NA,
-  tblPre_label = NA,
-  tblFontName = NA,
-  tblFontSize = NA,
-  tblTheme = NA
+  tbl_title = NA,
+  tbl_pre_label = NA,
+  tbl_font_name = NA,
+  tbl_font_size = NA,
+  tbl_theme = NA
 )
 }
 \arguments{
 \item{data}{table data}
 
-\item{tblTitle}{table title}
+\item{tbl_title}{table title}
 
-\item{tblPre_label}{table title pre_label}
+\item{tbl_pre_label}{table title pre_label}
 
-\item{tblFontName}{table font}
+\item{tbl_font_name}{table font}
 
-\item{tblFontSize}{font size}
+\item{tbl_font_size}{font size}
 
-\item{tblTheme}{table theme}
+\item{tbl_theme}{table theme}
 }
 \value{
 # may return flextable

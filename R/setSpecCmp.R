@@ -28,65 +28,65 @@
 setSpecCmp <- function(c.spec) {
   
   # ----< extract needed variables >----
-  varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
-    , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
-    , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
+  varsNeeded <- c("stat_vec", "start_year", "end_year", "month_grid", "day_grid"
+    , "grp_cnt", "wq_parm", "wq_layer", "id_var", "prof_var", "month_adj"
+    , "analysis_title", "analysis_date", "file_name", "data_out", "ex_cov_class")
   pry(c.spec, varsNeeded)
 
-  # ----< Station setup: labels and order based on statVec >----
-  statDF <- tibble(statOrd = 1:length(statVec)
-    , statVec
-    , statLab = statVec)
+  # ----< Station setup: labels and order based on stat_vec >----
+  stat_df <- tibble(stat_ord = 1:length(stat_vec)
+    , stat_vec
+    , stat_lab = stat_vec)
   
   if ("stations" %in% names(c.spec)) {
     stations <- c.spec$stations
     varFound <- grep("station", names(stations), ignore.case = TRUE , value = TRUE)
-    statDF <- merge(statDF, stations, by.x = "statVec", by.y = varFound, all.x = TRUE)
+    stat_df <- merge(stat_df, stations, by.x = "stat_vec", by.y = varFound, all.x = TRUE)
   } 
   
-  statDF <- statDF %>%
-    arrange(., statOrd) 
+  stat_df <- stat_df %>%
+    arrange(., stat_ord) 
   
-  # ----< Year setup: labels and order based on startYear and endYear >----
-  yearVec = startYear:endYear
-  yearDF <- tibble(yearOrd = 1:length(yearVec)
-    , yearVec
-    , yearLab =  paste(yearVec))
+  # ----< Year setup: labels and order based on start_year and end_year >----
+  year_vec = start_year:end_year
+  year_df <- tibble(year_ord = 1:length(year_vec)
+    , year_vec
+    , year_lab =  paste(year_vec))
   
-  # ----< Month setup: vector, labels and order based on monthGrid and monthAdj >----
-  monthOrd <- monthVec <- monthGrid
-  if (any(!is.na(monthAdj))) {
-    if (monthAdj[1] > 0) {
-      monthOrd <- c(monthVec[monthVec %in% monthAdj], monthVec[!(monthVec %in% monthAdj)])
+  # ----< Month setup: vector, labels and order based on month_grid and month_adj >----
+  month_ord <- month_vec <- month_grid
+  if (any(!is.na(month_adj))) {
+    if (month_adj[1] > 0) {
+      month_ord <- c(month_vec[month_vec %in% month_adj], month_vec[!(month_vec %in% month_adj)])
     } else {
-      monthOrd <- c(monthVec[!(monthVec %in% abs(monthAdj))], monthVec[(monthVec %in% abs(monthAdj))])
+      month_ord <- c(month_vec[!(month_vec %in% abs(month_adj))], month_vec[(month_vec %in% abs(month_adj))])
     }
   }
-  monthDF <- tibble(monthOrd.1 = 1:length(monthOrd)
-    , monthVec = monthOrd
-    , monthLab = month.abb[monthOrd]) %>%
-    rename(., monthOrd = monthOrd.1)
+  month_df <- tibble(month_ord.1 = 1:length(month_ord)
+    , month_vec = month_ord
+    , month_lab = month.abb[month_ord]) %>%
+    rename(., month_ord = month_ord.1)
   
   # ----< creating these lists makes it easy to switch between clustering by years, months, or stations. >----
-  idLev <- list(
-    year = yearDF$yearVec
-    , month = monthDF$monthVec
-    , station = statDF$statVec)
+  id_lev <- list(
+    year = year_df$year_vec
+    , month = month_df$month_vec
+    , station = stat_df$stat_vec)
   
-  idLab <- list(
-    year = yearDF$yearLab
-    , month = monthDF$monthLab
-    , station = statDF$statLab)
+  id_lab <- list(
+    year = year_df$year_lab
+    , month = month_df$month_lab
+    , station = stat_df$stat_lab)
   
   # ----< append variables to list for return >----
-  vars2append <- c("statDF", "yearDF", "monthDF", "idLev", "idLab")
+  vars2append <- c("stat_df", "year_df", "month_df", "id_lev", "id_lab")
   
   for (var in vars2append) {
     c.spec[[var]] <- eval(parse(text=var))
   }  
   
   # ----< datSource specific supplemental variables >----
-  if(c.spec$datSource == "gam") {
+  if(c.spec$dat_source == "gam") {
     c.spec <- setSpecCmpGAM(c.spec) 
   } else if (c.spec$datSource == "WRTDS") {
     c.spec <- setSpecCmpWRTDS(c.spec) 

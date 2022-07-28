@@ -25,34 +25,34 @@
 setSpecChkGAM <- function(c.spec) {
   
 
-  # ----< monthGrid check >----
-  if ( not_empty(c.spec[["monthGrid"]]) ) {
-    if (any(!(c.spec[["monthGrid"]] %in% 1:12))) {
-      warning(simpleWarning(paste("Invalid monthGrid: must be 1-12")))
+  # ----< month_grid check >----
+  if ( not_empty(c.spec[["month_grid"]]) ) {
+    if (any(!(c.spec[["month_grid"]] %in% 1:12))) {
+      warning(simpleWarning(paste("Invalid month_grid: must be 1-12")))
     }
   } else {
-    warning(simpleWarning(paste("monthGrid"," variable not provided but is needed")))
+    warning(simpleWarning(paste("month_grid"," variable not provided but is needed")))
   }
   
   
-  # ----< FUTURE DEVELOPMENT: Notify user of 1 wqParm limitation >----
-  if ( not_empty(c.spec[["wqParm"]]) ) {
-    if (length(c.spec[["wqParm"]]) > 1) {
+  # ----< FUTURE DEVELOPMENT: Notify user of 1 wq_parm limitation >----
+  if ( not_empty(c.spec[["wq_parm"]]) ) {
+    if (length(c.spec[["wq_parm"]]) > 1) {
       warning(simpleWarning(paste("Ok to include more than one water quality parameter for the moment,\n"
       , " but we'll downselect to the first item for cluster analysis later.")))
     }
   } else {
-    warning(simpleWarning(paste("wqParm"," variable not provided but is needed")))
+    warning(simpleWarning(paste("wq_parm"," variable not provided but is needed")))
   }
   
-  # ----< FUTURE DEVELOPMENT: Notify user of 1 wqLayer limitation >----
-  if ( not_empty(c.spec[["wqLayer"]]) ) {
-    if (length(c.spec[["wqLayer"]]) > 1) {
+  # ----< FUTURE DEVELOPMENT: Notify user of 1 wq_layer limitation >----
+  if ( not_empty(c.spec[["wq_layer"]]) ) {
+    if (length(c.spec[["wq_layer"]]) > 1) {
       warning(simpleWarning(paste("Ok to include more than one layer for the moment,\n"
         , " but we'll downselect to the first item for cluster analysis later.")))
     }
   } else {
-    warning(simpleWarning(paste("wqLayer"," variable not provided but is needed")))
+    warning(simpleWarning(paste("wq_layer"," variable not provided but is needed")))
   }
 
   

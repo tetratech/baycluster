@@ -5,7 +5,7 @@
 #'   Currently developed for using predictions from GAM results. (Future updates
 #'   for WRTDS files.)
 #'   
-#' @details See \code{\link{c.specQC}} for list of variables needed to be passed. 
+#' @details See \code{\link{c.spec_qc}} for list of variables needed to be passed. 
 #' 
 #' TBD: expand to include list of variables added to the list
 #' 
@@ -65,14 +65,16 @@ setSpec <- function(c.spec = list(), ...) {
   # ----< Update c.spec >----
   {
     # updates based on changed variables and new variables 
-    c.spec[c(varCommonDifferent, varNew)] <- c.spec2[c(varCommonDifferent, varNew)]
+    if (length(c(varCommonDifferent, varNew)) > 0) {
+      c.spec[c(varCommonDifferent, varNew)] <- c.spec2[c(varCommonDifferent, varNew)]
+    }
   }
   
   # ----< Create table of changes >---- 
   {
     # create table
     df <- tibble(Variable = c(varCommonDifferent, varNew)) %>%
-      left_join(., c.specQC, by = "Variable") %>%
+      left_join(., c.spec_qc, by = "Variable") %>%
       select(., Variable, Description) %>%
       mutate(., Settings = NA_character_)
     
@@ -81,7 +83,9 @@ setSpec <- function(c.spec = list(), ...) {
     }
     
     # print the updates out ####
-    FT <- tblFT1(df)
+    FT <- tblFT1(df
+      , tbl_title = "Cluster analysis settings/updates"  
+    )
   }
   
   # ----< Check c.spec >----

@@ -28,71 +28,71 @@
 setSpecCmpGAM <- function(c.spec) {
   
   # ----< extract needed variables >----
-  varsNeeded <- c("statVec", "startYear", "endYear", "monthGrid", "dayGrid"
-    , "grpCnt", "wqParm", "wqLayer", "idVar", "profVar", "monthAdj"
-    , "analysisTitle", "analysisDate", "filename", "dataOut", "exCovClass")
+  varsNeeded <- c("stat_vec", "start_year", "end_year", "month_grid", "day_grid"
+    , "grp_cnt", "wq_parm", "wq_layer", "id_var", "prof_var", "month_adj"
+    , "analysis_title", "analysis_date", "file_name", "data_out", "ex_cov_class")
   pry(c.spec, varsNeeded)
   
   # ----< Plot Variable >----
-  pltVar <- paste(wqParm,"pred",sep=".") 
+  plt_var <- paste(wq_parm,"pred",sep=".") 
   
   # ----< Cluster group and colors >----
-  grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
-    mutate(., grpCol = rev(scales::hue_pal()(grpCnt))) %>%
-    mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
+  grp_df  <- tibble(lab = paste("Group",1:grp_cnt)) %>%
+    mutate(., grp_col = rev(scales::hue_pal()(grp_cnt))) %>%
+    mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
 
   # ----< Exogenous Covariate Cluster group and colors >----
-  exCovColFct <- scales::col_numeric(
+  ex_cov_col_fct <- scales::col_numeric(
     palette = c("red","lightblue","blue")
     , na.color = NA
-    , domain = c(1,exCovClass))
-  exCovDF <- tibble(lab = paste("Class",1:exCovClass)) %>%
-    mutate(., exCovCol = exCovColFct(1:exCovClass)) %>%
-    mutate(., exCovCol = apply(as.data.frame(exCovCol), 1, hexColor2Name)) 
+    , domain = c(1,ex_cov_class))
+  ex_cov_df <- tibble(lab = paste("Class",1:ex_cov_class)) %>%
+    mutate(., ex_cov_col = ex_cov_col_fct(1:ex_cov_class)) %>%
+    mutate(., ex_cov_col = apply(as.data.frame(ex_cov_col), 1, hexColor2Name)) 
   
   # ----< ID variable label >----
-  if (length(idVar)==2) {
-    idVarLab <- vec.strg(idVar,sep='&')
+  if (length(id_var)==2) {
+    id_var_lab <- vec.strg(id_var,sep='&')
   } else {
-      idVarLab <- paste(idVar)
+    id_var_lab <- paste(id_var)
   }
   
   # ----< output file names >----
-  if (is.null(filename)) {
-    filename <- paste("Cluster",analysisTitle,wqLayer,wqParm,"of"
-      , idVarLab,"by",profVar,startYear,endYear,sep="_")
+  if (is.null(file_name)) {
+    file_name <- paste("Cluster",analysis_title,wq_layer,wq_parm,"of"
+      , id_var_lab,"by",prof_var,start_year,end_year,sep="_")
   }
   
-  if (is.null(dataOut)) {
-    dataOut <- paste("ClusterGroup",analysisTitle,wqLayer,wqParm,"of"
-      , idVarLab,"by",profVar,startYear,endYear,sep="_")
+  if (is.null(data_out)) {
+    dataOut <- paste("ClusterGroup",analysis_title,wq_layer,wq_parm,"of"
+      , id_var_lab,"by",prof_var,start_year,end_year,sep="_")
   }
   
   # ----< build base prediction data set >----
   
-  basePred <- createBasePred(
-    startYear = startYear,
-    endYear = endYear,
-    monthGrid = monthGrid,
-    dayGrid = dayGrid,
-    monthAdj = monthAdj
+  base_pred <- createBasePred(
+    start_year = start_year,
+    end_year = end_year,
+    month_grid = month_grid,
+    day_grid = day_grid,
+    month_adj = month_adj
   ) %>%
     structure( out.attrs = NULL
-      , dateCreated = NULL
-      , startYear = NULL
-      , endYear = NULL
-      , monthGrid = NULL
-      , dayGrid = NULL
-      , monthAdj = NULL
-      , firstDay = NULL
-      , lastDay = NULL
-      , month.order = NULL
+      , date_created = NULL
+      , start_year = NULL
+      , end_year = NULL
+      , month_grid = NULL
+      , day_grid = NULL
+      , month_adj = NULL
+      , first_day = NULL
+      , last_day = NULL
+      , month_order = NULL
     )
   
   
   # ----< append variables to list for return >----
-  vars2append <- c("pltVar", "idVarLab", "filename", "dataOut"
-    , "grpDF", "exCovDF", "basePred")
+  vars2append <- c("plt_var", "id_var_lab", "file_name", "data_out"
+    , "grp_df", "ex_cov_df", "base_pred")
 
   for (var in vars2append) {
     c.spec[[var]] <- eval(parse(text=var))
@@ -101,8 +101,3 @@ setSpecCmpGAM <- function(c.spec) {
   return(c.spec)
   
 } # end ~ function: setSpecCmpGAM
-
-
-
-
-

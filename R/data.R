@@ -1,10 +1,8 @@
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# c.specQC ####
-#' @title Variable list for performing cluster analysis using
-#'   predictions from GAM results. (Future updates for WRTDS files.)
+# c.spec_qc
+#' @title Variable list for performing cluster analysis.
 #' 
 #' @description Variable list for performing cluster analysis using
-#'   predictions from GAM results
+#'   predictions from GAM results. (Future updates for WRTDS files.)
 #' 
 #' @format A data frame with the following variables:
 #' \describe{
@@ -16,4 +14,4 @@
 #'   \item{Where}{Where}
 #'   \item{DescriptionDetailed}{DescriptionDetailed}
 #' }
-"c.specQC"
+"c.spec_qc"

@@ -7,11 +7,11 @@
 #' 
 #' 
 #' @param data table data
-#' @param tblTitle table title
-#' @param tblPre_label table title pre_label
-#' @param tblFontName table font
-#' @param tblFontSize font size
-#' @param tblTheme table theme
+#' @param tbl_title table title
+#' @param tbl_pre_label table title pre_label
+#' @param tbl_font_name table font
+#' @param tbl_font_size font size
+#' @param tbl_theme table theme
 #' 
 #' @examples 
 #' \dontrun{
@@ -34,11 +34,11 @@
 #' @export
 #' 
 tblFT1 <- function(data
-  , tblTitle = NA
-  , tblPre_label = NA   # "Table: "
-  , tblFontName = NA    # "Calibri"
-  , tblFontSize = NA    # 11
-  , tblTheme = NA       # "box" 
+  , tbl_title = NA
+  , tbl_pre_label = NA   # "Table: "
+  , tbl_font_name = NA    # "Calibri"
+  , tbl_font_size = NA    # 11
+  , tbl_theme = NA       # "box" 
   ) {
   
   # ----< Interactive >----
@@ -51,31 +51,31 @@ tblFT1 <- function(data
     padding(padding = 1, part = "all") 
   
   # ----< customize font name >----
-  if (!is.na(tblFontName)) {
-    FT <- font(FT, fontname = tblFontName, part = "all")
+  if (!is.na(tbl_font_name)) {
+    FT <- font(FT, fontname = tbl_font_name, part = "all")
   }  
 
   # ----< customize font size >----  
-  if (!is.na(tblFontSize)) {
-    FT <- fontsize(FT, size = tblFontSize, part = "all")
+  if (!is.na(tbl_font_size)) {
+    FT <- fontsize(FT, size = tbl_font_size, part = "all")
   }
   
   # ----< customize table theme >----
-  stopifnot(tblTheme %in% c(NA, "box", "vanilla", "booktabs"))
-  if (!is.na(tblTheme)) {
-    if (tblTheme == "box") {
+  stopifnot(tbl_theme %in% c(NA, "box", "vanilla", "booktabs"))
+  if (!is.na(tbl_theme)) {
+    if (tbl_theme == "box") {
       FT <- theme_box(FT)   
-    } else if (tblTheme == "vanilla") {
+    } else if (tbl_theme == "vanilla") {
       FT <- theme_vanilla(FT)   
-    } else if (tblTheme == "booktabs") {
+    } else if (tbl_theme == "booktabs") {
       FT <- theme_booktabs(FT)   
     } 
   }
   
   # ----< customize table title >----
-  if (!is.na(tblTitle)) {
-    FT <- set_caption(FT, caption = tblTitle
-      , autonum = run_autonum(seq_id = "tab", pre_label = tblPre_label, bkm = "anytable"))
+  if (!is.na(tbl_title)) {
+    FT <- set_caption(FT, caption = tbl_title
+      , autonum = run_autonum(seq_id = "tab", pre_label = tbl_pre_label, bkm = "anytable"))
   }
   
   # # ----< customize output >----

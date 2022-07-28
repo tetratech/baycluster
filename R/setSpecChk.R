@@ -26,11 +26,11 @@
 setSpecChk <- function(c.spec) {
   
   # Cannot proceed without knowing which list of variables to check for ####
-  stopifnot(c.spec$datSource %in% c("gam", "WRTDS", "file"))
+  stopifnot(c.spec$dat_source %in% c("gam", "WRTDS", "file"))
   
   # ----< Extract variables to look for >----
-  qc <- c.specQC %>%
-    filter(., .data[[paste0("warn",toupper(c.spec$datSource))]]) %>%
+  qc <- c.spec_qc %>%
+    filter(., .data[[paste0("warn",toupper(c.spec$dat_source))]]) %>%
     select(., Variable, Description, Type, Where)
   
   # ----< Check presence of variables in c.spec - warning only >----
@@ -40,7 +40,7 @@ setSpecChk <- function(c.spec) {
     
     if (length(ArgumentsNotPassed) >0) {
       msg <- paste0("Following variables not passed to setSpec or stored in c.spec"
-        , c.spec$datSource, ": "
+        , c.spec$dat_source, ": "
         , vec.strg(ArgumentsNotPassed)
         , " \n -- further checking continues but you might need to address this issue")
       warning(simpleWarning(msg))
@@ -49,12 +49,12 @@ setSpecChk <- function(c.spec) {
   
   # ----< folder check >----
   {
-    chkList <- qc %>%
+    chk_list <- qc %>%
       filter(., Type == "Folder") %>%
       select(., Variable) %>%
       unlist(.)
     
-    for (chk in chkList) {
+    for (chk in chk_list) {
       if (not_empty(c.spec[[chk]]) ) {
         if (!file.exists(c.spec[[chk]])) {
           warning(simpleWarning(paste(chk," not found")))
@@ -68,21 +68,21 @@ setSpecChk <- function(c.spec) {
   
   # ----< file check >----
   {
-    chkList <- qc %>%
+    chk_list <- qc %>%
       filter(., Type == "File") %>%
       select(., Variable, Where) %>%
       as.data.frame(.)
     
-    for (k1 in 1:NROW(chkList)) {
-      cFolder <- chkList[k1,"Where"]
-      cFile   <- chkList[k1,"Variable"]
+    for (k1 in 1:NROW(chk_list)) {
+      cFolder <- chk_list[k1,"Where"]
+      cFile   <- chk_list[k1,"Variable"]
       
       if ( not_empty(c.spec[[cFolder]]) && not_empty(c.spec[[cFile]]) ) {
         if (!file.exists(file.path(c.spec[[cFolder]], c.spec[[cFile]]))) {
           warning(simpleWarning(paste(cfile," not found")))
         }
       } else {
-        warning(simpleWarning(paste(cfile," variable not provided but is needed")))
+        warning(simpleWarning(paste(cFile," variable not provided but is needed")))
       }
     } # end ~ for (k1
     
@@ -90,31 +90,31 @@ setSpecChk <- function(c.spec) {
   
   # ----< start year >----
   {
-    if (not_empty(c.spec$startYear) && not_empty(c.spec$endYear)) {
-      if (!see_if(c.spec$startYear < c.spec$endYear)) 
+    if (not_empty(c.spec$start_year) && not_empty(c.spec$end_year)) {
+      if (!see_if(c.spec$start_year < c.spec$end_year)) 
       {
-        warning(simpleWarning("startYear not less than endYear"))
+        warning(simpleWarning("start_year not less than end_year"))
       }
     } else {
-      warning(simpleWarning("startYear and/or endYear variable not provided but is needed"))
+      warning(simpleWarning("start_year and/or end_year variable not provided but is needed"))
     }
   }
   
-  # ----< profVar and idVar >----
+  # ----< prof_var and id_var >----
   {
-    if ( not_empty(c.spec[["profVar"]]) && not_empty(c.spec[["idVar"]]) ) {
-      if ( c.spec[["profVar"]] %in%  c.spec[["idVar"]]   )  {
-        warning(simpleWarning(paste("Error: profVar variable",c.spec[["profVar"]],"also listed in idVar:",vec.strg(c.spec[["idVar"]] ))))
+    if ( not_empty(c.spec[["prof_var"]]) && not_empty(c.spec[["id_var"]]) ) {
+      if ( c.spec[["prof_var"]] %in%  c.spec[["id_var"]]   )  {
+        warning(simpleWarning(paste("Error: prof_var variable",c.spec[["prof_var"]],"also listed in id_var:",vec.strg(c.spec[["id_var"]] ))))
       }
     } else {
-      warning(simpleWarning(paste("profVar and/or idVar"," variable not provided but is needed")))
+      warning(simpleWarning(paste("prof_var and/or id_var"," variable not provided but is needed")))
     }
   }
   
-  # ----< datSource specific checking >----
-  if(c.spec$datSource == "gam") {
+  # ----< dat_source specific checking >----
+  if(c.spec$dat_source == "gam") {
     setSpecChkGAM(c.spec) 
-  } else if (c.spec$datSource == "WRTDS") {
+  } else if (c.spec$dat_source == "WRTDS") {
     setSpecChkWRTDS(c.spec) 
   }
   

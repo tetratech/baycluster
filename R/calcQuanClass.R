@@ -5,24 +5,26 @@
 #'   
 #' @details 
 #' Quantiles are computed using all provided data, i.e., long-term
-#' quantiles. The \code{startYear} and \code{endYear} limit the returned
+#' quantiles. The \code{start_year} and \code{end_year} limit the returned
 #' data table to the desired years. 
 #' 
-#' Setting \code{numClasses = 4} results in probabilities being set to 0, 0.25,
+#' Setting \code{num_classes = 4} results in probabilities being set to 0, 0.25,
 #' 0.50, 0.75, and 1.00 for purposes of classification. This leads to four (4)
-#' classes being assigned where the leftmost interval corresponds to level one,
-#' the next leftmost to level two and so on. Setting \code{numClasses = 5} will
-#' yield probabilities of 0, 0.2, 0.4, 0.6, 0.8, 1.0.
+#' classes being assigned where the leftmost interval corresponds to level one
+#' and the lowest numerical values, the next leftmost to level two and so on.
+#' Setting \code{num_classes = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
+#' 0.8, 1.0.
 #' 
-#' @param data Data table to analyze. Must have two columns: \code{dateCol} and
-#'   \code{valueCol} which contain a date and value to analyze, respectively
-#' @param dateCol Column name that contains date
-#' @param valueCol Column name that contains values for analyzing for quantiles
-#' @param transform if \code{transform = "logtrans"}, then values are log transformed before analysis
-#' @param numClasses Number of classes for computing quantiles 
-#' @param startYear First year to maintain in returned data set
-#' @param endYear Last year to maintain in returned data set
-#' @param monthAdj Adjustment to months, setting to \code{monthAdj = c(10,11,12)} is
+#' @param data Data table to analyze. Must have two columns: \code{date_col} and
+#'   \code{value_col} which contain a date and value to analyze, respectively
+#' @param date_col Column name that contains date
+#' @param value_col Column name that contains values for analyzing for quantiles
+#' @param transform_type if \code{transform_type = "logtransform"}, then values are
+#'   log transformed before analysis
+#' @param num_classes Number of classes for computing quantiles 
+#' @param start_year First year to maintain in returned data set
+#' @param end_year Last year to maintain in returned data set
+#' @param month_adj Adjustment to months, setting to \code{month_adj = c(10,11,12)} is
 #'   equivalent to calling for water year. 
 #' @param report Indicate whether to print table
 #'  
@@ -45,44 +47,44 @@
 #' @export
 #' 
 calcQuanClass <- function(data 
-  , dateCol = "date"
-  , valueCol = "flow"
-  , transform = logtrans
-  , numClasses = 4
-  , startYear
-  , endYear 
-  , monthAdj = NA
+  , date_col = "date"
+  , value_col = "flow"
+  , transform_type = "logtransform"
+  , num_classes = 4
+  , start_year
+  , end_year 
+  , month_adj = NA
   , report = TRUE) { 
   
 
   # ----< Error trap >----
   {
-    # dateCol and valueCol must exist and be Date and numeric fields, respectively
+    # date_col and value_col must exist and be Date and numeric fields, respectively
     stopifnot(
-      dateCol %in% names(data) 
-      , valueCol %in% names(data)
-      , is.Date(pull(data[ , dateCol]))
-      , is.numeric(pull(data[ , valueCol]))
+      date_col %in% names(data) 
+      , value_col %in% names(data)
+      , is.Date(pull(data[ , date_col]))
+      , is.numeric(pull(data[ , value_col]))
       )
   } # end ~ error trap
   
   # ----< Compute even sized probability classes >----
   {
-    probabilities <- seq(0, 1, length.out = numClasses+1)
+    probabilities <- seq(0, 1, length.out = num_classes+1)
   }
   
-  # ----< Set month processing order based on monthAdj >----
+  # ----< Set month processing order based on month_adj >----
   {
     
     # initialize
-    monthOrder <- monthVec <- 1:12
+    month_order <- month_vec <- 1:12
     
-    # process if there are any non-NA monthAdj values
-    if (any(!is.na(monthAdj))) {
-      if (monthAdj[1] > 0) {
-        monthOrder <- c(monthVec[monthVec %in% monthAdj], monthVec[!(monthVec %in% monthAdj)])
+    # process if there are any non-NA month_adj values
+    if (any(!is.na(month_adj))) {
+      if (month_adj[1] > 0) {
+        month_order <- c(month_vec[month_vec %in% month_adj], month_vec[!(month_vec %in% month_adj)])
       } else {
-        monthOrder <- c(monthVec[!(monthVec %in% abs(monthAdj))], monthVec[(monthVec %in% abs(monthAdj))])
+        month_order <- c(month_vec[!(month_vec %in% abs(month_adj))], month_vec[(month_vec %in% abs(month_adj))])
       }
     }
     
@@ -93,24 +95,24 @@ calcQuanClass <- function(data
     data1 <- data %>%
       
       # down-select to columns with date and value
-      select(., .data[[dateCol]], .data[[valueCol]] ) %>%
+      select(., .data[[date_col]], .data[[value_col]] ) %>%
       
       # calculations
       mutate(.
         # extract year and month
-        , year  = year(.data[[dateCol]])
-        , month = month(.data[[dateCol]])
+        , year  = year(.data[[date_col]])
+        , month = month(.data[[date_col]])
         
         # transform if option is selected
-        , value = case_when(transform == "logtrans" ~ log(.data[[valueCol]])
-          , TRUE ~ .data[[valueCol]])) 
+        , value = case_when(transform_type == "logtrans" ~ log(.data[[value_col]])
+          , TRUE ~ .data[[value_col]])) 
     
-    # adjust year when monthAdj is specified (see note 1 for previous water year processing)
-    if (any(!is.na(monthAdj))) {
-      if (monthAdj[1] > 1) {
-        data1[ , "year"] <- data1[ , "year"] + unlist(data1[ , "month"]) %in% monthAdj
+    # adjust year when month_adj is specified (see note 1 for previous water year processing)
+    if (any(!is.na(month_adj))) {
+      if (month_adj[1] > 1) {
+        data1[ , "year"] <- data1[ , "year"] + unlist(data1[ , "month"]) %in% month_adj
       } else {
-        data1[ , "year"] <- data1[ , "year"] - unlist(data1[ , "month"]) %in% abs(monthAdj)
+        data1[ , "year"] <- data1[ , "year"] - unlist(data1[ , "month"]) %in% abs(month_adj)
       }
     }
     
@@ -124,12 +126,12 @@ calcQuanClass <- function(data
       summarise(., avg = mean(value))
     
     # Compute annual quantiles ####
-    quanVal <- quantile(ffyr$avg, probabilities)
-    quanVal <- quanVal + c(-0.1, rep(0,length(quanVal)-2), 0.1) # extend end points slightly
+    quan_val <- quantile(ffyr$avg, probabilities)
+    quan_val <- quan_val + c(-0.1, rep(0,length(quan_val)-2), 0.1) # extend end points slightly
     
     # Add quantile class to annual data set ####
     ffyr <- ffyr %>%
-      mutate(., YearCat = cut(avg, quanVal, labels = FALSE))
+      mutate(., year_cat = cut(avg, quan_val, labels = FALSE))
   } # end ~ Process data at annual level
   
   # ----< Process data at monthly level >----
@@ -141,20 +143,20 @@ calcQuanClass <- function(data
       ungroup(.)
 
     # process each month ####  
-    for(mon in monthOrder) {
+    for(mon in month_order) {
       
       # extract one month
       ff1mo <- ffmo %>%
         filter(., month == mon)
       
       # compute monthly quantiles
-      quanVal <- quantile(ff1mo$avg, probabilities)
-      quanVal <- quanVal + c(-0.1, rep(0,length(quanVal)-2), 0.1) # extend end points slightly
+      quan_val <- quantile(ff1mo$avg, probabilities)
+      quan_val <- quan_val + c(-0.1, rep(0,length(quan_val)-2), 0.1) # extend end points slightly
       
       # Add quantile class to monthly data set
       ff1mo <- ff1mo %>%
         mutate(.
-          , !!month.abb[mon] := cut(ff1mo$avg, quanVal, labels = FALSE)) %>%
+          , !!month.abb[mon] := cut(ff1mo$avg, quan_val, labels = FALSE)) %>%
         select(., year, month.abb[mon])
   
       # Merge one month data results to overall data set    
@@ -167,11 +169,14 @@ calcQuanClass <- function(data
   # ----< Filter final data set down to selected years >----
   {
   ffyr <- ffyr %>%
-    filter(., year >= startYear
-      , year <= endYear) %>%
-    rename(., Year = year
-      , YearAvg = avg)
+    filter(., year >= start_year
+      , year <= end_year) %>%
+    rename(., year_avg = avg)
   } # end ~ Filter final data set down
+  
+  FT <- tblFT1(ffyr
+    , tbl_title = "Yearly and monthly quantile classes"  
+  )
   
   return(ffyr)
   

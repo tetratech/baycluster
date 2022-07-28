@@ -9,16 +9,16 @@
 #' @details ...
 #' 
 #' 
-#' @param fileName Name of input file as character array
-#' @param filePath File path as character array. Setting \code{filePath = ".."}
+#' @param file_name Name of input file as character array
+#' @param file_path File path as character array. Setting \code{file_path = ".."}
 #'   reads from the current working directory
-#' @param fileType Indicates what type of file structure is expected. Set
-#'   \code{fileType = "WRTDS"} or \code{fileType = "flow"} to use specialized
-#'   settings built into the function.  \code{fileType = "standard"} is the default
+#' @param file_type Indicates what type of file structure is expected. Set
+#'   \code{file_type = "WRTDS"} or \code{file_type = "flow"} to use specialized
+#'   settings built into the function.  \code{file_type = "standard"} is the default
 #'   setting for typical comma or tab delimited text files with the header
 #'   as the first line.
-#' @param colNames Vector of columns names to use for column names in the
-#'   returned data set. Set \code{colNames = NA} to use column headers from
+#' @param col_names Vector of columns names to use for column names in the
+#'   returned data set. Set \code{col_names = NA} to use column headers from
 #'   input file.
 #' @param report Summary information about data after reading. Set
 #'   \code{report = FALSE} to suppress information.
@@ -40,19 +40,19 @@
 #' 
 #' @export
 #' 
-readTextFile <- function(fileName
-  , filePath = ".."
-  , fileType = "standard"
-  , colNames = NA
+readTextFile <- function(file_name
+  , file_path = ".."
+  , file_type = "standard"
+  , col_names = NA
   , report = FALSE) {
   
   # ----< testing >----
   {
     if (FALSE) {
-      fileName <- "NTN_2018_MonLoadTab_ver_2_0_WRTDS output.csv"
-      filePath <- "C:/Users/jon.harcum/OneDrive - Tetra Tech, Inc/work/CBP/cbpTrends_hold/work21b_cluster functions/2022.07.06a_fromElgin_rap/data_files"
-      fileType = "WRTDS"
-      colNames <- NA
+      file_name <- "NTN_2018_MonLoadTab_ver_2_0_WRTDS output.csv"
+      file_path <- "C:/Users/jon.harcum/OneDrive - Tetra Tech, Inc/work/CBP/cbpTrends_hold/work21b_cluster functions/2022.07.06a_fromElgin_rap/data_files"
+      file_type = "WRTDS"
+      col_names <- NA
       report <- TRUE
     }
   } # end ~ testing  
@@ -70,27 +70,27 @@ readTextFile <- function(fileName
   {
     # correct type of file must be specified
     stopifnot(
-      fileType %in% sk$type
+      file_type %in% sk$type
     )
   } # end ~ error trap
   
   # ----< Initialize type, full file name, and skip variable >----
   {
-    iType <- which(fileType == sk$type)
-    fname <- file.path(filePath, fileName)  
+    iType <- which(file_type == sk$type)
+    fname <- file.path(file_path, file_name)  
     skip  <- 0
   } # end ~ Initialize type, full ...  
 
   # ----< read in raw data if non-traditional >----
   { 
-    if (fileType != sk[1,1]) {
+    if (file_type != sk[1,1]) {
       tmp.fil <- read_lines(fname)
     }
   } # end ~ read in raw data
   
   # ----< determine first line of data file if non-traditional>----
   {
-    if (fileType != sk[1,1]) {
+    if (file_type != sk[1,1]) {
       skip <- 0; 
       agent=''
       while (agent != sk[iType,"chk"]) {
@@ -111,7 +111,7 @@ readTextFile <- function(fileName
     )
     
     # Set column names based on file or user supplied values ####    
-    if (any(is.na(colNames))) {
+    if (any(is.na(col_names))) {
       
       # when user-supplied column names are *NOT* provided
       data1 <- read_delim(file = fname
@@ -126,8 +126,8 @@ readTextFile <- function(fileName
       names(data) <- make.names(unlist(data1), unique = TRUE)
     } else {
       # when user-supplied column names are provided
-      stopifnot(length(names(data)) == length(colNames))
-      names(data) <- colNames
+      stopifnot(length(names(data)) == length(col_names))
+      names(data) <- col_names
     } # end ~ Set column names
     
   } # end ~ read generic delimited file
