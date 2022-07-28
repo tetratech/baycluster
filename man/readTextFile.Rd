@@ -5,27 +5,27 @@
 \title{Read text file into variable}
 \usage{
 readTextFile(
-  fileName,
-  filePath = "..",
-  fileType = "standard",
-  colNames = NA,
+  file_name,
+  file_path = "..",
+  file_type = "standard",
+  col_names = NA,
   report = FALSE
 )
 }
 \arguments{
-\item{fileName}{Name of input file as character array}
+\item{file_name}{Name of input file as character array}
 
-\item{filePath}{File path as character array. Setting \code{filePath = ".."}
+\item{file_path}{File path as character array. Setting \code{file_path = ".."}
 reads from the current working directory}
 
-\item{fileType}{Indicates what type of file structure is expected. Set
-\code{fileType = "WRTDS"} or \code{fileType = "flow"} to use specialized
-settings built into the function.  \code{fileType = "standard"} is the default
+\item{file_type}{Indicates what type of file structure is expected. Set
+\code{file_type = "WRTDS"} or \code{file_type = "flow"} to use specialized
+settings built into the function.  \code{file_type = "standard"} is the default
 setting for typical comma or tab delimited text files with the header
 as the first line.}
 
-\item{colNames}{Vector of columns names to use for column names in the
-returned data set. Set \code{colNames = NA} to use column headers from
+\item{col_names}{Vector of columns names to use for column names in the
+returned data set. Set \code{col_names = NA} to use column headers from
 input file.}
 
 \item{report}{Summary information about data after reading. Set

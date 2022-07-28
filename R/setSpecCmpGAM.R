@@ -30,7 +30,7 @@ setSpecCmpGAM <- function(c.spec) {
   # ----< extract needed variables >----
   varsNeeded <- c("stat_vec", "start_year", "end_year", "month_grid", "day_grid"
     , "grp_cnt", "wq_parm", "wq_layer", "id_var", "prof_var", "month_adj"
-    , "analysis_title", "analysis_date", "filename", "data_out", "ex_cov_class")
+    , "analysis_title", "analysis_date", "file_name", "data_out", "ex_cov_class")
   pry(c.spec, varsNeeded)
   
   # ----< Plot Variable >----
@@ -58,8 +58,8 @@ setSpecCmpGAM <- function(c.spec) {
   }
   
   # ----< output file names >----
-  if (is.null(filename)) {
-    filename <- paste("Cluster",analysis_title,wq_layer,wq_parm,"of"
+  if (is.null(file_name)) {
+    file_name <- paste("Cluster",analysis_title,wq_layer,wq_parm,"of"
       , id_var_lab,"by",prof_var,start_year,end_year,sep="_")
   }
   
@@ -91,7 +91,7 @@ setSpecCmpGAM <- function(c.spec) {
   
   
   # ----< append variables to list for return >----
-  vars2append <- c("plt_var", "id_var_lab", "filename", "data_out"
+  vars2append <- c("plt_var", "id_var_lab", "file_name", "data_out"
     , "grp_df", "ex_cov_df", "base_pred")
 
   for (var in vars2append) {

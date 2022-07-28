@@ -6,34 +6,34 @@
 \usage{
 calcQuanClass(
   data,
-  dateCol = "date",
-  valueCol = "flow",
-  transform.type = "logtransform",
-  numClasses = 4,
-  startYear,
-  endYear,
-  monthAdj = NA,
+  date_col = "date",
+  value_col = "flow",
+  transform_type = "logtransform",
+  num_classes = 4,
+  start_year,
+  end_year,
+  month_adj = NA,
   report = TRUE
 )
 }
 \arguments{
-\item{data}{Data table to analyze. Must have two columns: \code{dateCol} and
-\code{valueCol} which contain a date and value to analyze, respectively}
+\item{data}{Data table to analyze. Must have two columns: \code{date_col} and
+\code{value_col} which contain a date and value to analyze, respectively}
 
-\item{dateCol}{Column name that contains date}
+\item{date_col}{Column name that contains date}
 
-\item{valueCol}{Column name that contains values for analyzing for quantiles}
+\item{value_col}{Column name that contains values for analyzing for quantiles}
 
-\item{transform.type}{if \code{transform.type = "logtransform"}, then values are
+\item{transform_type}{if \code{transform_type = "logtransform"}, then values are
 log transformed before analysis}
 
-\item{numClasses}{Number of classes for computing quantiles}
+\item{num_classes}{Number of classes for computing quantiles}
 
-\item{startYear}{First year to maintain in returned data set}
+\item{start_year}{First year to maintain in returned data set}
 
-\item{endYear}{Last year to maintain in returned data set}
+\item{end_year}{Last year to maintain in returned data set}
 
-\item{monthAdj}{Adjustment to months, setting to \code{monthAdj = c(10,11,12)} is
+\item{month_adj}{Adjustment to months, setting to \code{month_adj = c(10,11,12)} is
 equivalent to calling for water year.}
 
 \item{report}{Indicate whether to print table}
@@ -46,14 +46,14 @@ Calculate and return quantile class by year and month
 }
 \details{
 Quantiles are computed using all provided data, i.e., long-term
-quantiles. The \code{startYear} and \code{endYear} limit the returned
+quantiles. The \code{start_year} and \code{end_year} limit the returned
 data table to the desired years. 
 
-Setting \code{numClasses = 4} results in probabilities being set to 0, 0.25,
+Setting \code{num_classes = 4} results in probabilities being set to 0, 0.25,
 0.50, 0.75, and 1.00 for purposes of classification. This leads to four (4)
 classes being assigned where the leftmost interval corresponds to level one
 and the lowest numerical values, the next leftmost to level two and so on.
-Setting \code{numClasses = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
+Setting \code{num_classes = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
 0.8, 1.0.
 }
 \examples{

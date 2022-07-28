@@ -6,32 +6,32 @@
 \usage{
 chkRDAfiles(
   c.spec = NULL,
-  stationVec = NULL,
-  wqParm = NULL,
-  wqLayer = NULL,
-  gamNumbr = NULL,
-  startYear = NULL,
-  endYear = NULL,
-  gamFolder = NULL,
+  station_vec = NULL,
+  wq_parm = NULL,
+  wq_layer = NULL,
+  gam_numbr = NULL,
+  start_year = NULL,
+  end_year = NULL,
+  gam_folder = NULL,
   month_threshold = NULL
 )
 }
 \arguments{
 \item{c.spec}{cluster specification file}
 
-\item{stationVec}{Vector of stations to analyze}
+\item{station_vec}{Vector of stations to analyze}
 
-\item{wqParm}{Parameter abbreviation to evaluate}
+\item{wq_parm}{Parameter abbreviation to evaluate}
 
-\item{wqLayer}{Layer abbreviation to evaluate}
+\item{wq_layer}{Layer abbreviation to evaluate}
 
-\item{gamNumbr}{GAM option to evaluate}
+\item{gam_numbr}{GAM option to evaluate}
 
-\item{startYear}{Begin year of analysis (scalar)}
+\item{start_year}{Begin year of analysis (scalar)}
 
-\item{endYear}{End year of analysis (scalar)}
+\item{end_year}{End year of analysis (scalar)}
 
-\item{gamFolder}{Folder location of GAM results from baytrends}
+\item{gam_folder}{Folder location of GAM results from baytrends}
 
 \item{month_threshold}{Threshold for flagging acceptable data range (see details)}
 }
@@ -45,30 +45,30 @@ Based on a station list, year range, water quality variable,
 }
 \details{
 It is presumed that a series of baytrends operations
-have been run and the results for an individual "station|parameter|wqLayer"
+have been run and the results for an individual "station|parameter|layer"
 have been stored as separate rda files in a folder passed as the variable
-\code{gamFolder} as depicted below.
+\code{gam_folder} as depicted below.
 
-\code{gamFolder/tn/TF3.1E_tn_surf.rda}\cr  
-\code{gamFolder/tn/TF3.2E_tn_surf.rda}\cr 
-\code{gamFolder/tn/...}\cr
-\code{gamFolder/do/TF3.1E_do_surf.rda}\cr
-\code{gamFolder/do/TF3.2E_do_surf.rda}\cr 
-\code{gamFolder/do/...}\cr
+\code{gam_folder/tn/TF3.1E_tn_surf.rda}\cr  
+\code{gam_folder/tn/TF3.2E_tn_surf.rda}\cr 
+\code{gam_folder/tn/...}\cr
+\code{gam_folder/do/TF3.1E_do_surf.rda}\cr
+\code{gam_folder/do/TF3.2E_do_surf.rda}\cr 
+\code{gam_folder/do/...}\cr
            
-The values of \code{station}, \code{wqParm}, and \code{wqLayer} are used to 
-construct the file name convention of: "station_wqParm_layer.rda". Under the 
-folder \code{gamFolder}, subfolders are organized by \code{wqParm}. 
+The values of \code{station}, \code{wq_parm}, and \code{wq_layer} are used to 
+construct the file name convention of: "station_parameter_layer.rda". Under the 
+folder \code{gam_folder}, subfolders are organized by \code{wq_parm}. 
 
-\code{gamNumbr} is used to define which GAM formula to use in the analysis.
-Setting \code{gamNumbr = c(23, 3, 2)} would result in preferentially
+\code{gam_numbr} is used to define which GAM formula to use in the analysis.
+Setting \code{gam_numbr = c(23, 3, 2)} would result in preferentially
 selecting \code{gamOutput23}, then \code{gamOutput3}, and finally \code{gamOutput2}.
 
-\code{startYear} and \code{endYear} are the planned beginning and ending
+\code{start_year} and \code{end_year} are the planned beginning and ending
 period of the cluster analysis. This function checks to confirm that a 
-particular combination of \code{station}, \code{wqParm}, and \code{wqLayer} 
-had monitoring data for the full period or record, i.e., \code{startYear}-01-01 
-to \code{endYear}-12-31. 
+particular combination of \code{station}, \code{wq_parm}, and \code{wq_layer} 
+had monitoring data for the full period or record, i.e., \code{start_year}-01-01 
+to \code{end_year}-12-31. 
 
 \code{month_threshold} provides a grace period in the interpretation of a full
 period of record.

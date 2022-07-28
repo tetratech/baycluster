@@ -30,7 +30,7 @@ setSpecCmp <- function(c.spec) {
   # ----< extract needed variables >----
   varsNeeded <- c("stat_vec", "start_year", "end_year", "month_grid", "day_grid"
     , "grp_cnt", "wq_parm", "wq_layer", "id_var", "prof_var", "month_adj"
-    , "analysis_title", "analysis_date", "filename", "data_out", "ex_cov_class")
+    , "analysis_title", "analysis_date", "file_name", "data_out", "ex_cov_class")
   pry(c.spec, varsNeeded)
 
   # ----< Station setup: labels and order based on stat_vec >----
