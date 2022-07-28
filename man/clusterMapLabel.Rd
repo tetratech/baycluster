@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeClusterMaps.R
 \name{clusterMapLabel}
 \alias{clusterMapLabel}
-\title{Add a text annotation to map from clustMap}
+\title{Add a text annotation to map from clusterMap}
 \usage{
 clusterMapLabel(
   cmap,
@@ -17,7 +17,7 @@ clusterMapLabel(
 )
 }
 \arguments{
-\item{cmap}{map object from clustMap}
+\item{cmap}{map object from clusterMap}
 
 \item{lat}{vertical location of annotation expressed as latitude}
 
@@ -37,15 +37,15 @@ clusterMapLabel(
 map object
 }
 \description{
-Add a text annotation to map from clustMap
+Add a text annotation to map from clusterMap
 }
 \details{
 ...
 }
 \examples{
 \dontrun{
-m <- clustMap(...)
-m2 <-clustMapLabel(cmap = m
+m <- clusterMap(...)
+m2 <-clusterMapLabel(cmap = m
   , lat = 39.5, lon = -77.00
   , lab_txt = c("Station Grouping", "by", "TN Level")
   , x_space = 0, y_space = 0.1, lab_col <- "black", lab_size = 8)
@@ -55,5 +55,5 @@ m2 <-clustMapLabel(cmap = m
 
 }
 \seealso{
-\code{\link{clustMap}}
+\code{\link{clusterMap}}
 }

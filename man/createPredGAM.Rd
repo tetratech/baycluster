@@ -13,9 +13,9 @@ createPredGAM(c.spec)
 data table with full prediction data set
 \itemize{
 \item station - 
-\item wqParm - 
-\item wqLayer - 
-\item yearCal - year (calendar basis)   
+\item wq_parm - 
+\item wq_layer - 
+\item year_cal - year (calendar basis)   
 \item year - year for cluster 
 \item month - month   
 \item day - day of month   

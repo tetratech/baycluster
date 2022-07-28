@@ -4,40 +4,40 @@
 \alias{crossTabulate}
 \title{Cross tabulate data.}
 \usage{
-crossTabulate(c.spec, data, retData = 1)
+crossTabulate(c.spec, data, ret_data = 1)
 }
 \arguments{
 \item{c.spec}{list for storing specifications for cluster analysis}
 
 \item{data}{input data to be cross tabulated}
 
-\item{retData}{1: return wide data, 2: return list of wide and long data}
+\item{ret_data}{1: return wide data, 2: return list of wide and long data}
 }
 \value{
 cross tabulate data table
 }
 \description{
 Cross tabulate data. Includes transformations, averaging over
-  idVar., and data centering
+  id_var., and data centering
 }
 \details{
 The incoming data is intended to have the following fields:
-  "station", "wqParm",  "wqLayer", "yearCal", "year", "month",  "day"
+  "station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
   "value". NOTE: need to clarify minimum data set and what happens with extra variables.
 
 Processing include the following steps:  
 
-Values are logtransformed if c.spec$dataTrans == "logtrans"
+Values are logtransformed if c.spec$data_transform == "logtrans"
 
-If idVar has more than one variable, a new column is constructed by
-concatenating the columns in idVar.
+If id_var has more than one variable, a new column is constructed by
+concatenating the columns in id_var.
 
-Values are averaged over idVar (or the newly constructed column).
+Values are averaged over id_var (or the newly constructed column).
 
-Values are cross tabulated such that idVar is unique and columns correspond
-to profVar
+Values are cross tabulated such that id_var is unique and columns correspond
+to prof_var
 
-If c.spec$dataCenter is TRUE then the data are centered by subtracting the
+If c.spec$data_center is TRUE then the data are centered by subtracting the
 row mean from each value in the row
 }
 \examples{

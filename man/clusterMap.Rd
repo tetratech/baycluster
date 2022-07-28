@@ -61,8 +61,8 @@ Wrapper function for mapPoints() function
 }
 \examples{
 \dontrun{
-m <- clustMap(...)
-m2 <-clustMapLabel(cmap = m
+m <- clusterMap(...)
+m2 <-clusterMapLabel(cmap = m
   , lat = 39.5, lon = -77.00
   , lab_txt = c("Station Grouping", "by", "TN Level")
   , x_space = 0, y_space = 0.1, lab_col <- "black", lab_size = 8)

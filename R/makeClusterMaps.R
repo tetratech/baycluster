@@ -1,10 +1,10 @@
-#' @title Add a text annotation to map from clustMap 
+#' @title Add a text annotation to map from clusterMap 
 #' 
-#' @description Add a text annotation to map from clustMap
+#' @description Add a text annotation to map from clusterMap
 #'   
 #' @details ...
 #' 
-#' @param cmap map object from clustMap
+#' @param cmap map object from clusterMap
 #' @param lat vertical location of annotation expressed as latitude
 #' @param lon horizontal location of annotation expressed as longitude
 #' @param lab_txt text of label. Can be a vector
@@ -15,8 +15,8 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' m <- clustMap(...)
-#' m2 <-clustMapLabel(cmap = m
+#' m <- clusterMap(...)
+#' m2 <-clusterMapLabel(cmap = m
 #'   , lat = 39.5, lon = -77.00
 #'   , lab_txt = c("Station Grouping", "by", "TN Level")
 #'   , x_space = 0, y_space = 0.1, lab_col <- "black", lab_size = 8)
@@ -26,7 +26,7 @@
 #' 
 #' @return map object 
 #' 
-#' @seealso \code{\link{clustMap}}
+#' @seealso \code{\link{clusterMap}}
 #' 
 #' @export
 #' 
@@ -44,7 +44,7 @@ clusterMapLabel <- function(cmap,lat,lon,lab_txt,x_space=0,y_space=0,lab_col="bl
   }
   
   return(cmap)
-} # end ~ function clustMapLabel
+} # end ~ function clusterMapLabel
 
 
 
@@ -71,8 +71,8 @@ clusterMapLabel <- function(cmap,lat,lon,lab_txt,x_space=0,y_space=0,lab_col="bl
 #'
 #' @examples 
 #' \dontrun{
-#' m <- clustMap(...)
-#' m2 <-clustMapLabel(cmap = m
+#' m <- clusterMap(...)
+#' m2 <-clusterMapLabel(cmap = m
 #'   , lat = 39.5, lon = -77.00
 #'   , lab_txt = c("Station Grouping", "by", "TN Level")
 #'   , x_space = 0, y_space = 0.1, lab_col <- "black", lab_size = 8)
@@ -129,8 +129,8 @@ clusterMap <- function(grp_data, grp_lab,grp_col, leg_title = "Station Grouping"
 #'
 #' @examples 
 #' \dontrun{
-#' m <- clustMap(...)
-#' m2 <-clustMapLabel(cmap = m
+#' m <- clusterMap(...)
+#' m2 <-clusterMapLabel(cmap = m
 #'   , lat = 39.5, lon = -77.00
 #'   , lab_txt = c("Station Grouping", "by", "TN Level")
 #'   , x_space = 0, y_space = 0.1, lab_col <- "black", lab_size = 8)
@@ -140,7 +140,7 @@ clusterMap <- function(grp_data, grp_lab,grp_col, leg_title = "Station Grouping"
 #' 
 #' @return map object 
 #' 
-#' @seealso \code{\link{clustMap}}
+#' @seealso \code{\link{clusterMap}}
 #' 
 #' @export
 #' 
