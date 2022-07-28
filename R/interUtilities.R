@@ -268,5 +268,27 @@ firstCapAll <- function(cs) {
   return(cs.return)
 }
 
-
-
+# ####
+#' @title clear viewer pane
+#' 
+#' @description clear viewer pane
+#'   
+#' @details ...
+#' 
+#' @examples 
+#' \dontrun{
+#' cv()
+#' 
+#' }
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+cv <- function() {
+  dir <- tempfile()
+  dir.create(dir)
+  TextFile <- file.path(dir, "blank.html")
+  writeLines("", con = TextFile)
+  rstudioapi::viewer(TextFile) 
+}

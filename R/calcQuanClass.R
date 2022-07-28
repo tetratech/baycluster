@@ -174,6 +174,10 @@ calcQuanClass <- function(data
     rename(., year_avg = avg)
   } # end ~ Filter final data set down
   
+  FT <- tblFT1(ffyr
+    , tbl_title = "Yearly and monthly quantile classes"  
+  )
+  
   return(ffyr)
   
 } # end ~ function: calcQuanClass

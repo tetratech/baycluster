@@ -83,7 +83,9 @@ setSpec <- function(c.spec = list(), ...) {
     }
     
     # print the updates out ####
-    FT <- tblFT1(df)
+    FT <- tblFT1(df
+      , tbl_title = "Cluster analysis settings/updates"  
+    )
   }
   
   # ----< Check c.spec >----

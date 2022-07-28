@@ -268,7 +268,7 @@ chkRDAfiles <- function(
         , MaxQC = data_max_date_qc)
     
     FT <- tblFT1(file_log_to_table
-      , tblTitle = "GAM file availability."  
+      , tbl_title = "GAM file availability"  
     )
     
   } # end ~ output report
