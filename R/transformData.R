@@ -33,6 +33,8 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
+#' @importFrom stats sd
+#' 
 #' @export
 #' 
 transformData <- function(data
