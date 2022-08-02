@@ -44,19 +44,11 @@ setSpec <- function(c.spec = list(), ...) {
     # find common variable names between arguments passed to those in original c.spec ####
     varCommon <- intersect(names(c.spec2), names(c.spec))
 
-    # down-select common variables to those with updates ####
-    chk <- logical(length = length(varCommon))
-    for (k1 in 1:length(varCommon)) {
-      var = varCommon[k1]
-      chk[k1] = length(unlist(c.spec[var])) != length(unlist(c.spec2[var])) ||
-        !is.na(unlist(c.spec[var])) & is.na(unlist(c.spec2[var])) ||
-        is.na(unlist(c.spec[var])) & !is.na(unlist(c.spec2[var])) ||
-        unlist(c.spec[var]) != unlist(c.spec2[var])
-    }
-    
-    # variables with updates ####    
-    varCommonDifferent <- varCommon[chk]
-    
+    # which common variables are different ####
+    chk <- !mapply(`%in%`, c.spec[varCommon], c.spec2[varCommon])
+
+    # Down-select to variables with updates needed ####    
+    varCommonDifferent <- varCommon[chk | is.na(chk)]
   }
   
   # ----< Find new variables >---- 
