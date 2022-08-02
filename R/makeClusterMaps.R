@@ -178,7 +178,7 @@ mapPoints <- function(pts
   
   # Load map layer----
   if (is.na(file_layer)) {
-    base_layer <- baycluster::shape_cbseg
+    base_layer <- baycluster::shp_cbseg
   } else {
     loadRData <- function(fileName) {
       load(fileName)

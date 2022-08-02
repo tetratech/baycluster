@@ -91,10 +91,7 @@ setSpecCmp <- function(c.spec) {
   } else if (c.spec$datSource == "WRTDS") {
     c.spec <- setSpecCmpWRTDS(c.spec) 
   }
-  
    
   return(c.spec)
   
 } # end ~ function: setSpecCmp
-
-

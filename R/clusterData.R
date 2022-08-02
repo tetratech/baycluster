@@ -9,25 +9,25 @@
 #'   data matrix. This distance matrix is then used to perform the hierarchical
 #'   cluster analysis. Optionally, the function will output a basic plot.
 #'   
-#' The input data should only have columns used in the cluster analysis (it is
-#' ok to have labeled rows.)
+#' The input data should only have columns used in the cluster analysis. (It is
+#' advantageous to have labeled rows for plotting purposes.)
 #' 
 #' @param data table of data to cluster. Rows are the items to be clustered and
 #'   columns represent the different variables. 
-#' @param dist.Method distance matrix method to be used in coordination with
+#' @param dist_method distance matrix method to be used in coordination with
 #'   stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
 #'   "canberra", "binary" or "minkowski".
-#' @param aggl.Method dissimilarities agglomeration method to be used in
+#' @param aggl_method dissimilarities agglomeration method to be used in
 #'   coordination with stats::hclust(). This should be one of "ward.D",
 #'   "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),
 #'   "median" (= WPGMC) or "centroid" (= UPGMC)
-#' @param dendo.Title title of plot.
-#' @param output.Plot TRUE to output plot.
+#' @param dendo_title title of plot.
+#' @param output_plot TRUE to output plot.
 #' 
 #' @examples 
 #' \dontrun{
-#' p.dend <-clusterData(iris[, -5], output.Plot = FALSE)
-#' p.dend <-clusterData(iris[, -5], dendo.Title = "Iris Data")
+#' p.dend <-clusterData(iris[, -5], output_plot = FALSE)
+#' p.dend <-clusterData(iris[, -5], dendo_title = "Iris Data")
 #' plot(p.dend, main="Iris Data", xlab = "Cluster Groups", sub=NA)
 #' }
 #' 
@@ -39,22 +39,22 @@
 #' 
 #' @export
 #
-clusterData <- function(data, dist.Method = "euclidean", aggl.Method = "ward.D"
-  , dendo.Title = "", output.Plot = TRUE)  
+clusterData <- function(data, dist_method = "euclidean", aggl_method = "ward.D"
+  , dendo_title = "", output_plot = TRUE)  
 { 
   
-  data.dist    <- dist(data, method = dist.Method)
-  data.hclust  <- hclust(data.dist, method = aggl.Method)
+  data_dist    <- dist(data, method = dist_method)
+  data_hclust  <- hclust(data_dist, method = aggl_method)
   
-  if (output.Plot) {
-    plot(data.hclust
-      , main = dendo.Title
+  if (output_plot) {
+    plot(data_hclust
+      , main = dendo_title
       , xlab = "Cluster Groups"
-      , sub = paste("dist.:", dist.Method, "|", "aggl.:",aggl.Method)
+      , sub = paste("dist.:", dist_method, "|", "aggl.:",aggl_method)
     )
   }
   
   # return
-  return(data.hclust)  
+  return(data_hclust)  
   
 } # end function: clusterData

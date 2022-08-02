@@ -34,6 +34,8 @@
 #' @importFrom tibble tibble as_tibble
 #' @importFrom knitr kable 
 #' @importFrom mgcv gam
+#' @importFrom stats predict
+#' @importFrom utils tail
 #' 
 #' @export
 #' 

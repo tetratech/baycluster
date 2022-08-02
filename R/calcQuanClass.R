@@ -49,7 +49,7 @@
 calcQuanClass <- function(data 
   , date_col = "date"
   , value_col = "flow"
-  , transform_type = "logtransform"
+  , transform_type = NA
   , num_classes = 4
   , start_year
   , end_year 
@@ -68,14 +68,13 @@ calcQuanClass <- function(data
       )
   } # end ~ error trap
   
-  # ----< Compute even sized probability classes >----
+  # ----< Compute equal-sized probability classes >----
   {
     probabilities <- seq(0, 1, length.out = num_classes+1)
   }
   
   # ----< Set month processing order based on month_adj >----
   {
-    
     # initialize
     month_order <- month_vec <- 1:12
     
@@ -102,12 +101,14 @@ calcQuanClass <- function(data
         # extract year and month
         , year  = year(.data[[date_col]])
         , month = month(.data[[date_col]])
-        
-        # transform if option is selected
-        , value = case_when(transform_type == "logtrans" ~ log(.data[[value_col]])
-          , TRUE ~ .data[[value_col]])) 
+      )
     
-    # adjust year when month_adj is specified (see note 1 for previous water year processing)
+    # transform if option is selected
+    if (!is.na(transform_type)) {
+      data1 <- transformData(data1, value_col, transform_type)
+    }
+
+    # adjust year when month_adj is specified  
     if (any(!is.na(month_adj))) {
       if (month_adj[1] > 1) {
         data1[ , "year"] <- data1[ , "year"] + unlist(data1[ , "month"]) %in% month_adj
@@ -123,7 +124,7 @@ calcQuanClass <- function(data
     # Average data by year ####
     ffyr <- data1 %>%
       group_by(., year) %>%
-      summarise(., avg = mean(value))
+      summarise(., avg = mean(.data[[value_col]]))
     
     # Compute annual quantiles ####
     quan_val <- quantile(ffyr$avg, probabilities)
@@ -139,7 +140,7 @@ calcQuanClass <- function(data
     # Average data by year+month ####
     ffmo <- data1 %>%
       group_by(., year, month) %>%
-      summarise(., avg = mean(value), .groups = "keep") %>%
+      summarise(., avg = mean(.data[[value_col]]), .groups = "keep") %>%
       ungroup(.)
 
     # process each month ####  

@@ -21,24 +21,25 @@ Cross tabulate data. Includes transformations, averaging over
   id_var., and data centering
 }
 \details{
-The incoming data is intended to have the following fields:
+The incoming data are intended to have the following fields:
   "station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
-  "value". NOTE: need to clarify minimum data set and what happens with extra variables.
+  "value". JBH NOTE: need to clarify minimum data set and what happens with
+  extra variables.
 
 Processing include the following steps:  
 
-Values are logtransformed if c.spec$data_transform == "logtrans"
+Values are transformed based on value stored in c.spec$data_transform
 
-If id_var has more than one variable, a new column is constructed by
-concatenating the columns in id_var.
+If c.spec$id_var identifies more than one variable, a new column is
+constructed by concatenating the columns identified by id_var.
 
 Values are averaged over id_var (or the newly constructed column).
 
+Values are centered based on the value of c.spec$data_center and performed
+on an id_var basis
+
 Values are cross tabulated such that id_var is unique and columns correspond
 to prof_var
-
-If c.spec$data_center is TRUE then the data are centered by subtracting the
-row mean from each value in the row
 }
 \examples{
 \dontrun{
@@ -48,5 +49,5 @@ row mean from each value in the row
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{calcQuanClass}} \code{\link{transformData}} \code{\link{centerData}}
 }

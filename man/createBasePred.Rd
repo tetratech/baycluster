@@ -26,8 +26,9 @@ createBasePred(
 \value{
 data table with base prediction data set
 \itemize{
-\item year - year (calendar basis)   
-\item month - month   
+\item year - year (calendar basis) 
+\item month - month (Jan, Feb, ...)   
+\item month_num - month (1, 2, 3, ...)  
 \item day - day of month   
 \item date - date   
 \item dyear - date expressed as decimal year   

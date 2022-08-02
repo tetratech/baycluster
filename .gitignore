@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+README.Rmd
+data/shp_cbseg.rda

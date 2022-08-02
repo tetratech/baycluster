@@ -13,17 +13,18 @@
 #' 
 #' hexColor2Name("#80FF00")
 #' 
-#' grpCnt <- 5
+#' grp_cnt <- 5
 #' 
-#' grpCol <- rev(rainbow(grpCnt))
+#' grp_col <- rev(rainbow(grp_cnt))
 #' 
-#' grpDF  <- tibble(lab = paste("Group",1:grpCnt)) %>%
-#'   mutate(., grpCol = scales::hue_pal()(grpCnt)) %>%
-#'   mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
-#' with(grpDF, barplot(1:grpCnt, col=grpCol, names.arg=grpCol))
+#' grp_df  <- tibble(lab = paste("Group",1:grp_cnt)) %>%
+#'   mutate(., grp_col = scales::hue_pal()(grp_cnt)) %>%
+#'   mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
+#' with(grp_df, barplot(1:grp_cnt, col=grp_col, names.arg=grp_col))
 #' }
 #' 
 #' @return named color
+#' 
 #' @keywords internal
 #' 
 #' @seealso \code{\link{calcQuanClass}}
@@ -291,4 +292,41 @@ cv <- function() {
   TextFile <- file.path(dir, "blank.html")
   writeLines("", con = TextFile)
   rstudioapi::viewer(TextFile) 
+}
+
+
+
+# ####
+#' @title append variables to a list 
+#' 
+#' @description append variables to a list 
+#' 
+#' @details ...
+#' 
+#' @param listvar name of target list 
+#' @param v vector of variables to stow into list
+#' 
+#' @examples 
+#' \dontrun{
+#' 
+#' a = c(1, 3, 5)
+#' b = c("abc", "def", "ghi", "jkl")
+#' my_list <- stow(my_list, c("a", "b") )
+#' 
+#' }
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{calcQuanClass}}
+#' 
+#' @export
+#' 
+stow <- function(listvar=list(), v=NA) {
+
+  for (var in v) {
+    listvar[[var]] <- eval(parse(text=var))
+  }  
+  
+  return(listvar)
+  
 }

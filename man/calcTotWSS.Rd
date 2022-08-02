@@ -4,17 +4,17 @@
 \alias{calcTotWSS}
 \title{Calculate total within sum of squares}
 \usage{
-calcTotWSS(data, dist.Method = "euclidean", aggl.Method = "ward.D")
+calcTotWSS(data, dist_method = "euclidean", aggl_method = "ward.D")
 }
 \arguments{
 \item{data}{table of data to cluster. Rows are the items to be clustered and
 columns represent the different variables.}
 
-\item{dist.Method}{distance matrix method to be used in coordination with
+\item{dist_method}{distance matrix method to be used in coordination with
 stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
 "canberra", "binary" or "minkowski".}
 
-\item{aggl.Method}{dissimilarities agglomeration method to be used in
+\item{aggl_method}{dissimilarities agglomeration method to be used in
 coordination with stats::hclust(). This should be one of "ward.D",
 "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),
 "median" (= WPGMC) or "centroid" (= UPGMC)}
@@ -28,12 +28,12 @@ Calculate total within sum of squares to inform the number of
 }
 \details{
 The "knee-of-the-curve" method can be used to inform the number of
-clusters to use when performing cluster analyses. The input data should only 
-have columns used in the cluster analysis (it is ok to have labeled rows.)
+  clusters to use when performing cluster analyses. The input data should
+  only have columns used in the cluster analysis.
 }
 \examples{
 \dontrun{
-calcTotWSS(iris[ , -5]) 
+calTotWSS(iris[ , -5]) 
 }
 
 }
