@@ -36,8 +36,9 @@
 #' 
 #' @return data table with base prediction data set
 #' \itemize{
-#' \item year - year (calendar basis)   
-#' \item month - month   
+#' \item year - year (calendar basis) 
+#' \item month - month (Jan, Feb, ...)   
+#' \item month_num - month (1, 2, 3, ...)  
 #' \item day - day of month   
 #' \item date - date   
 #' \item dyear - date expressed as decimal year   
@@ -71,13 +72,16 @@ createBasePred <- function(start_year = 1990
     # year starts
     data <- 
       as_tibble(expand.grid((start_year-1):(end_year+1), month_grid, day_grid)) %>%
-      rename(., year = Var1, month = Var2, day = Var3) %>%
+      rename(., year = Var1, month_num = Var2, day = Var3) %>%
       
       # create date-related fields 
       mutate(.
         
+        # add month
+        , month = month.abb[month_num]
+        
         # compute date, decimal date, and day of year
-        , date  = ymd(paste(year, month, day, sep = "-")) # date
+        , date  = ymd(paste(year, month_num, day, sep = "-")) # date
         , dyear = decimal_date(date)                      # decimal year
         , doy   = yday(date)                              # day of year
         
@@ -97,8 +101,8 @@ createBasePred <- function(start_year = 1990
       data <- data %>%
         mutate(.
           , year_adj = case_when(
-            month_adj[1] > 0 ~ year + month %in% abs(month_adj)
-            , month_adj[1] < 0 ~ year - month %in% abs(month_adj)
+            month_adj[1] > 0 ~ year + month_num %in% abs(month_adj)
+            , month_adj[1] < 0 ~ year - month_num %in% abs(month_adj)
             , TRUE ~ year 
           )
         )
@@ -117,11 +121,11 @@ createBasePred <- function(start_year = 1990
     data <- data %>%
       filter(., between(year_adj , start_year , end_year))
     
-    # ** do not combine with above because unique(month) cannot be calculated
+    # ** do not combine with above because unique(month_num) cannot be calculated
     data <- data %>%
       mutate(.
-        , d1  = as.numeric(date - make_date(year, unique(month)[1], 1) )+1
-        , d2 = as.numeric(date - make_date(year-1, unique(month)[1], 1))+1
+        , d1  = as.numeric(date - make_date(year, unique(month_num)[1], 1) )+1
+        , d2 = as.numeric(date - make_date(year-1, unique(month_num)[1], 1))+1
         , doy_adj = case_when( between(d1,1,366) ~ d1
           , between(d2,1,366) ~ d2
           , TRUE ~ NA_real_)
@@ -139,9 +143,9 @@ createBasePred <- function(start_year = 1990
         , month_grid = month_grid
         , day_grid = day_grid
         , month_adj = month_adj
-        , first_day = floor_date(min(data$date), unit = "month")
-        , last_day = ceiling_date(max(data$date), unit = "month")-1
-        , month_order = unique(data$month)
+        , first_day = floor_date(min(data$date), unit = "month_num")
+        , last_day = ceiling_date(max(data$date), unit = "month_num")-1
+        , month_order = unique(data$month_num)
       )
   } # end ~ Add attributes documenting prediction data set creation
   

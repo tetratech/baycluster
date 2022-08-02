@@ -8,7 +8,7 @@ calcQuanClass(
   data,
   date_col = "date",
   value_col = "flow",
-  transform_type = "logtransform",
+  transform_type = NA,
   num_classes = 4,
   start_year,
   end_year,

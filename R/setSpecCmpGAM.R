@@ -46,6 +46,7 @@ setSpecCmpGAM <- function(c.spec) {
     palette = c("red","lightblue","blue")
     , na.color = NA
     , domain = c(1,ex_cov_class))
+  
   ex_cov_df <- tibble(lab = paste("Class",1:ex_cov_class)) %>%
     mutate(., ex_cov_col = ex_cov_col_fct(1:ex_cov_class)) %>%
     mutate(., ex_cov_col = apply(as.data.frame(ex_cov_col), 1, hexColor2Name)) 
@@ -89,15 +90,14 @@ setSpecCmpGAM <- function(c.spec) {
       , month_order = NULL
     )
   
-  
   # ----< append variables to list for return >----
   vars2append <- c("plt_var", "id_var_lab", "file_name", "data_out"
     , "grp_df", "ex_cov_df", "base_pred")
-
+  
   for (var in vars2append) {
     c.spec[[var]] <- eval(parse(text=var))
   }  
-  
+
   return(c.spec)
   
 } # end ~ function: setSpecCmpGAM

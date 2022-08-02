@@ -6,28 +6,28 @@
 \usage{
 clusterData(
   data,
-  dist.Method = "euclidean",
-  aggl.Method = "ward.D",
-  dendo.Title = "",
-  output.Plot = TRUE
+  dist_method = "euclidean",
+  aggl_method = "ward.D",
+  dendo_title = "",
+  output_plot = TRUE
 )
 }
 \arguments{
 \item{data}{table of data to cluster. Rows are the items to be clustered and
 columns represent the different variables.}
 
-\item{dist.Method}{distance matrix method to be used in coordination with
+\item{dist_method}{distance matrix method to be used in coordination with
 stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
 "canberra", "binary" or "minkowski".}
 
-\item{aggl.Method}{dissimilarities agglomeration method to be used in
+\item{aggl_method}{dissimilarities agglomeration method to be used in
 coordination with stats::hclust(). This should be one of "ward.D",
 "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),
 "median" (= WPGMC) or "centroid" (= UPGMC)}
 
-\item{dendo.Title}{title of plot.}
+\item{dendo_title}{title of plot.}
 
-\item{output.Plot}{TRUE to output plot.}
+\item{output_plot}{TRUE to output plot.}
 }
 \value{
 An object which describes the produced tree.
@@ -41,13 +41,13 @@ This function calculates the distance matrix between the rows of a
   data matrix. This distance matrix is then used to perform the hierarchical
   cluster analysis. Optionally, the function will output a basic plot.
   
-The input data should only have columns used in the cluster analysis (it is
-ok to have labeled rows.)
+The input data should only have columns used in the cluster analysis. (It is
+advantageous to have labeled rows for plotting purposes.)
 }
 \examples{
 \dontrun{
-p.dend <-clusterData(iris[, -5], output.Plot = FALSE)
-p.dend <-clusterData(iris[, -5], dendo.Title = "Iris Data")
+p.dend <-clusterData(iris[, -5], output_plot = FALSE)
+p.dend <-clusterData(iris[, -5], dendo_title = "Iris Data")
 plot(p.dend, main="Iris Data", xlab = "Cluster Groups", sub=NA)
 }
 

@@ -9,17 +9,18 @@
 #' \item "exptransform": exp(x) transform
 #' \item "logbase10": log base 10 
 #' \item "antilog10": 10^ (anti-log for base 10 logarithms)
-#' \item "standnorm": z-score (subtract mean and divide by standard deviation)
-#' \item "percent": percent (express response as a percent of the mean)
 #' }
 #' 
+#' Negative values in \code{value_col} are not permitted for "logtransform" and "logbase10" options.
+#' 
 #' @param data Data table to analyze. Must have one column: \code{value_col}
-#'   which contain the values to transform
+#'   which contains the values to transform
 #' @param value_col Column name that contains values for transforming
 #' @param transform_type type of transformation to perform. If \code{transform_type =
-#'   "logtransform"}, then values are log transformed  
+#'   "logtransform"}, then values are log transformed. If \code{transform_type =
+#'   NA}, then an unchanged data table is returned.
 #' @param transform_col Column name to store transformed data. If left as NA, then
-#'   value_col will be overwritten.
+#'   \code{value_col} will be overwritten.
 #' 
 #' @examples 
 #' \dontrun{
@@ -33,14 +34,17 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
-#' @importFrom stats sd
-#' 
 #' @export
 #' 
 transformData <- function(data
   , value_col
-  , transform_type = "logtransform"
+  , transform_type = NA
   , transform_col = NA) {
+
+  # ----< Do nothing if transform_type is NA >----  
+  if (is.na(transform_type)) {
+    return(data)
+  }
   
   # ----< Error trap >----
   {
@@ -49,23 +53,33 @@ transformData <- function(data
       value_col %in% names(data)
       , is.numeric(pull(data[ , value_col]))
       , is.na(transform_type) || transform_type %in% c("logtransform", "exptransform", "logbase10"
-        , "antilog10", "standnorm", "percent")
+        , "antilog10")
     )
     
-    # neg value test
+    # no negative values for log* transforms 
     numNegValues <- sum(data[[value_col]] < 0) 
-    if (numNegValues > 0 && transform_type %in% c("logtransform", "logbase10", "percent")) {
-      warning(paste(numNegValues, "values found in data --", transform_type, "not valid option.\n"
+    if (numNegValues > 0 && transform_type %in% c("logtransform", "logbase10")) {
+      warning(paste(numNegValues, "negative values found in data --", transform_type, "not valid option.\n"
+        , "Transformation not performed."))
+      return(data) 
+    }
+    
+    # no big positive values for 10^ or exp transforms 
+    numBigValues <- sum(data[[value_col]] >50) 
+    if (numBigValues > 0 && transform_type %in% c("exptransform", "antilog10")) {
+      warning(paste(numBigValues, "values > 50 found in data --", transform_type, "not valid option.\n"
         , "Transformation not performed."))
       return(data) 
     }
     
   } # end ~ error trap
   
-  # Do transformation
-  data_mean <- mean(data[[value_col]] , na.rm = TRUE)
-  data_sd   <- sd(data[[value_col]], na.rm = TRUE)  
+  # Figure out where to store transformed values ####
+  if (is.na(transform_col)) {
+    transform_col = value_col
+  }
   
+  # Do transformation ####
   if (transform_type == "logtransform") {
     data[[transform_col]] <- log(data[[value_col]])
   } else if (transform_type == "exptransform") {
@@ -74,10 +88,6 @@ transformData <- function(data
     data[[transform_col]] <- log10(data[[value_col]])
   } else if (transform_type == "antilog10") {
     data[[transform_col]] <- 10 ^ (data[[value_col]])
-  } else if (transform_type == "standnorm") {
-    data[[transform_col]] <- (data[[value_col]] - data_mean) / data_sd
-  } else if (transform_type == "percent") {
-    data[[transform_col]] <- 100 * (data[[value_col]] / data_mean)
   } else {
     stop("Transformation error")
   }

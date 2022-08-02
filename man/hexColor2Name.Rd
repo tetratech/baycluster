@@ -23,14 +23,14 @@ Find named color close to hexCol
 
 hexColor2Name("#80FF00")
 
-grpCnt <- 5
+grp_cnt <- 5
 
-grpCol <- rev(rainbow(grpCnt))
+grp_col <- rev(rainbow(grp_cnt))
 
-grpDF  <- tibble(lab = paste("Group",1:grpCnt)) \%>\%
-  mutate(., grpCol = scales::hue_pal()(grpCnt)) \%>\%
-  mutate(., grpCol = apply(as.data.frame(grpCol), 1, hexColor2Name)) 
-with(grpDF, barplot(1:grpCnt, col=grpCol, names.arg=grpCol))
+grp_df  <- tibble(lab = paste("Group",1:grp_cnt)) \%>\%
+  mutate(., grp_col = scales::hue_pal()(grp_cnt)) \%>\%
+  mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
+with(grp_df, barplot(1:grp_cnt, col=grp_col, names.arg=grp_col))
 }
 
 }

@@ -49,6 +49,8 @@ setSpec <- function(c.spec = list(), ...) {
     for (k1 in 1:length(varCommon)) {
       var = varCommon[k1]
       chk[k1] = length(unlist(c.spec[var])) != length(unlist(c.spec2[var])) ||
+        !is.na(unlist(c.spec[var])) & is.na(unlist(c.spec2[var])) ||
+        is.na(unlist(c.spec[var])) & !is.na(unlist(c.spec2[var])) ||
         unlist(c.spec[var]) != unlist(c.spec2[var])
     }
     
