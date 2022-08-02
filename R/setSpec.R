@@ -45,10 +45,14 @@ setSpec <- function(c.spec = list(), ...) {
     varCommon <- intersect(names(c.spec2), names(c.spec))
 
     # which common variables are different ####
-    chk <- !mapply(`%in%`, c.spec[varCommon], c.spec2[varCommon])
+    chk <- rep(TRUE, length(varCommon))
+    for (k1 in 1:length(varCommon)) {
+      var <- varCommon[k1]
+      chk[k1] <- !identical( c.spec[var], c.spec2[var])
+    }
 
     # Down-select to variables with updates needed ####    
-    varCommonDifferent <- varCommon[chk | is.na(chk)]
+    varCommonDifferent <- varCommon[chk]
   }
   
   # ----< Find new variables >---- 
