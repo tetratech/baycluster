@@ -4,33 +4,18 @@
 \alias{clusterData}
 \title{Perform basic hierarchical cluster analysis}
 \usage{
-clusterData(
-  data,
-  dist_method = "euclidean",
-  aggl_method = "ward.D",
-  dendo_title = "",
-  output_plot = TRUE
-)
+clusterData(c.spec, data, man_dend_grp_lbl = NA)
 }
 \arguments{
+\item{c.spec}{list that stores specifications for cluster analysis}
+
 \item{data}{table of data to cluster. Rows are the items to be clustered and
-columns represent the different variables.}
+columns represent the different variables. See Details for more information.}
 
-\item{dist_method}{distance matrix method to be used in coordination with
-stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
-"canberra", "binary" or "minkowski".}
-
-\item{aggl_method}{dissimilarities agglomeration method to be used in
-coordination with stats::hclust(). This should be one of "ward.D",
-"ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),
-"median" (= WPGMC) or "centroid" (= UPGMC)}
-
-\item{dendo_title}{title of plot.}
-
-\item{output_plot}{TRUE to output plot.}
+\item{man_dend_grp_lbl}{Labels to manually override automatic group labeling}
 }
 \value{
-An object which describes the produced tree.
+table of results
 }
 \description{
 Perform basic hierarchical cluster analysis and return an
@@ -39,16 +24,32 @@ Perform basic hierarchical cluster analysis and return an
 \details{
 This function calculates the distance matrix between the rows of a
   data matrix. This distance matrix is then used to perform the hierarchical
-  cluster analysis. Optionally, the function will output a basic plot.
+  cluster analysis. 
   
-The input data should only have columns used in the cluster analysis. (It is
-advantageous to have labeled rows for plotting purposes.)
+The input \code{data} must be organized to have the first column as an
+identifier for the rows. The remainder of the columns have data to be used in
+the analysis. It is strongly advised and advantageous to have labeled rows
+for plotting purposes. The output from \code{crossTabulate} is properly 
+formatted for this purpose.
+
+The variables actively used from \code{c.spec} include the following:
+
+\code{dist_method} distance matrix method to be used in coordination with
+  stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
+  "canberra", "binary" or "minkowski".
+  
+\code{aggl_method} dissimilarities agglomeration method to be used in
+  coordination with stats::hclust(). This should be one of "ward.D",
+  "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),
+  "median" (= WPGMC) or "centroid" (= UPGMC)
+
+\code{wq_parm} 
+\code{grp_cnt}
+\code{prof_var}
+\code{id_var}
 }
 \examples{
 \dontrun{
-p.dend <-clusterData(iris[, -5], output_plot = FALSE)
-p.dend <-clusterData(iris[, -5], dendo_title = "Iris Data")
-plot(p.dend, main="Iris Data", xlab = "Cluster Groups", sub=NA)
 }
 
 }

@@ -37,31 +37,25 @@ setSpec <- function(c.spec = list(), ...) {
   {
     c.spec2 <- grabFunctionParameters()    
     c.spec2$c.spec <- NULL                # drop c.spec from list
-  }
-  
+  } 
   # ----< Find updates of existing variables >----
   {
     # find common variable names between arguments passed to those in original c.spec ####
-    varCommon <- intersect(names(c.spec2), names(c.spec))
-
-    # down-select common variables to those with updates ####
-    chk <- logical(length = length(varCommon))
-    for (k1 in 1:length(varCommon)) {
-      var = varCommon[k1]
-      chk[k1] = length(unlist(c.spec[var])) != length(unlist(c.spec2[var])) ||
-        !is.na(unlist(c.spec[var])) & is.na(unlist(c.spec2[var])) ||
-        is.na(unlist(c.spec[var])) & !is.na(unlist(c.spec2[var])) ||
-        unlist(c.spec[var]) != unlist(c.spec2[var])
-    }
+    varCommon <- intersect(names(c.spec2), names(c.spec)) 
+    # which common variables are different ####
+    chk <- rep(TRUE, length(varCommon)) 
     
-    # variables with updates ####    
+    for (k1 in 1:length(varCommon)) { 
+      var <- varCommon[k1]
+      chk[k1] <- !identical( c.spec[var], c.spec2[var])
+    } 
+    # Down-select to variables with updates needed ####    
     varCommonDifferent <- varCommon[chk]
-    
   }
   
   # ----< Find new variables >---- 
-  {
-    varNew <- setdiff(names(c.spec2), names(c.spec))
+  { 
+    varNew <- setdiff(names(c.spec2), names(c.spec)) 
   }
   
   # ----< Update c.spec >----
@@ -80,8 +74,12 @@ setSpec <- function(c.spec = list(), ...) {
       select(., Variable, Description) %>%
       mutate(., Settings = NA_character_)
     
-    for (k1 in 1:NROW(df)) {
-      df[k1, "Settings"] <- vec.strg(as.character(unlist(c.spec[[unlist(df[k1, "Variable"])]])))
+    if (NROW(df) == 0) {
+      df[1,"Variable"] <- "No changes detected."
+    } else {
+      for (k1 in 1:NROW(df)) {
+        df[k1, "Settings"] <- vec.strg(as.character(unlist(c.spec[[unlist(df[k1, "Variable"])]])))
+      }
     }
     
     # print the updates out ####
