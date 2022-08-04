@@ -55,8 +55,8 @@ Basic map plotting function
 }
 \examples{
 \dontrun{
-m <- clusterMap(...)
-m2 <-clusterMapLabel(cmap = m
+m <- plotMap(...)
+m2 <-plotMapLabel(cmap = m
   , lat = 39.5, lon = -77.00
   , lab_txt = c("Station Grouping", "by", "TN Level")
   , x_space = 0, y_space = 0.1, lab_col <- "black", lab_size = 8)
@@ -66,5 +66,5 @@ m2 <-clusterMapLabel(cmap = m
 
 }
 \seealso{
-\code{\link{clusterMap}}
+\code{\link{plotMap}}
 }

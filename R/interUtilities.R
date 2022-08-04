@@ -21,8 +21,10 @@
 #'   mutate(., grp_col = scales::hue_pal()(grp_cnt)) %>%
 #'   mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
 #' with(grp_df, barplot(1:grp_cnt, col=grp_col, names.arg=grp_col))
-#' }
 #' 
+#' getColors(5)
+#' 
+#' }
 #' @return named color
 #' 
 #' @keywords internal
@@ -50,6 +52,51 @@ hexColor2Name <- function(hexCol) {
   hexColor2Name.return <- bestMatch[1]
   
 }
+
+
+# ####
+#' @title Return vector of named colors
+#' 
+#' @description Return vector of named colors
+#'   
+#' @details ...
+#' 
+#' 
+#' @param k number of colors
+#' 
+#' @examples 
+#' \dontrun{
+#' 
+#' hexColor2Name("#80FF00")
+#' 
+#' grp_cnt <- 5
+#' 
+#' grp_col <- rev(rainbow(grp_cnt))
+#' 
+#' grp_df  <- tibble(lab = paste("Group",1:grp_cnt)) %>%
+#'   mutate(., grp_col = scales::hue_pal()(grp_cnt)) %>%
+#'   mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
+#' with(grp_df, barplot(1:grp_cnt, col=grp_col, names.arg=grp_col))
+#' 
+#' getColors(5)
+#' 
+#' }
+#' 
+#' @return named vector
+#' 
+#' @keywords internal
+#' 
+#' @seealso \code{\link{hexColor2Name}}
+#' 
+#' @importFrom scales hue_pal 
+#' 
+#' @export
+#' 
+getColors <- function(grp_cnt) {
+  x<-apply(as.data.frame(scales::hue_pal()(grp_cnt)), 1, hexColor2Name)
+  return(x)
+}  
+
 
 
 # ####

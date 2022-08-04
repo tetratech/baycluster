@@ -7,12 +7,20 @@
 #' @details The "knee-of-the-curve" method can be used to inform the number of
 #'   clusters to use when performing cluster analyses. The input data should
 #'   only have columns used in the cluster analysis.
+#'   
+#' The input \code{data} must be organized to have the first column as an
+#' identifier for the rows. The remainder of the columns have data to be used in
+#' the analysis. It is strongly advised and advantageous to have labeled rows
+#' for plotting purposes. The output from \code{crossTabulate} is properly 
+#' formatted for this purpose.
 #' 
 #' @param data table of data to cluster. Rows are the items to be clustered and
-#'   columns represent the different variables.
+#'   columns represent the different variables. See Details for more information.
+#'   
 #' @param dist_method distance matrix method to be used in coordination with
 #'   stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
 #'   "canberra", "binary" or "minkowski".
+#'   
 #' @param aggl_method dissimilarities agglomeration method to be used in
 #'   coordination with stats::hclust(). This should be one of "ward.D",
 #'   "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),
@@ -20,7 +28,11 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' calTotWSS(iris[ , -5]) 
+#' # create data set from well known iris data set
+#' iris_df <- data.frame(id_row = paste(substr(iris[ ,5],1,3), rownames(iris), sep="."), iris[ , -5])
+#' rownames(iris_df) <- iris_df[, 1]
+#' 
+#' baycluster::calcTotWSS(iris_df)
 #' }
 #' 
 #' @return "knee of the curve" plot
@@ -39,11 +51,11 @@ calcTotWSS <- function(data, dist_method = "euclidean", aggl_method="ward.D") {
   
   # calculate distance matrix and agglomeration clusters
   
-  data_hclust <- clusterData(data
-    , dist_method = dist_method
-    , aggl_method = aggl_method
-    , dendo_title = ""
-    , output_plot = FALSE)  
+  # ----< run hierarchical cluster >----
+  dend <- data[ , -1] %>%
+    dist(., method = dist_method) %>%
+    hclust(., method = aggl_method) %>%
+    as.dendrogram()  
   
   # calculate number of clusters to evaluate
   size <- dim(data)

@@ -8,7 +8,7 @@ calcTotWSS(data, dist_method = "euclidean", aggl_method = "ward.D")
 }
 \arguments{
 \item{data}{table of data to cluster. Rows are the items to be clustered and
-columns represent the different variables.}
+columns represent the different variables. See Details for more information.}
 
 \item{dist_method}{distance matrix method to be used in coordination with
 stats::dist(). This must be one of "euclidean", "maximum", "manhattan",
@@ -30,10 +30,20 @@ Calculate total within sum of squares to inform the number of
 The "knee-of-the-curve" method can be used to inform the number of
   clusters to use when performing cluster analyses. The input data should
   only have columns used in the cluster analysis.
+  
+The input \code{data} must be organized to have the first column as an
+identifier for the rows. The remainder of the columns have data to be used in
+the analysis. It is strongly advised and advantageous to have labeled rows
+for plotting purposes. The output from \code{crossTabulate} is properly 
+formatted for this purpose.
 }
 \examples{
 \dontrun{
-calTotWSS(iris[ , -5]) 
+# create data set from well known iris data set
+iris_df <- data.frame(id_row = paste(substr(iris[ ,5],1,3), rownames(iris), sep="."), iris[ , -5])
+rownames(iris_df) <- iris_df[, 1]
+
+baycluster::calcTotWSS(iris_df)
 }
 
 }
