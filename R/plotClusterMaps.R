@@ -186,7 +186,7 @@ mapPoints <- function(pts
     }
     base_layer <- loadRData(file_layer)
   }
-
+  
   # if (isTRUE(boo_tidal)) {
   #   load(file.path(file_layer, "map_layers.RDA"))
   # } else {
