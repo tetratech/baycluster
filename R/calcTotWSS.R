@@ -40,7 +40,7 @@
 #' @seealso \code{\link{calcQuanClass}}
 #' 
 #' @importFrom tibble tibble  
-#' @importFrom stats dist hclust cutree
+#' @importFrom stats dist hclust cutree as.dendrogram
 #' @importFrom ggplot2 ggplot geom_line geom_point theme_bw theme
 #' @importFrom ggplot2 element_text element_line scale_y_continuous
 #' @importFrom ggplot2 scale_x_continuous labs
@@ -51,8 +51,10 @@ calcTotWSS <- function(data, dist_method = "euclidean", aggl_method="ward.D") {
   
   # calculate distance matrix and agglomeration clusters
   
+  data <- data[ , -1]
+  
   # ----< run hierarchical cluster >----
-  dend <- data[ , -1] %>%
+  dend <- data %>%
     dist(., method = dist_method) %>%
     hclust(., method = aggl_method) %>%
     as.dendrogram()  
@@ -69,7 +71,7 @@ calcTotWSS <- function(data, dist_method = "euclidean", aggl_method="ward.D") {
   
   # calculate total sum of square errors
   for (k1 in tot_wss$k) {
-    data_k1     <- cutree(data_hclust, k=k1)
+    data_k1     <- dendextend::cutree(dend, k=k1)
     groups      <- split(data, data_k1)
     wss         <- sapply(groups, function(x) sum(colSums(scale(x, scale=FALSE)^2)))
     tot_wss$wss[k1] <- sum(wss)

@@ -10,6 +10,8 @@
 #' @param data table variable
 #' @param tblFTout set to TRUE to output formatted tables
 #' 
+#' @keywords internal
+#' 
 #' @examples 
 #' \dontrun{
 #' 
@@ -25,7 +27,7 @@
 #' @importFrom rlang .data := 
 #' @importFrom lubridate ymd decimal_date yday year month is.Date
 #' @importFrom lubridate %m+% %m-% make_date  floor_date ceiling_date
-#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename 
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename all_of desc count last_col
 #' @importFrom dplyr group_by rename_with distinct relocate left_join arrange
 #' @importFrom dplyr  between pull summarise ungroup across ends_with   
 #' @importFrom tidyr pivot_wider pivot_longer
@@ -34,6 +36,7 @@
 #' @importFrom flextable flextable align fontsize font padding theme_box set_caption flextable_to_rmd
 #' @importFrom officer run_autonum
 #' @importFrom stats quantile
+#' @importFrom utils head
 #' 
 #' @export
 #' 
@@ -116,7 +119,7 @@ outSummStat <- function(data, tblFTout = FALSE) {
   {
     if (sum(i3) > 0) {
      
-      x.charSum <- header(data[ , i3])
+      x.charSum <- head(data[ , i3])
       
       if (outtblFT.character) {
         tblFT1(x.charSum

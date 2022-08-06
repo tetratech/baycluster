@@ -15,7 +15,13 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' #TBD
+#' c.spec <- setSpec(c.spec = list()
+#'   , start_year    = 1993
+#'   , end_year      = 2020
+#'   , month_grid    = 1:12
+#'   , day_grid      = 15 
+#'   , month_adj     = NA
+#'   ) 
 #' 
 #' }
 #' 
@@ -25,7 +31,7 @@
 #' 
 #' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
-#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by all_of desc count last_col
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
 #' @importFrom tibble tibble as_tibble 
 #' 

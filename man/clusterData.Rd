@@ -50,6 +50,8 @@ The variables actively used from \code{c.spec} include the following:
 }
 \examples{
 \dontrun{
+#TBD
+
 }
 
 }

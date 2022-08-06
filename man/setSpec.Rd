@@ -27,7 +27,13 @@ TBD: expand to include list of variables added to the list
 }
 \examples{
 \dontrun{
-#TBD
+c.spec <- setSpec(c.spec = list()
+  , start_year    = 1993
+  , end_year      = 2020
+  , month_grid    = 1:12
+  , day_grid      = 15 
+  , month_adj     = NA
+  ) 
 
 }
 

@@ -32,3 +32,4 @@ outSummStat(iris)
 \seealso{
 \code{\link{calcQuanClass}}
 }
+\keyword{internal}

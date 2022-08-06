@@ -39,20 +39,19 @@
 #' 
 #' @examples 
 #' \dontrun{
+#' #TBD
+#' 
 #' }
 #' 
 #' @return table of results
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
-#' @importFrom stats dist hclust 
+#' @importFrom stats dist hclust as.dendrogram
 #' 
 #' @export
 #
 clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) { 
-  
-  # man_dend_grp_lbl <- NA
-  # man_dend_grp_lbl <- c("A", "B", "C", "D", "E")
   
   # ----< preliminary set up >----
   
@@ -96,7 +95,8 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
       leaves <- left_join(leaves, dend_lbl, by = "dend_grp_ord")
       
       # create summary of groups for labeling dendrogram
-      dend_lbl <- unique(leaves[, c("cutree_grp", "cutree_leaves", "prim_lbl", "prim_col", "dend_grp_ord")]) %>%
+      dend_lbl <- unique(leaves[, c("cutree_grp", "cutree_leaves", "prim_grp"
+        , "prim_lbl", "prim_col", "dend_grp_ord")]) %>%
         as.data.frame()
     }
   }
@@ -162,7 +162,6 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
   
   # plot
   
-  
   plotDendrogram(
     dend = dend,
     grp_cnt = grp_cnt,
@@ -174,11 +173,20 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
     aggl_method = aggl_method
   )
 
-  tblFT1(leaves)
+  tblFT1(leaves, "Cluster Groups")
+  
+  if (all(id_var == "station")) {
+    
+    stat_df <- c.spec$stat_df %>%
+      select(., stat_vec, latitude, longitude) %>% 
+      rename(id_row = stat_vec)
+    
+    leaves <- left_join(leaves, stat_df, by = "id_row")
+  }
   
   return(leaves)
   
-} # end function: clusterData
+} # end ~ function: clusterData
   
   
   
