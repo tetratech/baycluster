@@ -24,6 +24,8 @@
 #' 
 #' @return data table with values for year and month added 
 #' 
+#' @keywords internal
+#' 
 #' @seealso \code{\link{readTextFile}} \code{\link{calcWaterYear}}
 #' 
 #' @export

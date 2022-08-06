@@ -26,6 +26,8 @@
 #' 
 #' @return vector of water year
 #' 
+#' @keywords internal
+#' 
 #' @seealso \code{\link{readTextFile}} \code{\link{calcYearMonth}}
 #' 
 #' @export

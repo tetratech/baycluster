@@ -244,6 +244,8 @@ rnkSeasLab <- function(c.spec,allMat.mn)  {
 #' 
 #' @return table of results
 #' 
+#' @importFrom stats aggregate cor 
+#' 
 #' @export
 #'
 rnkFlowCorLab <- function(c.spec,allMat.mn) {  

@@ -39,3 +39,4 @@ dat0$WY <- calcWaterYear(dat0$Year, dat0$theMonth)
 \seealso{
 \code{\link{readTextFile}} \code{\link{calcWaterYear}}
 }
+\keyword{internal}

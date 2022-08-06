@@ -20,7 +20,7 @@
 #' 
 #' @export
 #'
-grpCentrDist <- function(c.spec,data,grp1) { 
+calcGrpEuclideanDist <- function(c.spec,data,grp1) { 
   
   clus_var <- names(data[, -1])
   names(data)[1]    <- "id_row"

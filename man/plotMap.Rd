@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotClusterMaps.R
 \name{plotMap}
 \alias{plotMap}
-\title{Wrapper function for mapPoints() function}
+\title{Plot basic map}
 \usage{
 plotMap(
   grp_data,
@@ -63,5 +63,5 @@ m2 <-plotMapLabel(cmap = m
 
 }
 \seealso{
-\code{\link{plotMap}}
+\code{\link{plotMapLabel}} \code{\link{mapPoints}}
 }

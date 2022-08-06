@@ -19,6 +19,9 @@
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
+#' @importFrom graphics axis layout legend lines  mtext par points title 
+#' @importFrom stats aggregate cor 
+#' 
 #' 
 #' @export 
 #'
@@ -90,7 +93,7 @@ plotClusProfMat <- function(c.spec, data, grp1, legendPos="topleft")
       flow_col <- c.spec$ex_cov_df$ex_cov_col
       if (c.spec$TEST) print("  pltclusProf 2")
       if(is.na(flow_index[1,1])) {
-        errorTrap <- addError("pltClustProfMat error:  flow_index object not available",errorTrap)
+        warning("pltClustProfMat error:  flow_index object not available")
       } else {
         for( i in 1:nrow(flow_index)) {
           # points(i,yrng[1],col = flow_col[flow_index[i,"flowCat"]],pch=17,cex=1.5)  
@@ -100,7 +103,7 @@ plotClusProfMat <- function(c.spec, data, grp1, legendPos="topleft")
       }
     } # end of ex_cov_incl true condition
   } else {   
-    errorTrap <- addError("pltClustProfMat error: ex_cov_incl requested but prof_var not equal 'year'" ,errorTrap)
+    errorTrap <- warning("pltClustProfMat error: ex_cov_incl requested but prof_var not equal 'year'")
   }
   pltClusProfiles.return <- data.grp
 } # end ~ function: plotClusProfMat
@@ -127,6 +130,8 @@ plotClusProfMat <- function(c.spec, data, grp1, legendPos="topleft")
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
+#' @importFrom graphics axis layout legend lines  mtext par points title 
+#' @importFrom stats aggregate cor 
 #' 
 #' @export 
 #'

@@ -27,7 +27,7 @@
 #' 
 #' @return map object 
 #' 
-#' @seealso \code{\link{plotMap}}
+#' @seealso \code{\link{plotMap}} \code{\link{mapPoints}} 
 #' 
 #' @export
 #' 
@@ -50,7 +50,7 @@ plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0.1
 
 
 
-#' @title Wrapper function for mapPoints() function 
+#' @title Plot basic map 
 #' 
 #' @description Wrapper function for mapPoints() function 
 #'   
@@ -81,7 +81,7 @@ plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0.1
 #' 
 #' @return map object 
 #' 
-#' @seealso \code{\link{plotMap}}
+#' @seealso \code{\link{plotMapLabel}} \code{\link{mapPoints}} 
 #' 
 #' @export
 #' 
@@ -145,7 +145,7 @@ plotMap <- function(grp_data
 #' 
 #' @return map object 
 #' 
-#' @seealso \code{\link{plotMap}}
+#' @seealso \code{\link{plotMap}} \code{\link{plotMapLabel}} 
 #' 
 #' @export
 #' 
