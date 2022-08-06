@@ -46,7 +46,7 @@ plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0.1
   }
   
   return(cmap)
-} # end ~ function plotMapLabel
+} # end ~ function: plotMapLabel
 
 
 
@@ -265,4 +265,4 @@ mapPoints <- function(pts
   # Return----
   return(p)
   
-} # FUNCTION ~ END
+} # end ~ function: mapPoints

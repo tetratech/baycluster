@@ -175,7 +175,7 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
 
   tblFT1(leaves)
   
-  if (id_var == "station") {
+  if (all(id_var == "station")) {
     
     stat_df <- c.spec$stat_df %>%
       select(., stat_vec, latitude, longitude) %>% 
