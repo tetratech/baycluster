@@ -42,6 +42,8 @@ grpCentrDist <- function(c.spec,data,grp1) {
   
   names(grpCentrDist.return) <-  c("prim_lbl","prim_grp", grpCentrDist.return[ , 1])
   
+  tblFT1(grpCentrDist.return, "Group Euclidean Distances")
+  
   return(grpCentrDist.return)
   
 } # end ~ function: grpCentrDist

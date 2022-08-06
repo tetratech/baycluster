@@ -173,7 +173,7 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
     aggl_method = aggl_method
   )
 
-  tblFT1(leaves)
+  tblFT1(leaves, "Cluster Groups")
   
   if (all(id_var == "station")) {
     

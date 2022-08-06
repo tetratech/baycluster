@@ -141,6 +141,7 @@ plotMap <- function(grp_data
 #' 
 #' }
 #' 
+#' @keywords internal
 #' 
 #' @return map object 
 #' 

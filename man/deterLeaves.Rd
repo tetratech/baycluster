@@ -30,3 +30,4 @@ Summarize cluster analysis results into table
 \seealso{
 \code{\link{calcQuanClass}}
 }
+\keyword{internal}

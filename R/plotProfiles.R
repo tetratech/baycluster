@@ -22,7 +22,7 @@
 #' 
 #' @export 
 #'
-pltClusProfMat <- function(c.spec, data, grp1, legendPos="topleft") 
+plotClusProfMat <- function(c.spec, data, grp1, legendPos="topleft") 
 {
   # plot profiles in data by group superimposed on one plot
   #  mnOnly=FALSE; grp.lab <- c.spec$grp_lab; grpVar <- "prim_grp"; legendPos <- "topright"  
@@ -103,7 +103,8 @@ pltClusProfMat <- function(c.spec, data, grp1, legendPos="topleft")
     errorTrap <- addError("pltClustProfMat error: ex_cov_incl requested but prof_var not equal 'year'" ,errorTrap)
   }
   pltClusProfiles.return <- data.grp
-} # end ~ function: pltClusProfMat
+} # end ~ function: plotClusProfMat
+
 
 #' @title Plot profiles - panels
 #' 
@@ -129,7 +130,7 @@ pltClusProfMat <- function(c.spec, data, grp1, legendPos="topleft")
 #' 
 #' @export 
 #'
-pltClusProfMatPan <- function(c.spec,data,grp1, legendPos="topleft", num_col = 3) {
+plotClusProfMatPan <- function(c.spec,data,grp1, legendPos="topleft", num_col = 3) {
   # plot profiles in data by group in panels
   #  grp_lab <- paste("Group",1:grp_cnt); grpVar<-"prim_grp"; num_col <- 3; legendPos="topleft"; data <- data
   # unpack c.spec
@@ -203,7 +204,7 @@ pltClusProfMatPan <- function(c.spec,data,grp1, legendPos="topleft", num_col = 3
   }
   par(par.orig)
   pltClusProfMatPan.return <- data.grp
-}# end of pltClusProfMatPan
+}# end of plotClusProfMatPan
 
 
 

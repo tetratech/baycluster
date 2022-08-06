@@ -10,6 +10,8 @@
 #'   used in cluster analysis)
 #' @param grp_cnt number of clusters
 #' 
+#' @keywords internal
+#' 
 #' @examples 
 #' \dontrun{
 #' # TBD

@@ -51,8 +51,10 @@ calcTotWSS <- function(data, dist_method = "euclidean", aggl_method="ward.D") {
   
   # calculate distance matrix and agglomeration clusters
   
+  data <- data[ , -1]
+  
   # ----< run hierarchical cluster >----
-  dend <- data[ , -1] %>%
+  dend <- data %>%
     dist(., method = dist_method) %>%
     hclust(., method = aggl_method) %>%
     as.dendrogram()  

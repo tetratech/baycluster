@@ -63,8 +63,8 @@ m2 <-plotMapLabel(cmap = m
 
 }
 
-
 }
 \seealso{
 \code{\link{plotMap}}
 }
+\keyword{internal}
