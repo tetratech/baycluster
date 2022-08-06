@@ -6,15 +6,12 @@
 \usage{
 plotMap(
   grp_data,
-  grp_lab,
-  grp_col,
-  leg_title = "Station Grouping",
+  col_lbl = "prim_lbl",
+  col_colors = "prim_col",
+  leg_title = "Groups",
+  leg_pos = "left",
   col_lat = "latitude",
   col_lon = "longitude",
-  col_grp = "grpColor",
-  leg_pos = "left",
-  leg_labs = grp_lab,
-  leg_cols = grp_col,
   file_layer = NA,
   zoom_buffer = NA,
   map_coord_ratio = 1.3,
@@ -22,25 +19,19 @@ plotMap(
 )
 }
 \arguments{
-\item{grp_data}{cluster analysis results table}
+\item{grp_data}{table of data to be plotted}
 
-\item{grp_lab}{group labels}
+\item{col_lbl}{column with labels}
 
-\item{grp_col}{group color}
+\item{col_colors}{column with colors}
 
 \item{leg_title}{legend title}
+
+\item{leg_pos}{legend position}
 
 \item{col_lat}{column name with latitude data}
 
 \item{col_lon}{column name with longitude data}
-
-\item{col_grp}{column with group}
-
-\item{leg_pos}{legend position}
-
-\item{leg_labs}{legend labels}
-
-\item{leg_cols}{legend colors}
 
 \item{file_layer}{file with base layer}
 

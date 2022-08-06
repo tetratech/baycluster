@@ -10,9 +10,9 @@ plotMapLabel(
   lon,
   lab_txt,
   x_space = 0,
-  y_space = 0,
+  y_space = 0.1,
   lab_col = "black",
-  lab_size = 8,
+  lab_size = 6,
   h_just = 0
 )
 }

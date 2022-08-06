@@ -31,8 +31,8 @@
 #' 
 #' @export
 #' 
-plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0
-  , lab_col="black", lab_size=8, h_just=0)
+plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0.1
+  , lab_col="black", lab_size=6, h_just=0)
 {
   x1 <- lon
   y1 <- lat
@@ -56,16 +56,13 @@ plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0
 #'   
 #' @details ...
 #'
-#' @param grp_data cluster analysis results table
-#' @param grp_lab group labels
-#' @param grp_col group color
+#' @param grp_data table of data to be plotted
+#' @param col_lbl column with labels
+#' @param col_colors column with colors
 #' @param leg_title legend title
+#' @param leg_pos legend position
 #' @param col_lat column name with latitude data
 #' @param col_lon column name with longitude data
-#' @param col_grp column with group 
-#' @param leg_pos legend position
-#' @param leg_labs legend labels
-#' @param leg_cols legend colors 
 #' @param file_layer file with base layer
 #' @param zoom_buffer zoom buffer
 #' @param map_coord_ratio map coordinate ratio
@@ -88,25 +85,31 @@ plotMapLabel <- function(cmap, lat, lon, lab_txt, x_space=0, y_space=0
 #' 
 #' @export
 #' 
-plotMap <- function(grp_data, grp_lab,grp_col, leg_title = "Station Grouping",
-  col_lat = "latitude", col_lon = "longitude", col_grp = "grpColor",
-  leg_pos = "left", leg_labs = grp_lab, leg_cols = grp_col,
-  file_layer = NA, 
-  zoom_buffer = NA, map_coord_ratio = 1.3, boo_tidal = TRUE) {
+plotMap <- function(grp_data
+  , col_lbl     = "prim_lbl", col_colors = "prim_col"
+  , leg_title   = "Groups",   leg_pos    = "left"
+  , col_lat     = "latitude", col_lon    = "longitude"
+  , file_layer  = NA
+  , zoom_buffer = NA, map_coord_ratio = 1.3, boo_tidal = TRUE) {
+  
+  grp_data <- as.data.frame(grp_data)
+  
   m <- mapPoints(pts = grp_data
     , col_lat = col_lat
     , col_lon = col_lon
-    , col_grp = col_grp
+    , col_grp = col_colors
     , leg_pos = leg_pos
     , leg_title = leg_title
-    , leg_labs = grp_lab
-    , leg_cols = grp_col
+    , leg_labs = unique(grp_data[, col_lbl])
+    , leg_cols = unique(grp_data[, col_colors])
     , file_layer = file_layer
     , zoom_buffer = zoom_buffer
     , map_coord_ratio = map_coord_ratio
     , boo_tidal = boo_tidal
   )
+  
   return(m)
+  
 } # end ~ function: plotMap
 
 #' @title Basic map plotting function 
@@ -158,6 +161,7 @@ mapPoints <- function(pts
   , map_coord_ratio = 1.3
   , boo_tidal = TRUE) {
   
+
   # QC----
   qc_cols <- sum(c(col_lat, col_lon, col_grp) %in% names(pts))
   if(qc_cols != 3){
@@ -175,7 +179,7 @@ mapPoints <- function(pts
   }## IF ~ is.null(fl_grp_fill) ~ END
   ## Prepare data for plot
   pts <- ggplot2::fortify(pts)
-  
+
   # Load map layer----
   if (is.na(file_layer)) {
     base_layer <- baycluster::shp_cbseg
