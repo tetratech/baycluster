@@ -41,7 +41,7 @@ setSpec <- function(c.spec = list(), ...) {
   
   # ----< Create list of arguments passed in function >----
   {
-    c.spec2 <- grabFunctionParameters()    
+    c.spec2 <- grabFunctionArguments()    
     c.spec2$c.spec <- NULL                # drop c.spec from list
   } 
   # ----< Find updates of existing variables >----

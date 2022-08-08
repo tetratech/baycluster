@@ -81,7 +81,7 @@ chkRDAfiles <- function(
   , month_threshold  = NULL) {  
 
   # ----< Determine whether to use c.spec or other specifications
-  args <- grabFunctionParameters()   # create list of function arguments
+  args <- grabFunctionArguments()   # create list of function arguments
   
   if ("c.spec" %in% names(args)) {
    station_vec       = c.spec$stat_df$stat_vec

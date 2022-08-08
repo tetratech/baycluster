@@ -27,7 +27,7 @@
 #' 
 #' @importFrom dplyr %>% mutate select filter 
 #' @importFrom flextable flextable align fontsize font padding  set_caption flextable_to_rmd
-#' @importFrom flextable theme_box theme_vanilla theme_booktabs
+#' @importFrom flextable theme_box theme_vanilla theme_booktabs colformat_int colformat_double
 #' @importFrom officer run_autonum
 #' @importFrom rstudioapi getActiveDocumentContext isAvailable
 #' 
@@ -48,7 +48,9 @@ tblFT1 <- function(data
   
   # ----< create flextable >----
   FT <- flextable(data) %>%
-    padding(padding = 1, part = "all") 
+    padding(padding = 1, part = "all") %>%
+    colformat_int(big.mark = "") %>%
+    colformat_double(big.mark = "")
   
   # ----< customize font name >----
   if (!is.na(tbl_font_name)) {

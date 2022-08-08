@@ -17,7 +17,7 @@ calcQuanClass(
 )
 }
 \arguments{
-\item{data}{Data table to analyze. Must have two columns: \code{date_col} and
+\item{data}{Data set to analyze. Must have two columns: \code{date_col} and
 \code{value_col} which contain a date and value to analyze, respectively}
 
 \item{date_col}{Column name that contains date}
@@ -57,9 +57,16 @@ Setting \code{num_classes = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
 0.8, 1.0.
 }
 \examples{
-# TBD
+# get USGS flow data for gage 01668000: Rappahannock River nr Fredericksburg, VA
+df <- baytrends::getUSGSflow('01668000', 1965, 2021)
+head(df)
+df_quan <- calcQuanClass(df, "date", "q01668000"
+   , transform_type = "logtransform", num_classes = 4
+   , start_year = 1990, end_year = 2020, report = FALSE)
+head(df_quan)
+
 
 }
 \seealso{
-\code{\link{readTextFile}}
+\code{\link{readTextFile}}  \code{\link{transformData}} \code{\link[baytrends]{getUSGSflow}}
 }
