@@ -14,13 +14,7 @@
 #' @param dist_method dist_method 
 #' @param aggl_method aggl_method 
 #' 
-#' @examples 
-#' \dontrun{
-#' # TBD
-#' 
-#' }
-#' 
-#' @seealso \code{\link{calcQuanClass}}
+#' @seealso  \code{\link{clusterData}} \code{\link[stats]{dist}} \code{\link[stats]{hclust}}
 #' 
 #' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
 #' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
