@@ -63,21 +63,23 @@ calcQuanClass <- function(data
   , month_adj = NA
   , report = TRUE) { 
   
-  # ----< Convert data to tibble, date_col to as.Date >----
-  data[ , date_col] <- as.Date(data[ , date_col]) 
-  data <- tibble::tibble(data)
-  
+  # ----< Convert data to tibble >----
+  if (!is_tibble(data))  data <- tibble::tibble(data)
+
   # ----< Error trap >----
   {
     # date_col and value_col must exist and be Date and numeric fields, respectively
     stopifnot(
       date_col %in% names(data) 
       , value_col %in% names(data)
-      , is.Date(pull(data[ , date_col]))
+      , is.Date(pull(data[ , date_col])) || is.POSIXt(pull(data[ , "date"]))
       , is.numeric(pull(data[ , value_col]))
     )
   } # end ~ error trap
-  
+
+  # ----< Convert POSIXt field to Date field if applicable >----
+  if (is.POSIXt(pull(data[ , "date"]))) data[ , "date"] <- as.Date(pull(data[ , "date"]))
+    
   # ----< Compute equal-sized probability classes >----
   {
     probabilities <- seq(0, 1, length.out = num_classes+1)

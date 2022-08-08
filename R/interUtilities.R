@@ -207,7 +207,7 @@ pry <- function(listvar, v=NA) {
     
   for(nam in v) {eval(parse(text=paste0(nam," <- listvar$",nam)))}  
   rm(nam, listvar, v)
-  argList <- grabFunctionParameters()   # create list of function arguments  
+  argList <- grabFunctionArguments()   # create list of function arguments  
   invisible( list2env(argList, parent.frame() ) )
   
 } # end ~ function: pry

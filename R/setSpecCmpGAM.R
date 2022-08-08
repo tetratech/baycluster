@@ -40,7 +40,7 @@ setSpecCmpGAM <- function(c.spec) {
   grp_df  <- tibble(lab = paste("Group",1:grp_cnt)) %>%
     mutate(., grp_col = rev(scales::hue_pal()(grp_cnt))) %>%
     mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
-
+  
   # ----< Exogenous Covariate Cluster group and colors >----
   ex_cov_col_fct <- scales::col_numeric(
     palette = c("red","lightblue","blue")
