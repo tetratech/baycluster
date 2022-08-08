@@ -26,6 +26,6 @@ capitalize first letter of character string
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{simpleCap}} \code{\link{vec.strg}} \code{\link{firstCapAll}}
 }
 \keyword{internal}

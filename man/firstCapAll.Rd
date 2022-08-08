@@ -27,6 +27,6 @@ capitalize first letter of words separated by blanks in a
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{simpleCap}} \code{\link{firstCap}} \code{\link{vec.strg}}
 }
 \keyword{internal}

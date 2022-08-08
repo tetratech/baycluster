@@ -30,7 +30,7 @@ The input \code{data} must be organized to have the first column as an
 identifier for the rows. The remainder of the columns have data to be used in
 the analysis. It is strongly advised and advantageous to have labeled rows
 for plotting purposes. The output from \code{crossTabulate} is properly 
-formatted for this purpose.
+formatted as input.
 
 The variables actively used from \code{c.spec} include the following:
 
@@ -56,5 +56,5 @@ The variables actively used from \code{c.spec} include the following:
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{crossTabulate}} \code{\link[stats]{dist}} \code{\link[stats]{hclust}}
 }

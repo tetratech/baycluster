@@ -26,6 +26,6 @@ capitalize first letter of words separated by blanks in a character string
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{vec.strg}} \code{\link{firstCap}} \code{\link{firstCapAll}}
 }
 \keyword{internal}

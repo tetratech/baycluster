@@ -14,17 +14,17 @@ tblFT1(
 )
 }
 \arguments{
-\item{data}{table data}
+\item{data}{data set to output}
 
 \item{tbl_title}{table title}
 
-\item{tbl_pre_label}{table title pre_label}
+\item{tbl_pre_label}{table title pre_label, e.g., "Table: "}
 
-\item{tbl_font_name}{table font}
+\item{tbl_font_name}{table font, e.g., "Calibri"}
 
 \item{tbl_font_size}{font size}
 
-\item{tbl_theme}{table theme}
+\item{tbl_theme}{table theme, available options: "box", "vanilla", "booktabs"}
 }
 \value{
 # may return flextable
@@ -36,11 +36,12 @@ This function outputs a table of data with basic formatting.
 ...
 }
 \examples{
-\dontrun{
 
 tblFT1(head(iris))
 
-}
+tblFT1(head(iris)
+  , tbl_theme ="box")
+  
 
 }
 \seealso{
