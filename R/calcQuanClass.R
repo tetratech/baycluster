@@ -40,13 +40,15 @@
 #' 
 #' @return data table with cross tabulation of quantiles by year and month
 #' 
-#' @seealso \code{\link{readTextFile}}  \code{\link{transformData}} \code{\link[baytrends]{getUSGSflow}}
+#' @seealso \code{\link{readTextFile}}  \code{\link{transformData}}
+#'   \code{\link[baytrends]{getUSGSflow}}
 #' 
 #' 
 #' @importFrom rlang .data := 
-#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
-#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename group_by
-#' @importFrom dplyr distinct relocate left_join arrange between pull summarise ungroup
+#' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date
+#'   floor_date ceiling_date is.Date is.POSIXt
+#' @importFrom dplyr %>% mutate select filter bind_rows case_when rename
+#'   group_by distinct relocate left_join arrange between pull summarise ungroup
 #' @importFrom tibble tibble as_tibble
 #' @importFrom knitr kable 
 
@@ -63,21 +65,23 @@ calcQuanClass <- function(data
   , month_adj = NA
   , report = TRUE) { 
   
-  # ----< Convert data to tibble, date_col to as.Date >----
-  data[ , date_col] <- as.Date(data[ , date_col]) 
-  data <- tibble::tibble(data)
-  
+  # ----< Convert data to tibble >----
+  if (!is_tibble(data))  data <- tibble::tibble(data)
+
   # ----< Error trap >----
   {
     # date_col and value_col must exist and be Date and numeric fields, respectively
     stopifnot(
       date_col %in% names(data) 
       , value_col %in% names(data)
-      , is.Date(pull(data[ , date_col]))
+      , is.Date(pull(data[ , date_col])) || is.POSIXt(pull(data[ , "date"]))
       , is.numeric(pull(data[ , value_col]))
     )
   } # end ~ error trap
-  
+
+  # ----< Convert POSIXt field to Date field if applicable >----
+  if (is.POSIXt(pull(data[ , "date"]))) data[ , "date"] <- as.Date(pull(data[ , "date"]))
+    
   # ----< Compute equal-sized probability classes >----
   {
     probabilities <- seq(0, 1, length.out = num_classes+1)

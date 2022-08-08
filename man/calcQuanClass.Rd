@@ -68,5 +68,6 @@ head(df_quan)
 
 }
 \seealso{
-\code{\link{readTextFile}}  \code{\link{transformData}} \code{\link[baytrends]{getUSGSflow}}
+\code{\link{readTextFile}}  \code{\link{transformData}}
+  \code{\link[baytrends]{getUSGSflow}}
 }

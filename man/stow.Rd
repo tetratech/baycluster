@@ -18,16 +18,16 @@ append variables to a list
 ...
 }
 \examples{
-\dontrun{
 
-a = c(1, 3, 5)
-b = c("abc", "def", "ghi", "jkl")
-my_list <- stow(my_list, c("a", "b") )
+my_list <- list(a = 4, b = 5, c = "charlie")
+pry(my_list, c("a", "c"))
 
-}
+d = "delta"
+my_list <- stow(my_list, v = "d")
+my_list
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{pry}}
 }
 \keyword{internal}

@@ -80,19 +80,29 @@ chkRDAfiles <- function(
   , gam_folder  = NULL
   , month_threshold  = NULL) {  
 
-  # ----< Determine whether to use c.spec or other specifications
-  args <- grabFunctionArguments()   # create list of function arguments
-  
-  if ("c.spec" %in% names(args)) {
-   station_vec       = c.spec$stat_df$stat_vec
-   wq_parm           = c.spec$wq_parm
-   wq_layer          = c.spec$wq_layer
-   gam_numbr         = c.spec$gam_numbr
-   start_year        = c.spec$start_year
-   end_year        = c.spec$end_year
-   gam_folder        = c.spec$gam_folder
+  # ----< load c.spec settings if provided >----
+  if (!is.null(c.spec)) {
+   station_vec      = c.spec$stat_df$stat_vec
+   wq_parm          = c.spec$wq_parm
+   wq_layer         = c.spec$wq_layer
+   gam_numbr        = c.spec$gam_numbr
+   start_year       = c.spec$start_year
+   end_year         = c.spec$end_year
+   gam_folder       = c.spec$gam_folder
    month_threshold  = c.spec$month_grace_period
   }
+  
+  # ----< error trap >----
+  stopifnot(
+    !is.null(station_vec)
+    , !is.null(wq_parm)
+    , !is.null(wq_layer)
+    , !is.null(gam_numbr)
+    , !is.null(start_year)
+    , !is.null(end_year)
+    , !is.null(gam_folder)
+    , !is.null(month_threshold)
+  )
     
   # ----< Create data table of files to look for >----
   {

@@ -18,13 +18,16 @@ pry components from list or table to parent environment
 ...
 }
 \examples{
-\dontrun{
-# TBD
 
-}
+my_list <- list(a = 4, b = 5, c = "charlie")
+pry(my_list, c("a", "c"))
+
+d = "delta"
+my_list <- stow(my_list, v = "d")
+my_list
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{stow}}
 }
 \keyword{internal}

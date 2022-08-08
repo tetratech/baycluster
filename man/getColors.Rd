@@ -4,7 +4,7 @@
 \alias{getColors}
 \title{Return vector of named colors}
 \usage{
-getColors(grp_cnt)
+getColors(k)
 }
 \arguments{
 \item{k}{number of colors}
@@ -17,26 +17,24 @@ Return vector of named colors
 }
 \examples{
 
-print(hexColor2Name("#80FF00"))
+k <- 5
 
-grp_cnt <- 5
-
-grp_col <- rev(rainbow(grp_cnt)) 
+grp_col <- rev(rainbow(k))
 grp_col <- apply(as.data.frame(grp_col), 1, hexColor2Name)
-barplot(1:grp_cnt, col=grp_col, names.arg=grp_col)
+barplot(1:k, col=grp_col, names.arg=grp_col)
 
-# baycluster colors
-grp_col = scales::hue_pal()(grp_cnt)
-grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)
-barplot(1:grp_cnt, col=grp_col, names.arg=grp_col)
+# baycluster color call statement
+k <- 5
+grp_col <- getColors(k)
+barplot(1:k, col=grp_col, names.arg=grp_col)
 
-# simpler baycluster color call statement
-grp_cnt <- 4
-grp_col <- getColors(grp_cnt)
-barplot(1:grp_cnt, col=grp_col, names.arg=grp_col)
+# baycluster color call statement for exogenous covariate
+k <- 4
+grp_col <- getColors2(k)
+barplot(1:k, col=grp_col, names.arg=grp_col)
 
 }
 \seealso{
-\code{\link{hexColor2Name}} \code{\link[scales]{hue_pal}}
+\code{\link{hexColor2Name}} \code{\link{getColors2}} \code{\link[scales]{hue_pal}}
 }
 \keyword{internal}

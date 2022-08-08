@@ -1,5 +1,3 @@
-# #################################################################################
-# ####
 #' @title Perform basic hierarchical cluster analysis 
 #' 
 #' @description Perform basic hierarchical cluster analysis and return an
@@ -13,7 +11,7 @@
 #' identifier for the rows. The remainder of the columns have data to be used in
 #' the analysis. It is strongly advised and advantageous to have labeled rows
 #' for plotting purposes. The output from \code{crossTabulate} is properly 
-#' formatted for this purpose.
+#' formatted as input.
 #' 
 #' The variables actively used from \code{c.spec} include the following:
 #' 
@@ -45,7 +43,7 @@
 #' 
 #' @return table of results
 #' 
-#' @seealso \code{\link{calcQuanClass}}
+#' @seealso \code{\link{crossTabulate}} \code{\link[stats]{dist}} \code{\link[stats]{hclust}}
 #' 
 #' @importFrom stats dist hclust as.dendrogram
 #' 

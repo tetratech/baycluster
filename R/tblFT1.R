@@ -6,19 +6,20 @@
 #' @details ...
 #' 
 #' 
-#' @param data table data
+#' @param data data set to output
 #' @param tbl_title table title
-#' @param tbl_pre_label table title pre_label
-#' @param tbl_font_name table font
+#' @param tbl_pre_label table title pre_label, e.g., "Table: "
+#' @param tbl_font_name table font, e.g., "Calibri"
 #' @param tbl_font_size font size
-#' @param tbl_theme table theme
+#' @param tbl_theme table theme, available options: "box", "vanilla", "booktabs"
 #' 
 #' @examples 
-#' \dontrun{
 #' 
 #' tblFT1(head(iris))
 #' 
-#' }
+#' tblFT1(head(iris)
+#'   , tbl_theme ="box")
+#'   
 #' 
 #' @return 
 #' # may return flextable 
@@ -26,8 +27,9 @@
 #' @seealso \code{\link{calcQuanClass}}
 #' 
 #' @importFrom dplyr %>% mutate select filter 
-#' @importFrom flextable flextable align fontsize font padding  set_caption flextable_to_rmd
-#' @importFrom flextable theme_box theme_vanilla theme_booktabs colformat_int colformat_double
+#' @importFrom flextable flextable align fontsize font padding  set_caption
+#'   flextable_to_rmd theme_box theme_vanilla theme_booktabs colformat_int
+#'   colformat_double
 #' @importFrom officer run_autonum
 #' @importFrom rstudioapi getActiveDocumentContext isAvailable
 #' 

@@ -38,13 +38,6 @@ Plot dendrogram
 \details{
 ...
 }
-\examples{
-\dontrun{
-# TBD
-
-}
-
-}
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{clusterData}} \code{\link[stats]{dist}} \code{\link[stats]{hclust}}
 }

@@ -9,16 +9,3 @@ cv()
 \description{
 clear viewer pane
 }
-\details{
-...
-}
-\examples{
-\dontrun{
-cv()
-
-}
-
-}
-\seealso{
-\code{\link{calcQuanClass}}
-}

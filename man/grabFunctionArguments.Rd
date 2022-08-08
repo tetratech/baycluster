@@ -18,17 +18,14 @@ Derived from https://stackoverflow.com/questions/66329835/using-r-how-to-get-all
 \examples{
 \dontrun{
 
-adebo.deepSearch = function(z, pi_0 = 0.3, families=list(), ... ) {
-  args = grabFunctionArguments();
+my_function = function(z, pi_0 = 0.3, families=list(), ... ) {
+  args = grabFunctionArguments()
   names(args)
-  return(args )
+  return(args)
 }
 
-X <- adebo.deepSearch(z=4, a=345, families = list(a=34, b=545), myList = list(a=34, b=545))
+X <- my_function(z=4, a=345, families = list(a=34, b=545), myList = list(a=34, b=545))
 }
 
-}
-\seealso{
-\code{\link{calcQuanClass}}
 }
 \keyword{internal}

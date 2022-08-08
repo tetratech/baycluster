@@ -29,6 +29,6 @@ vec.strg(M)
 
 }
 \seealso{
-\code{\link{calcQuanClass}}
+\code{\link{simpleCap}} \code{\link{firstCap}} \code{\link{firstCapAll}}
 }
 \keyword{internal}
