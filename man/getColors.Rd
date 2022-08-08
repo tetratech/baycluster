@@ -15,29 +15,28 @@ named vector
 \description{
 Return vector of named colors
 }
-\details{
-...
-}
 \examples{
-\dontrun{
 
-hexColor2Name("#80FF00")
+print(hexColor2Name("#80FF00"))
 
 grp_cnt <- 5
 
-grp_col <- rev(rainbow(grp_cnt))
+grp_col <- rev(rainbow(grp_cnt)) 
+grp_col <- apply(as.data.frame(grp_col), 1, hexColor2Name)
+barplot(1:grp_cnt, col=grp_col, names.arg=grp_col)
 
-grp_df  <- tibble(lab = paste("Group",1:grp_cnt)) \%>\%
-  mutate(., grp_col = scales::hue_pal()(grp_cnt)) \%>\%
-  mutate(., grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)) 
-with(grp_df, barplot(1:grp_cnt, col=grp_col, names.arg=grp_col))
+# baycluster colors
+grp_col = scales::hue_pal()(grp_cnt)
+grp_col = apply(as.data.frame(grp_col), 1, hexColor2Name)
+barplot(1:grp_cnt, col=grp_col, names.arg=grp_col)
 
-getColors(5)
-
-}
+# simpler baycluster color call statement
+grp_cnt <- 4
+grp_col <- getColors(grp_cnt)
+barplot(1:grp_cnt, col=grp_col, names.arg=grp_col)
 
 }
 \seealso{
-\code{\link{hexColor2Name}}
+\code{\link{hexColor2Name}} \code{\link[scales]{hue_pal}}
 }
 \keyword{internal}

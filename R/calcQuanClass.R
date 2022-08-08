@@ -15,7 +15,7 @@
 #' Setting \code{num_classes = 5} will yield probabilities of 0, 0.2, 0.4, 0.6,
 #' 0.8, 1.0.
 #' 
-#' @param data Data table to analyze. Must have two columns: \code{date_col} and
+#' @param data Data set to analyze. Must have two columns: \code{date_col} and
 #'   \code{value_col} which contain a date and value to analyze, respectively
 #' @param date_col Column name that contains date
 #' @param value_col Column name that contains values for analyzing for quantiles
@@ -29,11 +29,18 @@
 #' @param report Indicate whether to print table
 #'  
 #' @examples 
-#' # TBD
+#' # get USGS flow data for gage 01668000: Rappahannock River nr Fredericksburg, VA
+#' df <- baytrends::getUSGSflow('01668000', 1965, 2021)
+#' head(df)
+#' df_quan <- calcQuanClass(df, "date", "q01668000"
+#'    , transform_type = "logtransform", num_classes = 4
+#'    , start_year = 1990, end_year = 2020, report = FALSE)
+#' head(df_quan)
+#' 
 #' 
 #' @return data table with cross tabulation of quantiles by year and month
 #' 
-#' @seealso \code{\link{readTextFile}}
+#' @seealso \code{\link{readTextFile}}  \code{\link{transformData}} \code{\link[baytrends]{getUSGSflow}}
 #' 
 #' 
 #' @importFrom rlang .data := 
@@ -56,7 +63,10 @@ calcQuanClass <- function(data
   , month_adj = NA
   , report = TRUE) { 
   
-
+  # ----< Convert data to tibble, date_col to as.Date >----
+  data[ , date_col] <- as.Date(data[ , date_col]) 
+  data <- tibble::tibble(data)
+  
   # ----< Error trap >----
   {
     # date_col and value_col must exist and be Date and numeric fields, respectively
@@ -65,7 +75,7 @@ calcQuanClass <- function(data
       , value_col %in% names(data)
       , is.Date(pull(data[ , date_col]))
       , is.numeric(pull(data[ , value_col]))
-      )
+    )
   } # end ~ error trap
   
   # ----< Compute equal-sized probability classes >----
@@ -107,7 +117,7 @@ calcQuanClass <- function(data
     if (!is.na(transform_type)) {
       data1 <- transformData(data1, value_col, transform_type)
     }
-
+    
     # adjust year when month_adj is specified  
     if (any(!is.na(month_adj))) {
       if (month_adj[1] > 1) {
@@ -142,7 +152,7 @@ calcQuanClass <- function(data
       group_by(., year, month) %>%
       summarise(., avg = mean(.data[[value_col]]), .groups = "keep") %>%
       ungroup(.)
-
+    
     # process each month ####  
     for(mon in month_order) {
       
@@ -159,27 +169,32 @@ calcQuanClass <- function(data
         mutate(.
           , !!month.abb[mon] := cut(ff1mo$avg, quan_val, labels = FALSE)) %>%
         select(., year, month.abb[mon])
-  
+      
       # Merge one month data results to overall data set    
       ffyr <- ffyr %>%
         left_join(., ff1mo, by = "year")
       
     } # end ~ for mon
   } # end ~ Process data at monthly level
-
-  # ----< Filter final data set down to selected years >----
-  {
-  ffyr <- ffyr %>%
-    filter(., year >= start_year
-      , year <= end_year) %>%
-    rename(., year_avg = avg)
-  } # end ~ Filter final data set down
   
-  FT <- tblFT1(ffyr
-    , tbl_title = "Yearly and monthly quantile classes"  
-  )
+  # ----< Filter final data set down to selected years and adjust year varialbes >----
+  {
+    ffyr <- ffyr %>%
+      filter(., year >= start_year
+        , year <= end_year) %>%
+      rename(., year_avg = avg) %>%
+      mutate(., year = as.integer(year))
+  }
+  
+  # ----< Send output table to Viewer if requested >----
+  { 
+    if (report) {
+      FT <- tblFT1(ffyr
+        , tbl_title = "Yearly and monthly quantile classes"
+      )
+    }
+  }
   
   return(ffyr)
   
 } # end ~ function: calcQuanClass
-  

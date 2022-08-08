@@ -13,24 +13,23 @@
 #' 
 #' Negative values in \code{value_col} are not permitted for "logtransform" and "logbase10" options.
 #' 
-#' @param data Data table to analyze. Must have one column: \code{value_col}
+#' @param data Data set to analyze. Must have one column: \code{value_col}
 #'   which contains the values to transform
 #' @param value_col Column name that contains values for transforming
 #' @param transform_type type of transformation to perform. If \code{transform_type =
 #'   "logtransform"}, then values are log transformed. If \code{transform_type =
-#'   NA}, then an unchanged data table is returned.
+#'   NA}, then an unchanged data set is returned. See Details for other transformations.
 #' @param transform_col Column name to store transformed data. If left as NA, then
 #'   \code{value_col} will be overwritten.
 #' 
 #' @examples 
-#' \dontrun{
-#' # TBD
-#' 
-#' }
+#' df <- data.frame(id_row = 1:10, values_in = runif(10))
+#' df <- transformData(df, "values_in", "logtransform", "values_out")
+#' df
 #' 
 #' @keywords internal
 #' 
-#' @return data table with transformed column
+#' @return data set with transformed column
 #' 
 #' @seealso \code{\link{calcQuanClass}}
 #' 
@@ -45,6 +44,9 @@ transformData <- function(data
   if (is.na(transform_type)) {
     return(data)
   }
+  
+  # ----< Convert data to tibble, date_col to as.Date >----
+  data <- tibble::tibble(data)
   
   # ----< Error trap >----
   {
