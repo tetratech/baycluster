@@ -4,12 +4,28 @@
 \alias{crossTabulate}
 \title{Cross tabulate data.}
 \usage{
-crossTabulate(c.spec, data, ret_data = 1)
+crossTabulate(
+  c.spec = NULL,
+  data = NULL,
+  id_var = NULL,
+  prof_var = NULL,
+  data_transform = NULL,
+  data_center = NULL,
+  ret_data = 1
+)
 }
 \arguments{
 \item{c.spec}{list for storing specifications for cluster analysis}
 
 \item{data}{input data to be cross tabulated}
+
+\item{id_var}{items that are to be clustered}
+
+\item{prof_var}{attribute to cluster by}
+
+\item{data_transform}{data transformation}
+
+\item{data_center}{data centering}
 
 \item{ret_data}{1: return wide data, 2: return list of wide and long data}
 }
@@ -21,25 +37,32 @@ Cross tabulate data. Includes transformations, averaging over
   id_var., and data centering
 }
 \details{
-The incoming data are intended to have the following fields:
-  "station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
-  "value". JBH NOTE: need to clarify minimum data set and what happens with
-  extra variables.
+With the exception of \code{data}, the user can either specify the arguments
+for this function via the list \code{c.spec} (see \code{\link{setSpec}}); or
+specify the variables individually via the remaining arguments for this
+function.
+
+The incoming \code{data} are intended to have the following fields:
+"station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
+"value". JBH NOTE: need to clarify minimum data set and what happens with
+extra variables.
 
 Processing include the following steps:  
 
-Values are transformed based on value stored in c.spec$data_transform
+Values are transformed based on value stored in \code{data_transform}.
 
-If c.spec$id_var identifies more than one variable, a new column is
-constructed by concatenating the columns identified by id_var.
+If \code{id_var} identifies more than one variable, a new column is
+constructed by concatenating the columns identified by \code{id_var}.
 
-Values are averaged over id_var (or the newly constructed column).
+Values are averaged over \code{id_var} (or the newly constructed column).
 
-Values are centered based on the value of c.spec$data_center and performed
-on an id_var basis
+Values are centered based on the value of \code{data_center} and performed on
+an \code{id_var} basis.
 
-Values are cross tabulated such that id_var is unique and columns correspond
-to prof_var
+Values are cross tabulated such that \code{id_var} is unique in column 1 of
+the returned table and the remaining columns correspond to varying levels of
+\code{prof_var}.
+#'
 }
 \examples{
 \dontrun{
@@ -49,5 +72,8 @@ to prof_var
 
 }
 \seealso{
-\code{\link{calcQuanClass}} \code{\link{transformData}} \code{\link{centerData}}
+\code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+  \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+  \code{\link{transformData}} \code{\link{centerData}}
+  \code{\link{clusterData}}
 }

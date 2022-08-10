@@ -18,7 +18,11 @@
 #' \code{gam_folder/do/TF3.2E_do_surf.rda}\cr 
 #' \code{gam_folder/do/...}\cr
 #'            
-#' The values of \code{station}, \code{wq_parm}, and \code{wq_layer} are used to 
+#' The user can either specify the arguments for this function via the list \code{c.spec}
+#' (see \code{\link{setSpec}}); or specify the variables individually via the
+#' remaining arguments for this function.
+#'            
+#' The values of \code{station_vec}, \code{wq_parm}, and \code{wq_layer} are used to 
 #' construct the file name convention of: "station_parameter_layer.rda". Under the 
 #' folder \code{gam_folder}, subfolders are organized by \code{wq_parm}. 
 #' 
@@ -51,9 +55,12 @@
 #' 
 #' }
 #' 
-#' @return data table with a summary of files and GAM results
+#' @return data table with a summary of files and GAM result availability
 #' 
-#' @seealso \code{\link{readTextFile}}
+#' @seealso  \code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+#'   \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+#'   \code{\link{transformData}} \code{\link{centerData}}
+#'   \code{\link{clusterData}}
 #' 
 #' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
@@ -111,6 +118,7 @@ chkRDAfiles <- function(
         , wq_parm = wq_parm
         , wq_layer = wq_layer)) %>%
       mutate(.
+        , file_folder = gam_folder
         , file_base = paste(station, wq_parm, wq_layer, sep = "_")
         , file_name = paste0(file_base,".rda")
         , file_exists = file.exists(file.path(gam_folder, wq_parm, file_name))

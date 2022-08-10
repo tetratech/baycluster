@@ -99,12 +99,12 @@ setSpec <- function(c.spec = list(), ...) {
     )
   }
   
-  # ----< Check c.spec >----
+  # ----< Chk (Check) c.spec >----
   {
     setSpecChk(c.spec)
   }
   
-  # ----< build out c.spec >----
+  # ----< Cmp (Complete) c.spec >----
   {
     c.spec <- setSpecCmp(c.spec)
   }

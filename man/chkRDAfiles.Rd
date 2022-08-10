@@ -36,7 +36,7 @@ chkRDAfiles(
 \item{month_threshold}{Threshold for flagging acceptable data range (see details)}
 }
 \value{
-data table with a summary of files and GAM results
+data table with a summary of files and GAM result availability
 }
 \description{
 Based on a station list, year range, water quality variable,
@@ -56,7 +56,11 @@ have been stored as separate rda files in a folder passed as the variable
 \code{gam_folder/do/TF3.2E_do_surf.rda}\cr 
 \code{gam_folder/do/...}\cr
            
-The values of \code{station}, \code{wq_parm}, and \code{wq_layer} are used to 
+The user can either specify the arguments for this function via the list \code{c.spec}
+(see \code{\link{setSpec}}); or specify the variables individually via the
+remaining arguments for this function.
+           
+The values of \code{station_vec}, \code{wq_parm}, and \code{wq_layer} are used to 
 construct the file name convention of: "station_parameter_layer.rda". Under the 
 folder \code{gam_folder}, subfolders are organized by \code{wq_parm}. 
 
@@ -81,5 +85,8 @@ period of record.
 
 }
 \seealso{
-\code{\link{readTextFile}}
+\code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+  \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+  \code{\link{transformData}} \code{\link{centerData}}
+  \code{\link{clusterData}}
 }

@@ -14,12 +14,12 @@
 #' @param tbl_theme table theme, available options: "box", "vanilla", "booktabs"
 #' 
 #' @examples 
-#' 
+#' \dontrun{
 #' tblFT1(head(iris))
 #' 
 #' tblFT1(head(iris)
 #'   , tbl_theme ="box")
-#'   
+#' }
 #' 
 #' @return 
 #' # may return flextable 
@@ -50,9 +50,11 @@ tblFT1 <- function(data
   
   # ----< create flextable >----
   FT <- flextable(data) %>%
-    padding(padding = 1, part = "all") %>%
-    colformat_int(big.mark = "") %>%
-    colformat_double(big.mark = "")
+    padding(padding = 1, part = "all") 
+  
+  # %>%
+  #   colformat_int(big.mark = "") %>%
+  #   colformat_double(big.mark = "")
   
   # ----< customize font name >----
   if (!is.na(tbl_font_name)) {

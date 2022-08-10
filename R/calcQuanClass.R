@@ -51,7 +51,7 @@
 #'   group_by distinct relocate left_join arrange between pull summarise ungroup
 #' @importFrom tibble tibble as_tibble
 #' @importFrom knitr kable 
-
+#' @importFrom baytrends getUSGSflow
 #' 
 #' @export
 #' 
