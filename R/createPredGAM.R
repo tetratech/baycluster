@@ -1,12 +1,17 @@
 # ####
-#' @title Create prediction data 
+#' @title Create GAM prediction data set
 #' 
-#' @description Create prediction data 
+#' @description Create GAM prediction data set
 #'   
 #' @details 
-#' ...
+#' 
+#' The user can either specify the arguments for this function via the list \code{c.spec}
+#' (see \code{\link{setSpec}}); or specify the variables individually via the
+#' remaining arguments for this function.
 #' 
 #' @param c.spec list of cluster analysis specifications
+#' @param chk_rda data table with a summary of files and GAM result availability
+#' @param base_pred data table with base prediction data set
 #'  
 #' @examples 
 #' \dontrun{
@@ -15,17 +20,20 @@
 #' 
 #' @return data table with full prediction data set
 #' \itemize{
-#' \item station - 
-#' \item wq_parm - 
-#' \item wq_layer - 
+#' \item station - station 
+#' \item wq_parm - water quality parameter
+#' \item wq_layer - water quality layer
 #' \item year_cal - year (calendar basis)   
-#' \item year - year for cluster 
+#' \item year - year for cluster analysis
 #' \item month - month   
 #' \item day - day of month   
 #' \item value - prediction
 #' }
 #' 
-#' @seealso \code{\link{readTextFile}}
+#' @seealso  \code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+#'   \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+#'   \code{\link{transformData}} \code{\link{centerData}}
+#'   \code{\link{clusterData}}
 #' 
 #' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
@@ -39,12 +47,23 @@
 #' 
 #' @export
 #' 
-createPredGAM <- function(c.spec) {
+createPredGAM <- function(
+    c.spec = NULL
+  , chk_rda = NULL
+  , base_pred = NULL) {
   
-  # ----< extract needed variables from c.spec >----
-  varsNeeded <- c("gam_folder", "chk_rda", "base_pred")
-  pry(c.spec, varsNeeded)
-
+  # ----< load c.spec settings if provided >----
+  if (!is.null(c.spec)) {
+    chk_rda      = c.spec$chk_rda
+    base_pred    = c.spec$base_pred
+  }
+  
+  # ----< error trap >----
+  stopifnot(
+    !is.null(chk_rda)
+    , !is.null(base_pred)
+  )
+  
   # ----< create predictions >----
   {
     # downselect base_pred to minimum data ####
@@ -54,8 +73,9 @@ createPredGAM <- function(c.spec) {
     # for each row in chk_rda ####
     for (k1 in 1:NROW(chk_rda)) {
       
-      # load gamResult from baytrends output
-      load(file.path(gam_folder, chk_rda$wq_parm[k1], chk_rda$file_name[k1]))
+      # load gamResult from baytrends output 
+      # (assumes r object loaded will have be the variable: gamResult, a default of baytrends)
+      load(file.path(chk_rda$file_folder[k1], chk_rda$wq_parm[k1], chk_rda$file_name[k1]))
       
       # expand base prediction data set for ith row ####
       pred0 <- base_pred0 %>%

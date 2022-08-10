@@ -2,31 +2,37 @@
 % Please edit documentation in R/createPredGAM.R
 \name{createPredGAM}
 \alias{createPredGAM}
-\title{Create prediction data}
+\title{Create GAM prediction data set}
 \usage{
-createPredGAM(c.spec)
+createPredGAM(c.spec = NULL, chk_rda = NULL, base_pred = NULL)
 }
 \arguments{
 \item{c.spec}{list of cluster analysis specifications}
+
+\item{chk_rda}{data table with a summary of files and GAM result availability}
+
+\item{base_pred}{data table with base prediction data set}
 }
 \value{
 data table with full prediction data set
 \itemize{
-\item station - 
-\item wq_parm - 
-\item wq_layer - 
+\item station - station 
+\item wq_parm - water quality parameter
+\item wq_layer - water quality layer
 \item year_cal - year (calendar basis)   
-\item year - year for cluster 
+\item year - year for cluster analysis
 \item month - month   
 \item day - day of month   
 \item value - prediction
 }
 }
 \description{
-Create prediction data
+Create GAM prediction data set
 }
 \details{
-...
+The user can either specify the arguments for this function via the list \code{c.spec}
+(see \code{\link{setSpec}}); or specify the variables individually via the
+remaining arguments for this function.
 }
 \examples{
 \dontrun{
@@ -35,5 +41,8 @@ Create prediction data
 
 }
 \seealso{
-\code{\link{readTextFile}}
+\code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+  \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+  \code{\link{transformData}} \code{\link{centerData}}
+  \code{\link{clusterData}}
 }

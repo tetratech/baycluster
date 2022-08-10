@@ -36,12 +36,12 @@ This function outputs a table of data with basic formatting.
 ...
 }
 \examples{
-
+\dontrun{
 tblFT1(head(iris))
 
 tblFT1(head(iris)
   , tbl_theme ="box")
-  
+}
 
 }
 \seealso{

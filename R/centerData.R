@@ -6,11 +6,7 @@
 #' @details This function centers data from a table. Allowable transformations are
 #' \itemize{
 #' \item "meanadjust": subtract mean
-#' \item "standnorm": z-score (subtract mean and divide by standard deviation)
-#' \item "percent": percent (express response as a percent of the mean) 
 #' }
-#' 
-#' Negative values in \code{value_col} are not permitted for "percent" option.
 #' 
 #' @param data Data table to analyze. Must have two columns: \code{value_col}
 #'   which contains the values to transform and \code{id_col} which has the 
@@ -60,16 +56,8 @@ centerData <- function(data
       , prof_col %in% names(data)
       , id_col %in% names(data)
       , is.numeric(pull(data[ , value_col]))
-      , is.na(center_type) || center_type %in% c("meanadjust", "standnorm", "percent")
+      , is.na(center_type) || center_type %in% c("meanadjust")
     )
-    
-    # no negative values for log* transforms 
-    numNegValues <- sum(data[[value_col]] < 0) 
-    if (numNegValues > 0 && center_type %in% c("percent")) {
-      warning(paste(numNegValues, "values found in data --", center_type, "not valid option.\n"
-        , "Transformation not performed."))
-      return(data) 
-    }
     
   } # end ~ error trap
   
@@ -91,10 +79,6 @@ centerData <- function(data
   
   if (center_type == "meanadjust") {
     data[[center_col]] <- data[[value_col]] - data[["mn_id"]]
-  } else if (center_type == "standnorm") {
-    data[[center_col]] <- (data[[value_col]] - data[["mn_id"]]) / data[["sd_id"]]
-  } else if (center_type == "percent") {
-    data[[center_col]] <- 100 * (data[[value_col]] / data[["mn_id"]])
   } else {
     stop("Transformation error")
   }

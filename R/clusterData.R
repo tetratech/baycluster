@@ -54,9 +54,16 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
   # ----< preliminary set up >----
   
   # unpack needed variables ####
-    pry(c.spec, v = c("wq_parm", "grp_cnt", "prof_var", "id_var", "aggl_method", "dist_method"))
+    pry(c.spec, v = c(
+      "grp_cnt"
+      , "wq_parm"
+      , "prof_var"
+      , "id_var"
+      , "aggl_method"
+      , "dist_method"))
 
   # re-label first column of data ####
+  # id_var         <- names(data)[1]
   names(data)[1] <- "id_row"  
 
   # extract original order of rows of data ####

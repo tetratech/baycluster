@@ -44,10 +44,12 @@ setSpec <- function(c.spec = list(), ...) {
     c.spec2 <- grabFunctionArguments()    
     c.spec2$c.spec <- NULL                # drop c.spec from list
   } 
+  
   # ----< Find updates of existing variables >----
   {
     # find common variable names between arguments passed to those in original c.spec ####
     varCommon <- intersect(names(c.spec2), names(c.spec)) 
+    
     # which common variables are different ####
     chk <- rep(TRUE, length(varCommon)) 
     
@@ -55,8 +57,10 @@ setSpec <- function(c.spec = list(), ...) {
       var <- varCommon[k1]
       chk[k1] <- !identical( c.spec[var], c.spec2[var])
     } 
+    
     # Down-select to variables with updates needed ####    
     varCommonDifferent <- varCommon[chk]
+    
   }
   
   # ----< Find new variables >---- 
@@ -74,12 +78,13 @@ setSpec <- function(c.spec = list(), ...) {
   
   # ----< Create table of changes >---- 
   {
-    # create table
+    # create table of variables with updates
     df <- tibble(Variable = c(varCommonDifferent, varNew)) %>%
       left_join(., c.spec_qc, by = "Variable") %>%
       select(., Variable, Description) %>%
       mutate(., Settings = NA_character_)
     
+    # add changes
     if (NROW(df) == 0) {
       df[1,"Variable"] <- "No changes detected."
     } else {
@@ -94,12 +99,12 @@ setSpec <- function(c.spec = list(), ...) {
     )
   }
   
-  # ----< Check c.spec >----
+  # ----< Chk (Check) c.spec >----
   {
     setSpecChk(c.spec)
   }
   
-  # ----< build out c.spec >----
+  # ----< Cmp (Complete) c.spec >----
   {
     c.spec <- setSpecCmp(c.spec)
   }

@@ -111,7 +111,7 @@ setSpecChk <- function(c.spec) {
     }
   }
   
-  # ----< dat_source specific checking >----
+  # ----< data source specific checking >----
   if(c.spec$dat_source == "gam") {
     setSpecChkGAM(c.spec) 
   } else if (c.spec$dat_source == "WRTDS") {

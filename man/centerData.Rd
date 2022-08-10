@@ -41,11 +41,7 @@ Center data
 This function centers data from a table. Allowable transformations are
 \itemize{
 \item "meanadjust": subtract mean
-\item "standnorm": z-score (subtract mean and divide by standard deviation)
-\item "percent": percent (express response as a percent of the mean) 
 }
-
-Negative values in \code{value_col} are not permitted for "percent" option.
 }
 \examples{
 \dontrun{

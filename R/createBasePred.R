@@ -1,23 +1,28 @@
 # ####
 #' @title Create base prediction data set for GAM clusters
 #' 
-#' @description Constructs the base prediction data set for GAM clusters and
+#' @description Constructs the base prediction data set for GAM clusters which
 #'   includes dates, days of year, decimal year, etc.
 #'   
 #' @details 
+#' 
+#' The user can either specify the arguments for this function via the list
+#' \code{c.spec} (see \code{\link{setSpec}}); or specify the variables
+#' individually via the remaining arguments for this function.
+#' 
 #' Set \code{month_grid = 1:12} to include all months of the year. \code{month_grid
 #' = 6:9} would only include June through September.  
 #' 
 #' Set \code{day_grid = 15} to set up data set for the 15th of every month.
 #' \code{day_grid = c(10,20)} would set up data set for the 10 and 20th of every month.
 #' 
-#' Set \code{month_adj = NA} results in analysis performed on a calendar year.
+#' Setting \code{month_adj = NA} results in analysis performed on a calendar year.
 #' Setting \code{month_adj = c(10, 11, 12)} would result in analysis being set
 #' up for a water year basis, making October 1 the first day of the year. This
 #' is accomplished by computing year_adj as the calendar year plus 1 ("+1") for
 #' months 10-12. If \code{month_adj = c(-1, -2, -3)} (note the negative values),
-#' then year_adj is set to the calendar year minus 1 ("-1") for months 1-3. This
-#' has the effect of making April 1 the first day of the year in this example.
+#' then year_adj is set to the calendar year minus 1 ("-1") for months 1-3. In
+#' this latter example, the effect makes April 1 the first day of the year.
 #' 
 #' @param start_year Begin year of analysis (scalar)
 #' @param end_year End year of analysis (scalar)
@@ -25,14 +30,15 @@
 #' @param day_grid days of month to make predictions 
 #' @param month_adj month adjustment to accommodate water year analyses
 #'  
-#' @examples 
-#' \dontrun{
+#' @examples
+#' # create base prediction data set for water years 2015 and 2016 on the 10th
+#' # and 20th of each month
 #' basePred <- createBasePred(start_year = 2015
 #'  , end_year = 2016
 #'  , month_grid = 1:12
 #'  , day_grid = c(10,20)
 #'  , month_adj = c(10,11,12))
-#' }
+#'  print(basePred, n=50)
 #' 
 #' @return data table with base prediction data set
 #' \itemize{
@@ -44,10 +50,13 @@
 #' \item dyear - date expressed as decimal year   
 #' \item doy - day of year (calendar basis)   
 #' \item year_adj - year (adjusted based on month_adj)   
-#' \item doy_adj - day of year (adjusted based on year_adj)  
+#' \item doy_adj - day of year (adjusted based on month_adj)  
 #' }
 #' 
-#' @seealso \code{\link{readTextFile}}
+#' @seealso  \code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+#'   \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+#'   \code{\link{transformData}} \code{\link{centerData}}
+#'   \code{\link{clusterData}}
 #' 
 #' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date

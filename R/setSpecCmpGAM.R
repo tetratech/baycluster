@@ -65,7 +65,7 @@ setSpecCmpGAM <- function(c.spec) {
   }
   
   if (is.null(data_out)) {
-    dataOut <- paste("ClusterGroup",analysis_title,wq_layer,wq_parm,"of"
+    data_out <- paste("ClusterGroup",analysis_title,wq_layer,wq_parm,"of"
       , id_var_lab,"by",prof_var,start_year,end_year,sep="_")
   }
   

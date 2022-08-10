@@ -4,30 +4,40 @@
 #' @description Cross tabulate data. Includes transformations, averaging over
 #'   id_var., and data centering
 #'   
-#' @details The incoming data are intended to have the following fields:
-#'   "station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
-#'   "value". JBH NOTE: need to clarify minimum data set and what happens with
-#'   extra variables.
+#' @details 
+#' 
+#' With the exception of \code{data}, the user can either specify the arguments
+#' for this function via the list \code{c.spec} (see \code{\link{setSpec}}); or
+#' specify the variables individually via the remaining arguments for this
+#' function.
+#' 
+#' The incoming \code{data} are intended to have the following fields:
+#' "station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
+#' "value". JBH NOTE: need to clarify minimum data set and what happens with
+#' extra variables.
 #' 
 #' Processing include the following steps:  
 #' 
-#' Values are transformed based on value stored in c.spec$data_transform
+#' Values are transformed based on value stored in \code{data_transform}.
 #' 
-#' If c.spec$id_var identifies more than one variable, a new column is
-#' constructed by concatenating the columns identified by id_var.
+#' If \code{id_var} identifies more than one variable, a new column is
+#' constructed by concatenating the columns identified by \code{id_var}.
 #' 
-#' Values are averaged over id_var (or the newly constructed column).
+#' Values are averaged over \code{id_var} (or the newly constructed column).
 #' 
-#' Values are centered based on the value of c.spec$data_center and performed
-#' on an id_var basis
+#' Values are centered based on the value of \code{data_center} and performed on
+#' an \code{id_var} basis.
 #' 
-#' Values are cross tabulated such that id_var is unique and columns correspond
-#' to prof_var
-#' 
-
-#' 
+#' Values are cross tabulated such that \code{id_var} is unique in column 1 of
+#' the returned table and the remaining columns correspond to varying levels of
+#' \code{prof_var}.
+#' #' 
 #' @param c.spec list for storing specifications for cluster analysis 
 #' @param data input data to be cross tabulated
+#' @param id_var items that are to be clustered
+#' @param prof_var attribute to cluster by
+#' @param data_transform data transformation
+#' @param data_center data centering
 #' @param ret_data 1: return wide data, 2: return list of wide and long data
 #' 
 #' @examples 
@@ -38,7 +48,10 @@
 #' 
 #' @return cross tabulate data table
 #' 
-#' @seealso \code{\link{calcQuanClass}} \code{\link{transformData}} \code{\link{centerData}}
+#' @seealso  \code{\link{chkRDAfiles}} \code{\link{createBasePred}}
+#'   \code{\link{createPredGAM}} \code{\link{crossTabulate}}
+#'   \code{\link{transformData}} \code{\link{centerData}}
+#'   \code{\link{clusterData}}
 #' 
 #' @importFrom rlang .data := 
 #' @importFrom lubridate %m+% %m-% ymd decimal_date yday year month make_date floor_date ceiling_date is.Date
@@ -49,26 +62,48 @@
 #' 
 #' @export
 #'
-crossTabulate <- function(c.spec, data, ret_data=1) {
+crossTabulate <- function(
+    c.spec = NULL
+  , data = NULL
+  , id_var = NULL
+  , prof_var = NULL
+  , data_transform = NULL
+  , data_center = NULL
+  , ret_data = 1) {
+  
+  # ----< load c.spec settings if provided >----
+  if (!is.null(c.spec)) {
+    id_var         = c.spec$id_var
+    prof_var       = c.spec$prof_var
+    data_transform = c.spec$data_transform
+    data_center    = c.spec$data_center
+  }
+  
+  # ----< error trap >----
+  stopifnot(
+    !is.null(data)
+    , !is.null(id_var)
+    , !is.null(prof_var)
+    , !is.null(data_transform)
+    , !is.null(data_center)
+  )
 
   # ----< transform if option is selected >----
-  transform_type <- c.spec$data_transform
-  if (!is.na(transform_type)) {
-    data <- transformData(data, "value", transform_type)
+  if (!is.na(data_transform)) {
+    data <- transformData(data, "value", data_transform)
   }
   
   # ----< filter and summarize by mean at the prof and id level >----
   {
-    
     # Extract/Prep variables for next bit
-    prof       <- vec.strg(c.spec$prof_var, sep = "_")
-    id         <- vec.strg(c.spec$id_var, sep = "_")  
+    prof       <- vec.strg(prof_var, sep = "_")
+    id         <- vec.strg(id_var, sep = "_")  
     plt_var    <- "v."  
     
     # filter and down-select variables by prof_var and id_var 
     data0 <- data %>%
-      unite({{prof}}, c.spec$prof_var, sep = "_", remove = FALSE) %>% # concat >1 prof_var
-      unite({{id}}, c.spec$id_var, sep = "_", remove = FALSE) %>%     # concat >1 id_var
+      unite({{prof}}, prof_var, sep = "_", remove = FALSE) %>% # concat >1 prof_var
+      unite({{id}}, id_var, sep = "_", remove = FALSE) %>%     # concat >1 id_var
       select(., all_of({{prof}}), all_of({{id}}), value) 
     
     # determine column order of final table based on appearance in data table at this time
@@ -80,11 +115,9 @@ crossTabulate <- function(c.spec, data, ret_data=1) {
     data1 <- data0 %>%
       group_by(., .data[[prof]], .data[[id]]) %>%       
       summarise(., value=mean(value), .groups = "keep")    
-    
   }
   
   # ----< center data if requested >----
-  data_center <- c.spec$data_center
   if (!is.na(data_center)) {
     data1 <- centerData(data1, id, prof, "value", data_center)
   }
