@@ -41,6 +41,7 @@
 #' @param c.spec list for storing specifications for cluster analysis 
 #' @param data input data to be cross tabulated. See output from \code{\link{createBasePred}}.
 #' @param ret_data 1: return wide data, 2: return list of wide and long data
+#' @param ... alternative variable passing
 #' 
 #' @examples 
 #' \dontrun{

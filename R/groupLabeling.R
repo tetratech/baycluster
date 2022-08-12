@@ -3,10 +3,14 @@
 #' 
 #' @description compute mean group profiles and assign group labels
 #'   
-#' @param c.spec list that stores specifications for cluster analysis 
 #' @param allMat table of data to cluster. Rows are the items to be clustered and
 #'   columns represent the different variables. 
 #' @param grp1 cluster results table   
+#' @param wq_parm wq_parm
+#' @param prof_var prof_var
+#' @param id_var id_var
+#' @param data_center data_center
+#' @param ex_cov_quan ex_cov_quan
 #' 
 #' @keywords internal
 #' 
@@ -16,83 +20,75 @@
 #' 
 #' @export
 #'
-autogrp_lab <- function(c.spec,allMat,grp1) {
+autogrp_lab <- function(allMat, grp1, wq_parm, prof_var, id_var, data_center, ex_cov_quan=NA) {
   # compute mean group profiles and assign group labels
+
   #  grp1 <- cgrp;  allMat <- data
-  # unpack c.spec
-  c.spec.names <- names(c.spec)
-  for(nam in c.spec.names) { 
-    eval(parse(text=paste0(nam," <- c.spec$",nam)))
-  }
+
   grpVar <- "prim_grp"
+  clus_var <- names(allMat[,-1])
   
-  #### jh2ep interfacing
-  c.spec$clus_var <- clus_var <- names(allMat[,-1])
-  c.spec$flow_index <- c.spec$ex_cov_quan
-  #### jh2ep interfacing ~ end
-  
+  TEST_jh <- FALSE
   
   allMat.grp <- merge(allMat, grp1, by = "id_row")
-  if (c.spec$TEST) print("autolabeler >  autogrp_lab 1")
+  if (TEST_jh) print("autolabeler >  autogrp_lab 1")
   
   # compute group means for clus_var
   # JBH: ~ row mean by "prim_grp"
   allMat.mn <- aggregate(allMat.grp[,clus_var],list(grp=allMat.grp[,grpVar]),mean,na.rm=TRUE)
-  if (c.spec$TEST) print("autolabeler >  autogrp_lab 2")
-  
+  if (TEST_jh) print("autolabeler >  autogrp_lab 2")
   
   # BRANCH 1: call different group labeling functions based on type of cluster ####
   if(id_var[1]=="station" & prof_var== "year" & is.na(c.spec$data_center)) {
-    if (c.spec$TEST) print("autolabeler >  BRANCH 1")
-    grp_lab <- rnkRowMnLab(c.spec,allMat.mn)
-    if (c.spec$TEST) print("autolabeler >  BRANCH 1 ~ end")
+    if (TEST_jh) print("autolabeler >  BRANCH 1")
+    grp_lab <- rnkRowMnLab(allMat.mn, wq_parm, clus_var)
+    # grp_lab <- rnkRowMnLab(c.spec,allMat.mn, wq_parm, clus_var)
+    if (TEST_jh) print("autolabeler >  BRANCH 1 ~ end")
   }
   
   # BRANCH 2: #### 
-  if(id_var[1]=="station" & prof_var== "year" & !is.na(c.spec$data_center))  {
-    if (c.spec$TEST) print("autolabeler >  BRANCH 2")
-    grp_labOrd <- rnkTrndLab(c.spec,allMat.mn)
-    if(c.spec$ex_cov_incl) {
-      if (c.spec$TEST) print("autolabeler >  call rnkFlowCorLab")
-      flowLab <- rnkFlowCorLab(c.spec,allMat.mn)
+  if (id_var[1]=="station" & prof_var== "year" & !is.na(c.spec$data_center))  {
+    if (TEST_jh) print("autolabeler >  BRANCH 2")
+    grp_labOrd <- rnkTrndLab(allMat.mn, wq_parm, clus_var)
+    if (any(!is.na(ex_cov_quan))) {
+      if (TEST_jh) print("autolabeler >  call rnkFlowCorLab")
+      flowLab <- rnkFlowCorLab(allMat.mn, wq_parm, clus_var, ex_cov_quan)
       grp_lab <- list(paste(grp_labOrd[[1]], flowLab[[1]]),grp_labOrd[[2]])
     }
-    if (c.spec$TEST) print("autolabeler >  BRANCH 2 ~ end")
+    if (TEST_jh) print("autolabeler >  BRANCH 2 ~ end")
   }
   
   # BRANCH 3: ####
   if(prof_var == "month" & is.na(c.spec$data_center)) {
-    if (c.spec$TEST) print("autolabeler >  BRANCH 3") 
-    grp_lab <- rnkRowMnLab(c.spec,allMat.mn)
-    if (c.spec$TEST) print("autolabeler >  BRANCH 3 ~ end")
-    
+    if (TEST_jh) print("autolabeler >  BRANCH 3") 
+    grp_lab <- rnkRowMnLab(allMat.mn, wq_parm, clus_var)
+    if (TEST_jh) print("autolabeler >  BRANCH 3 ~ end")
   }
   
-  
-  # BRANCH 4: 
+  # BRANCH 4: ####
   if(prof_var == "month" & !is.na(c.spec$data_center)) {
-    if (c.spec$TEST) print("autolabeler >  BRANCH 4 ~ end")
-    grp_lab <- rnkSeasLab(c.spec,allMat.mn)
-    if (c.spec$TEST) print("autolabeler >  BRANCH 4 ~ end")
+    if (TEST_jh) print("autolabeler >  BRANCH 4 ~ end")
+    grp_lab <- rnkSeasLab(allMat.mn, wq_parm, clus_var)
+    if (TEST_jh) print("autolabeler >  BRANCH 4 ~ end")
   }
   
-  # BRANCH 5: 
+  # BRANCH 5: ####
   if(id_var[1]=="year" & prof_var == "station" & is.na(c.spec$data_center)) {
-    if (c.spec$TEST) print("autolabeler >  BRANCH 4")
-    grp_lab1 <- rnkRowMnLab(c.spec,allMat.mn)
-    grp_lab2 <- yeargrp_lab(c.spec,allMat.grp)
+    if (TEST_jh) print("autolabeler >  BRANCH 5")
+    grp_lab1 <- rnkRowMnLab(allMat.mn, wq_parm, clus_var)
+    grp_lab2 <- yeargrp_lab(allMat.grp, wq_parm, clus_var)
     grp_lab <- paste(grp_lab1[[1]], grp_lab2[[1]])
     grpOrd <- grp_lab1[[2]]
     grp_lab <- list(grp_lab, grpOrd)
-    if (c.spec$TEST) print("autolabeler >  BRANCH 5 ~ end")
+    if (TEST_jh) print("autolabeler >  BRANCH 5 ~ end")
   }
   
-  # BRANCH ELSE: 
+  # BRANCH ELSE: ####
   # if fall through above without changing grp_lab, make grp_lab default and record error
   if(grp_lab[1] == 'auto') {
-    if (c.spec$TEST) print("autolabeler >  BRANCH ELSE ~ end")
+    if (TEST_jh) print("autolabeler >  BRANCH ELSE ~ end")
     grp_lab <- paste0('Grp', 1:grp_cnt)
-    if (c.spec$TEST) print("autolabeler >  BRANCH ELSE ~ end")
+    if (TEST_jh) print("autolabeler >  BRANCH ELSE ~ end")
   }
   
   
@@ -108,8 +104,9 @@ autogrp_lab <- function(c.spec,allMat,grp1) {
 #' 
 #' @description compute group labels based on mean
 #'   
-#' @param c.spec list that stores specifications for cluster analysis 
 #' @param allMat.mn table of profile means
+#' @param wq_parm wq_parm
+#' @param clus_var column names associated with prof_var
 #' 
 #' @keywords internal
 #' 
@@ -119,12 +116,8 @@ autogrp_lab <- function(c.spec,allMat,grp1) {
 #' 
 #' @export
 #' 
-rnkRowMnLab <- function(c.spec,allMat.mn)
+  rnkRowMnLab <- function(allMat.mn, wq_parm, clus_var)
 {  # create labels by mean row rank
-  # unpack c.spec
-  c.spec.names <- names(c.spec)
-  for(nam in c.spec.names){ eval(parse(text=paste0(nam," <- c.spec$",nam)))}
-  
   # overall row mean (i.e,. one mean per cluster)
   grp.mn <- rowMeans(allMat.mn[,clus_var])
   
@@ -141,8 +134,9 @@ rnkRowMnLab <- function(c.spec,allMat.mn)
 #' 
 #' @description compute group labels based on comparison of beginning and ending 3-yr time period
 #'   
-#' @param c.spec list that stores specifications for cluster analysis 
 #' @param allMat.mn table of profile means
+#' @param wq_parm wq_parm
+#' @param clus_var column names associated with prof_var
 #' 
 #' @keywords internal
 #' 
@@ -152,12 +146,9 @@ rnkRowMnLab <- function(c.spec,allMat.mn)
 #' 
 #' @export
 #'
-rnkTrndLab <- function(c.spec,allMat.mn)
+rnkTrndLab <- function(allMat.mn, wq_parm, clus_var)
 {  # create labels by mean row trend
   #estimate trend (mean last 3 years) - (mean first 3 years)
-  
-  c.spec.names <- names(c.spec)
-  for(nam in c.spec.names){ eval(parse(text=paste0(nam," <- c.spec$",nam)))}
   
   # number of columns of data
   nCol <- length(clus_var)
@@ -201,8 +192,9 @@ rnkTrndLab <- function(c.spec,allMat.mn)
 #' 
 #' @description compute group labels based on seasonality
 #'   
-#' @param c.spec list that stores specifications for cluster analysis 
 #' @param allMat.mn table of profile means
+#' @param wq_parm wq_parm
+#' @param clus_var column names associated with prof_var
 #' 
 #' @keywords internal
 #' 
@@ -212,11 +204,8 @@ rnkTrndLab <- function(c.spec,allMat.mn)
 #' 
 #' @export
 #'
-rnkSeasLab <- function(c.spec,allMat.mn)  {  
+rnkSeasLab <- function(allMat.mn, wq_parm, clus_var)  {  
   # create labels by seasonality
-  # unpack c.spec
-  c.spec.names <- names(c.spec)
-  for(nam in c.spec.names){ eval(parse(text=paste0(nam," <- c.spec$",nam)))}
   
   grpRng <- data.frame(minVal = apply(allMat.mn[,clus_var],1,min))  
   grpRng$maxVal <- apply(allMat.mn[,clus_var],1,max)  
@@ -237,6 +226,9 @@ rnkSeasLab <- function(c.spec,allMat.mn)  {
 #'   
 #' @param c.spec list that stores specifications for cluster analysis 
 #' @param allMat.mn table of profile means
+#' @param wq_parm wq_parm
+#' @param clus_var column names associated with prof_var
+#' @param flow_index ex_cov_quan
 #' 
 #' @keywords internal
 #' 
@@ -248,18 +240,15 @@ rnkSeasLab <- function(c.spec,allMat.mn)  {
 #' 
 #' @export
 #'
-rnkFlowCorLab <- function(c.spec,allMat.mn) {  
+rnkFlowCorLab <- function(allMat.mn, wq_parm, clus_var, flow_index) {  
   # create labels by correlation with flow
-  # unpack c.spec
-  c.spec.names <- names(c.spec)
-  for(nam in c.spec.names){ eval(parse(text=paste0(nam," <- c.spec$",nam)))}
-  
+
   
   grpCor <- data.frame(grp=numeric(), flowCor=numeric())
   for(i in 1:nrow(allMat.mn)) {
     grpProf <- unlist(allMat.mn[i,clus_var])
     grpCor[i,"grp"] <- allMat.mn[i,'grp']
-    flowCor <- cor(cbind(grpProf,c.spec$flow_index["year_avg"]), method = "spearman")[1,2]
+    flowCor <- cor(cbind(grpProf,flow_index["year_avg"]), method = "spearman")[1,2]
     grpCor[i,"flowCor"] <- flowCor
   } #end of grp loop
   grpCor[,'grpOrd'] <- rank(grpCor$flowCor)
@@ -288,8 +277,9 @@ rnkFlowCorLab <- function(c.spec,allMat.mn) {
 #' 
 #' @description compute group labels based on years within group
 #'   
-#' @param c.spec list that stores specifications for cluster analysis 
 #' @param allMat.mn table of profile means
+#' @param wq_parm wq_parm
+#' @param clus_var column names associated with prof_var
 #' 
 #' @keywords internal
 #' 
@@ -299,16 +289,9 @@ rnkFlowCorLab <- function(c.spec,allMat.mn) {
 #' 
 #' @export
 #'
-yeargrp_lab <- function(c.spec,allMat.grp) {  
+yeargrp_lab <- function(allMat.grp, wq_parm, clus_var) {  
   # create labels by identifying years within group
-  # unpack c.spec
-  c.spec.names <- names(c.spec)
-  for(nam in c.spec.names){ eval(parse(text=paste0(nam," <- c.spec$",nam)))}
-  
-  #  allMat.grp <- merge(allMat, grp1, by = "id_row")
-  
-  #JBH 08.04.2022: allMat.grp$year is not a vector error: $year has been left as id_row ... 
-  #JBH 08.04.2022: so added a translation here (argh)   
+
   allMat.grp$year <- as.numeric(allMat.grp$id_row)
   allMat.grp <- allMat.grp[order(allMat.grp$prim_grp,allMat.grp$year),] # order by groups and years
   

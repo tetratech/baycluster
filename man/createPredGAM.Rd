@@ -8,6 +8,8 @@ createPredGAM(c.spec = NULL, ...)
 }
 \arguments{
 \item{c.spec}{list of cluster analysis specifications}
+
+\item{...}{alternative variable passing}
 }
 \value{
 data table with full prediction data set

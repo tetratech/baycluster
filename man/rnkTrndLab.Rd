@@ -4,12 +4,14 @@
 \alias{rnkTrndLab}
 \title{compute group labels based on comparison of beginning and ending 3-yr time period}
 \usage{
-rnkTrndLab(c.spec, allMat.mn)
+rnkTrndLab(allMat.mn, wq_parm, clus_var)
 }
 \arguments{
-\item{c.spec}{list that stores specifications for cluster analysis}
-
 \item{allMat.mn}{table of profile means}
+
+\item{wq_parm}{wq_parm}
+
+\item{clus_var}{column names associated with prof_var}
 }
 \value{
 table of results

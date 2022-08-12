@@ -4,15 +4,31 @@
 \alias{autogrp_lab}
 \title{compute mean group profiles and assign group labels}
 \usage{
-autogrp_lab(c.spec, allMat, grp1)
+autogrp_lab(
+  allMat,
+  grp1,
+  wq_parm,
+  prof_var,
+  id_var,
+  data_center,
+  ex_cov_quan = NA
+)
 }
 \arguments{
-\item{c.spec}{list that stores specifications for cluster analysis}
-
 \item{allMat}{table of data to cluster. Rows are the items to be clustered and
 columns represent the different variables.}
 
 \item{grp1}{cluster results table}
+
+\item{wq_parm}{wq_parm}
+
+\item{prof_var}{prof_var}
+
+\item{id_var}{id_var}
+
+\item{data_center}{data_center}
+
+\item{ex_cov_quan}{ex_cov_quan}
 }
 \value{
 table of results

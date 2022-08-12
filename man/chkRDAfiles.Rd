@@ -8,6 +8,8 @@ chkRDAfiles(c.spec = NULL, ...)
 }
 \arguments{
 \item{c.spec}{cluster specification file}
+
+\item{...}{alternative variable passing}
 }
 \value{
 data table with a summary of files and GAM result availability

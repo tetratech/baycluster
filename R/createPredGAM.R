@@ -15,6 +15,7 @@
 #' }
 #' 
 #' @param c.spec list of cluster analysis specifications
+#' @param ... alternative variable passing
 #'  
 #' @examples 
 #' \dontrun{

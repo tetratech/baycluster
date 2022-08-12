@@ -12,6 +12,8 @@ crossTabulate(c.spec = NULL, data, ret_data = 1, ...)
 \item{data}{input data to be cross tabulated. See output from \code{\link{createBasePred}}.}
 
 \item{ret_data}{1: return wide data, 2: return list of wide and long data}
+
+\item{...}{alternative variable passing}
 }
 \value{
 cross tabulate data table

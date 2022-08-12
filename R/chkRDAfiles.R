@@ -51,6 +51,7 @@
 #' period of record.
 #' 
 #' @param c.spec cluster specification file
+#' @param ... alternative variable passing
 #'  
 #' @examples 
 #' \dontrun{
@@ -81,6 +82,11 @@
 #' 
 chkRDAfiles <- function(c.spec = NULL, ...) {  
 
+  # ----< declare variables >----
+  stat_vec <- wq_parm <- wq_layer <- gam_numbr <- start_year <- end_year <- gam_folder <- NULL
+  month_grace_period <- station <- file_base <- file_name <- gamResult <- file_exists <- NULL
+  data_min_date <- data_min_date_qc <- type <- data_max_date <- data_max_date_qc <- gam_option_eval_avail <- NULL
+  
   # ----< load c.spec settings if provided >----
   vars = c("stat_vec", "wq_parm", "wq_layer", "gam_numbr", "start_year"
     , "end_year", "gam_folder", "month_grace_period")

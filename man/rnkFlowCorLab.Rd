@@ -4,12 +4,18 @@
 \alias{rnkFlowCorLab}
 \title{compute group labels based on correlation with flow}
 \usage{
-rnkFlowCorLab(c.spec, allMat.mn)
+rnkFlowCorLab(allMat.mn, wq_parm, clus_var, flow_index)
 }
 \arguments{
-\item{c.spec}{list that stores specifications for cluster analysis}
-
 \item{allMat.mn}{table of profile means}
+
+\item{wq_parm}{wq_parm}
+
+\item{clus_var}{column names associated with prof_var}
+
+\item{flow_index}{ex_cov_quan}
+
+\item{c.spec}{list that stores specifications for cluster analysis}
 }
 \value{
 table of results

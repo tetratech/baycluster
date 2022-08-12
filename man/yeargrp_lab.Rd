@@ -4,10 +4,12 @@
 \alias{yeargrp_lab}
 \title{compute group labels based on years within group}
 \usage{
-yeargrp_lab(c.spec, allMat.grp)
+yeargrp_lab(allMat.grp, wq_parm, clus_var)
 }
 \arguments{
-\item{c.spec}{list that stores specifications for cluster analysis}
+\item{wq_parm}{wq_parm}
+
+\item{clus_var}{column names associated with prof_var}
 
 \item{allMat.mn}{table of profile means}
 }
