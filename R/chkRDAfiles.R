@@ -2,12 +2,12 @@
 #' @title Check RDA files to confirm availability of GAM results
 #' 
 #' @description Based on a station list, year range, water quality variable,
-#'   layer, and GAM option, confirm that the `gamResults` from
+#'   layer, and GAM option, confirm that the `gamResults` files from
 #'   baytrends are correctly positioned.
 #'   
 #' @details 
 #' It is presumed that a series of baytrends operations
-#' have been run and the results for an individual "station|parameter|layer"
+#' have been run and the files for individual "station|parameter|layer" results
 #' have been stored as separate rda files in a folder passed as the variable
 #' \code{gam_folder} as depicted below.
 #' 
@@ -18,11 +18,22 @@
 #' \code{gam_folder/do/TF3.2E_do_surf.rda}\cr 
 #' \code{gam_folder/do/...}\cr
 #'            
-#' The user can either specify the arguments for this function via the list \code{c.spec}
-#' (see \code{\link{setSpec}}); or specify the variables individually via the
-#' remaining arguments for this function.
+#' The user can either specify the arguments for this function via the list
+#' \code{c.spec} (see \code{\link{setSpec}}); or by specifying all of the below
+#' variables individually.
 #'            
-#' The values of \code{station_vec}, \code{wq_parm}, and \code{wq_layer} are used to 
+#' \itemize{
+#' \item \strong{stat_vec} -- vector of stations to analyze 
+#' \item \strong{wq_parm} -- parameter abbreviation to evaluate (subfolder within \code{gam_folder})
+#' \item \strong{wq_layer} -- layer abbreviation to evaluate
+#' \item \strong{gam_numbr} -- GAM option to evaluate 
+#' \item \strong{start_year} -- Begin year of analysis (scalar)
+#' \item \strong{end_year} -- End year of analysis (scalar)
+#' \item \strong{gam_folder} -- Folder location of GAM results from baytrends
+#' \item \strong{month_grace_period} -- Threshold for flagging acceptable data range
+#' }        
+#'            
+#' The values of \code{stat_vec}, \code{wq_parm}, and \code{wq_layer} are used to 
 #' construct the file name convention of: "station_parameter_layer.rda". Under the 
 #' folder \code{gam_folder}, subfolders are organized by \code{wq_parm}. 
 #' 
@@ -36,18 +47,11 @@
 #' had monitoring data for the full period or record, i.e., \code{start_year}-01-01 
 #' to \code{end_year}-12-31. 
 #' 
-#' \code{month_threshold} provides a grace period in the interpretation of a full
+#' \code{month_grace_period} provides a grace period in the interpretation of a full
 #' period of record.
 #' 
 #' @param c.spec cluster specification file
-#' @param station_vec Vector of stations to analyze 
-#' @param wq_parm Parameter abbreviation to evaluate 
-#' @param wq_layer Layer abbreviation to evaluate
-#' @param gam_numbr GAM option to evaluate 
-#' @param start_year Begin year of analysis (scalar)
-#' @param end_year End year of analysis (scalar)
-#' @param gam_folder Folder location of GAM results from baytrends
-#' @param month_threshold Threshold for flagging acceptable data range (see details)
+#' @param ... alternative variable passing
 #'  
 #' @examples 
 #' \dontrun{
@@ -76,45 +80,38 @@
 #' 
 #' @export
 #' 
-chkRDAfiles <- function(
-    c.spec = NULL
-  , station_vec = NULL
-  , wq_parm  = NULL
-  , wq_layer = NULL
-  , gam_numbr  = NULL
-  , start_year  = NULL
-  , end_year  = NULL
-  , gam_folder  = NULL
-  , month_threshold  = NULL) {  
+chkRDAfiles <- function(c.spec = NULL, ...) {  
 
-  # ----< load c.spec settings if provided >----
-  if (!is.null(c.spec)) {
-   station_vec      = c.spec$stat_df$stat_vec
-   wq_parm          = c.spec$wq_parm
-   wq_layer         = c.spec$wq_layer
-   gam_numbr        = c.spec$gam_numbr
-   start_year       = c.spec$start_year
-   end_year         = c.spec$end_year
-   gam_folder       = c.spec$gam_folder
-   month_threshold  = c.spec$month_grace_period
-  }
+  # ----< declare variables >----
+  stat_vec <- wq_parm <- wq_layer <- gam_numbr <- start_year <- end_year <- gam_folder <- NULL
+  month_grace_period <- station <- file_base <- file_name <- gamResult <- file_exists <- NULL
+  data_min_date <- data_min_date_qc <- type <- data_max_date <- data_max_date_qc <- gam_option_eval_avail <- NULL
   
+  # ----< load c.spec settings if provided >----
+  vars = c("stat_vec", "wq_parm", "wq_layer", "gam_numbr", "start_year"
+    , "end_year", "gam_folder", "month_grace_period")
+  if (!is.null(c.spec)) {
+    pry(c.spec, v = vars)
+  } else {
+    pry(list(...), v = vars)
+  }
+
   # ----< error trap >----
   stopifnot(
-    !is.null(station_vec)
+    !is.null(stat_vec)
     , !is.null(wq_parm)
     , !is.null(wq_layer)
     , !is.null(gam_numbr)
     , !is.null(start_year)
     , !is.null(end_year)
     , !is.null(gam_folder)
-    , !is.null(month_threshold)
+    , !is.null(month_grace_period)
   )
     
   # ----< Create data table of files to look for >----
   {
     file_log <- 
-      tibble(expand.grid(station = station_vec
+      tibble(expand.grid(station = stat_vec
         , wq_parm = wq_parm
         , wq_layer = wq_layer)) %>%
       mutate(.
@@ -180,11 +177,11 @@ chkRDAfiles <- function(
     # Determine Concerns about date range of data ####
     file_log <- file_log %>%
         mutate(.
-          , data_min_date_qc = case_when(data_min_date <= make_date(start_year,1,1) %m+% months(month_threshold) ~ "Ok"
-          , data_min_date > make_date(start_year,1,1) %m+% months(month_threshold) ~ "Concern"
+          , data_min_date_qc = case_when(data_min_date <= make_date(start_year,1,1) %m+% months(month_grace_period) ~ "Ok"
+          , data_min_date > make_date(start_year,1,1) %m+% months(month_grace_period) ~ "Concern"
             , TRUE ~ NA_character_)
-          , data_max_date_qc = case_when(data_max_date >= make_date(end_year,12,31) %m-% months(month_threshold) ~ "Ok"
-            , data_max_date < make_date(end_year,12,31) %m-% months(month_threshold) ~ "Concern"
+          , data_max_date_qc = case_when(data_max_date >= make_date(end_year,12,31) %m-% months(month_grace_period) ~ "Ok"
+            , data_max_date < make_date(end_year,12,31) %m-% months(month_grace_period) ~ "Concern"
             , TRUE ~ NA_character_) 
         )
     

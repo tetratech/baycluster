@@ -2,43 +2,46 @@
 #' @title Cross tabulate data. 
 #' 
 #' @description Cross tabulate data. Includes transformations, averaging over
-#'   id_var., and data centering
+#'   id_var, and data centering
 #'   
 #' @details 
 #' 
-#' With the exception of \code{data}, the user can either specify the arguments
-#' for this function via the list \code{c.spec} (see \code{\link{setSpec}}); or
-#' specify the variables individually via the remaining arguments for this
-#' function.
+#' The user can pass arguments \code{id_var}, \code{prof_var},
+#' \code{data_transform}, and \code{data_center} for this function via the list
+#' \code{c.spec} (see \code{\link{setSpec}}); or by specifying variables
+#' individually.
+#' 
+#' \itemize{
+#' \item \strong{id_var} -- items that are to be clustered
+#' \item \strong{prof_var} -- attribute to cluster by
+#' \item \strong{data_transform} -- data transformation
+#' \item \strong{data_center} -- data centering
+#' } 
 #' 
 #' The incoming \code{data} are intended to have the following fields:
 #' "station", "wq_parm",  "wq_layer", "yearCal", "year", "month",  "day"
-#' "value". JBH NOTE: need to clarify minimum data set and what happens with
-#' extra variables.
+#' "value". See output from \code{\link{createBasePred}}.
 #' 
-#' Processing include the following steps:  
+#' Processing includes the following steps:  
 #' 
-#' Values are transformed based on value stored in \code{data_transform}.
+#' \itemize{
+#' \item {\code{value} is transformed based on value stored in
+#' \code{data_transform}.}
+#' \item {If \code{id_var} identifies more than one variable, a new column is
+#' constructed by concatenating the columns identified by \code{id_var}.}
+#' \item {code{value} is averaged over \code{id_var} (or the newly constructed
+#' column).}
+#' \item {code{value} is centered based on the value of \code{data_center} and
+#' performed on an \code{id_var} basis.}
+#' \item {code{value} is cross tabulated such that \code{id_var} is unique in column
+#' 1 of the returned table and the remaining columns correspond to varying
+#' levels of \code{prof_var}.}
+#' }
 #' 
-#' If \code{id_var} identifies more than one variable, a new column is
-#' constructed by concatenating the columns identified by \code{id_var}.
-#' 
-#' Values are averaged over \code{id_var} (or the newly constructed column).
-#' 
-#' Values are centered based on the value of \code{data_center} and performed on
-#' an \code{id_var} basis.
-#' 
-#' Values are cross tabulated such that \code{id_var} is unique in column 1 of
-#' the returned table and the remaining columns correspond to varying levels of
-#' \code{prof_var}.
-#' #' 
 #' @param c.spec list for storing specifications for cluster analysis 
-#' @param data input data to be cross tabulated
-#' @param id_var items that are to be clustered
-#' @param prof_var attribute to cluster by
-#' @param data_transform data transformation
-#' @param data_center data centering
+#' @param data input data to be cross tabulated. See output from \code{\link{createBasePred}}.
 #' @param ret_data 1: return wide data, 2: return list of wide and long data
+#' @param ... alternative variable passing
 #' 
 #' @examples 
 #' \dontrun{
@@ -64,19 +67,16 @@
 #'
 crossTabulate <- function(
     c.spec = NULL
-  , data = NULL
-  , id_var = NULL
-  , prof_var = NULL
-  , data_transform = NULL
-  , data_center = NULL
-  , ret_data = 1) {
+  , data 
+  , ret_data = 1
+  , ...) {
   
   # ----< load c.spec settings if provided >----
+  vars = c("id_var", "prof_var", "data_transform", "data_center")
   if (!is.null(c.spec)) {
-    id_var         = c.spec$id_var
-    prof_var       = c.spec$prof_var
-    data_transform = c.spec$data_transform
-    data_center    = c.spec$data_center
+    pry(c.spec, v = vars)
+  } else {
+    pry(list(...), v = vars)
   }
   
   # ----< error trap >----
@@ -95,7 +95,7 @@ crossTabulate <- function(
   
   # ----< filter and summarize by mean at the prof and id level >----
   {
-    # Extract/Prep variables for next bit
+    # Extract/Prep variables for this section
     prof       <- vec.strg(prof_var, sep = "_")
     id         <- vec.strg(id_var, sep = "_")  
     plt_var    <- "v."  

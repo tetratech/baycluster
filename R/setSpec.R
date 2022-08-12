@@ -39,12 +39,9 @@
 #'
 setSpec <- function(c.spec = list(), ...) {
   
-  # ----< Create list of arguments passed in function >----
-  {
-    c.spec2 <- grabFunctionArguments()    
-    c.spec2$c.spec <- NULL                # drop c.spec from list
-  } 
-  
+  # ----< Create list of arguments passed as ... >----
+  c.spec2 <- list(...)
+
   # ----< Find updates of existing variables >----
   {
     # find common variable names between arguments passed to those in original c.spec ####

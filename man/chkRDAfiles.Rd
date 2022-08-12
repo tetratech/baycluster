@@ -4,48 +4,24 @@
 \alias{chkRDAfiles}
 \title{Check RDA files to confirm availability of GAM results}
 \usage{
-chkRDAfiles(
-  c.spec = NULL,
-  station_vec = NULL,
-  wq_parm = NULL,
-  wq_layer = NULL,
-  gam_numbr = NULL,
-  start_year = NULL,
-  end_year = NULL,
-  gam_folder = NULL,
-  month_threshold = NULL
-)
+chkRDAfiles(c.spec = NULL, ...)
 }
 \arguments{
 \item{c.spec}{cluster specification file}
 
-\item{station_vec}{Vector of stations to analyze}
-
-\item{wq_parm}{Parameter abbreviation to evaluate}
-
-\item{wq_layer}{Layer abbreviation to evaluate}
-
-\item{gam_numbr}{GAM option to evaluate}
-
-\item{start_year}{Begin year of analysis (scalar)}
-
-\item{end_year}{End year of analysis (scalar)}
-
-\item{gam_folder}{Folder location of GAM results from baytrends}
-
-\item{month_threshold}{Threshold for flagging acceptable data range (see details)}
+\item{...}{alternative variable passing}
 }
 \value{
 data table with a summary of files and GAM result availability
 }
 \description{
 Based on a station list, year range, water quality variable,
-  layer, and GAM option, confirm that the `gamResults` from
+  layer, and GAM option, confirm that the `gamResults` files from
   baytrends are correctly positioned.
 }
 \details{
 It is presumed that a series of baytrends operations
-have been run and the results for an individual "station|parameter|layer"
+have been run and the files for individual "station|parameter|layer" results
 have been stored as separate rda files in a folder passed as the variable
 \code{gam_folder} as depicted below.
 
@@ -56,11 +32,22 @@ have been stored as separate rda files in a folder passed as the variable
 \code{gam_folder/do/TF3.2E_do_surf.rda}\cr 
 \code{gam_folder/do/...}\cr
            
-The user can either specify the arguments for this function via the list \code{c.spec}
-(see \code{\link{setSpec}}); or specify the variables individually via the
-remaining arguments for this function.
+The user can either specify the arguments for this function via the list
+\code{c.spec} (see \code{\link{setSpec}}); or by specifying all of the below
+variables individually.
            
-The values of \code{station_vec}, \code{wq_parm}, and \code{wq_layer} are used to 
+\itemize{
+\item \strong{stat_vec} -- vector of stations to analyze 
+\item \strong{wq_parm} -- parameter abbreviation to evaluate (subfolder within \code{gam_folder})
+\item \strong{wq_layer} -- layer abbreviation to evaluate
+\item \strong{gam_numbr} -- GAM option to evaluate 
+\item \strong{start_year} -- Begin year of analysis (scalar)
+\item \strong{end_year} -- End year of analysis (scalar)
+\item \strong{gam_folder} -- Folder location of GAM results from baytrends
+\item \strong{month_grace_period} -- Threshold for flagging acceptable data range
+}        
+           
+The values of \code{stat_vec}, \code{wq_parm}, and \code{wq_layer} are used to 
 construct the file name convention of: "station_parameter_layer.rda". Under the 
 folder \code{gam_folder}, subfolders are organized by \code{wq_parm}. 
 
@@ -74,7 +61,7 @@ particular combination of \code{station}, \code{wq_parm}, and \code{wq_layer}
 had monitoring data for the full period or record, i.e., \code{start_year}-01-01 
 to \code{end_year}-12-31. 
 
-\code{month_threshold} provides a grace period in the interpretation of a full
+\code{month_grace_period} provides a grace period in the interpretation of a full
 period of record.
 }
 \examples{

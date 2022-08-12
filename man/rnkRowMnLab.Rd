@@ -4,12 +4,14 @@
 \alias{rnkRowMnLab}
 \title{compute group labels based on mean}
 \usage{
-rnkRowMnLab(c.spec, allMat.mn)
+rnkRowMnLab(allMat.mn, wq_parm, clus_var)
 }
 \arguments{
-\item{c.spec}{list that stores specifications for cluster analysis}
-
 \item{allMat.mn}{table of profile means}
+
+\item{wq_parm}{wq_parm}
+
+\item{clus_var}{column names associated with prof_var}
 }
 \value{
 table of results

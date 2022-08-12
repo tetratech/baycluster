@@ -4,7 +4,15 @@
 \alias{clusterData}
 \title{Perform basic hierarchical cluster analysis}
 \usage{
-clusterData(c.spec, data, man_dend_grp_lbl = NA)
+clusterData(
+  c.spec = NULL,
+  data,
+  man_dend_grp_lbl = NA,
+  dend_title = NA,
+  dend_xlab = NA,
+  dend_ylab = NA,
+  ...
+)
 }
 \arguments{
 \item{c.spec}{list that stores specifications for cluster analysis}
@@ -13,6 +21,14 @@ clusterData(c.spec, data, man_dend_grp_lbl = NA)
 columns represent the different variables. See Details for more information.}
 
 \item{man_dend_grp_lbl}{Labels to manually override automatic group labeling}
+
+\item{dend_title}{user supplied figure title}
+
+\item{dend_xlab}{user supplied x axis label}
+
+\item{dend_ylab}{user supplied y axis label}
+
+\item{...}{alternative variable passing}
 }
 \value{
 table of results

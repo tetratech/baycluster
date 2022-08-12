@@ -4,14 +4,12 @@
 \alias{createPredGAM}
 \title{Create GAM prediction data set}
 \usage{
-createPredGAM(c.spec = NULL, chk_rda = NULL, base_pred = NULL)
+createPredGAM(c.spec = NULL, ...)
 }
 \arguments{
 \item{c.spec}{list of cluster analysis specifications}
 
-\item{chk_rda}{data table with a summary of files and GAM result availability}
-
-\item{base_pred}{data table with base prediction data set}
+\item{...}{alternative variable passing}
 }
 \value{
 data table with full prediction data set
@@ -30,9 +28,14 @@ data table with full prediction data set
 Create GAM prediction data set
 }
 \details{
-The user can either specify the arguments for this function via the list \code{c.spec}
-(see \code{\link{setSpec}}); or specify the variables individually via the
-remaining arguments for this function.
+The user can either specify the arguments for this function via the list
+\code{c.spec} (see \code{\link{setSpec}}); or by specifying all of the below
+variables individually.
+
+\itemize{
+\item \strong{chk_rda} -- data table with a summary of files and GAM result availability. See output from \code{\link{chkRDAfiles}}.
+\item \strong{base_pred} -- data table with base prediction data set. See output from \code{\link{createBasePred}}.
+}
 }
 \examples{
 \dontrun{
