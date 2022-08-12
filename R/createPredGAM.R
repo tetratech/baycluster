@@ -5,13 +5,16 @@
 #'   
 #' @details 
 #' 
-#' The user can either specify the arguments for this function via the list \code{c.spec}
-#' (see \code{\link{setSpec}}); or specify the variables individually via the
-#' remaining arguments for this function.
+#' The user can either specify the arguments for this function via the list
+#' \code{c.spec} (see \code{\link{setSpec}}); or by specifying all of the below
+#' variables individually.
+#' 
+#' \itemize{
+#' \item \strong{chk_rda} -- data table with a summary of files and GAM result availability. See output from \code{\link{chkRDAfiles}}.
+#' \item \strong{base_pred} -- data table with base prediction data set. See output from \code{\link{createBasePred}}.
+#' }
 #' 
 #' @param c.spec list of cluster analysis specifications
-#' @param chk_rda data table with a summary of files and GAM result availability
-#' @param base_pred data table with base prediction data set
 #'  
 #' @examples 
 #' \dontrun{
@@ -47,17 +50,16 @@
 #' 
 #' @export
 #' 
-createPredGAM <- function(
-    c.spec = NULL
-  , chk_rda = NULL
-  , base_pred = NULL) {
+createPredGAM <- function(c.spec = NULL, ...) {
   
   # ----< load c.spec settings if provided >----
+  vars = c("chk_rda", "base_pred")
   if (!is.null(c.spec)) {
-    chk_rda      = c.spec$chk_rda
-    base_pred    = c.spec$base_pred
+    pry(c.spec, v = vars)
+  } else {
+    pry(list(...), v = vars)
   }
-  
+
   # ----< error trap >----
   stopifnot(
     !is.null(chk_rda)

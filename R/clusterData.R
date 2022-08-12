@@ -49,27 +49,41 @@
 #' 
 #' @export
 #
-clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) { 
+clusterData <- function(c.spec, data, man_dend_grp_lbl = NA, ...) { 
+  
+  # ----< load c.spec settings >----
+  pry(c.spec, c("grp_cnt", "aggl_method", "dist_method", "wq_parm", "wq_layer"
+    , "analysis_title", "stat_df"))
+
+  # ----< error trap >----
+  stopifnot(
+    !is.null(data)
+    , !is.null(grp_cnt)
+    , !is.null(aggl_method)
+    , !is.null(dist_method)
+    , !is.null(man_dend_grp_lbl)
+  )
   
   # ----< preliminary set up >----
-  
-  # unpack needed variables ####
-    pry(c.spec, v = c(
-      "grp_cnt"
-      , "wq_parm"
-      , "prof_var"
-      , "id_var"
-      , "aggl_method"
-      , "dist_method"))
 
-  # re-label first column of data ####
-  # id_var         <- names(data)[1]
+  # re-name first column of data 
+  id_var         <- names(data)[1]
   names(data)[1] <- "id_row"  
 
-  # extract original order of rows of data ####
+  # if clustering over stations, then need to provide stat_df file
+  if (all(id_var == "station")) {
+    if (is.null(stat_df)) {
+      warning(simpleWarning("Variable 'stat_df' not in 'c.spec' ... lat/lng cannot be appended to results"))
+    }
+  }
+
+  # create vector of variables used in cluster analysis  
+  clus_var       <- names(data)[-1]
+
+  # extract original order of rows of data 
   id_row_vec <- data[ , 1]  
   
-  # if user passes a vector of labels as an argument, then it takes precedent on number of clusters ####
+  # if user passes a vector of labels as an argument, then it takes precedent on number of clusters
   {
     if (any(is.na(man_dend_grp_lbl))) {
       is_auto <- TRUE
@@ -94,13 +108,13 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
   {
     if (!is_auto) {
       # build table of labels based on manual over-ride
-      dend_lbl <- tibble(prim_grp = rev(1:grp_cnt), dend_grp_ord = 1:grp_cnt, grp_df)
+      grp_lbl <- tibble(prim_grp = rev(1:grp_cnt), dend_grp_ord = 1:grp_cnt, grp_df)
       
       # amend manual labels to leaves
-      leaves <- left_join(leaves, dend_lbl, by = "dend_grp_ord")
+      leaves <- left_join(leaves, grp_lbl, by = "dend_grp_ord")
       
       # create summary of groups for labeling dendrogram
-      dend_lbl <- unique(leaves[, c("cutree_grp", "cutree_leaves", "prim_grp"
+      grp_lbl <- unique(leaves[, c("cutree_grp", "cutree_leaves", "prim_grp"
         , "prim_lbl", "prim_col", "dend_grp_ord")]) %>%
         as.data.frame()
     }
@@ -112,7 +126,7 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
       
       # Create cgrp data set for autogrp_lab function. ####
       # From from deterLeaves > dendextend::cutree, cutree_grp is the group id
-      # and dend_grp_ord_1 is the left-to-right order of leaves
+      # and dend_grp_ord is the left-to-right order of leaves
       cgrp   <- leaves %>%
         select(., id_row, cutree_grp, dend_grp_ord) %>%
         rename(., grpid = cutree_grp, prim_grp = dend_grp_ord) 
@@ -153,7 +167,7 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
           select(., -dend_ord_r, -dend_grp_ord_r) 
         
         # create summary of groups for labeling dendrogram
-        dend_lbl <- unique(leaves[, c("prim_lbl", "prim_col", "cutree_leaves")]) %>%
+        grp_lbl <- unique(leaves[, c("prim_lbl", "prim_col", "cutree_leaves")]) %>%
           as.data.frame()
         
       } # end ~ rotate dendrogram
@@ -166,21 +180,32 @@ clusterData <- function(c.spec, data, man_dend_grp_lbl=NA) {
   } # end ~ auto
   
   # plot
-  
-  plotDendrogram(
-    dend = dend,
-    grp_cnt = grp_cnt,
-    dend_lbl = dend_lbl,
-    dend_title = "Tree 1",
-    dend_xlab = "Sites",
-    dend_ylab = "Distance",
-    dist_method = dist_method,
-    aggl_method = aggl_method
-  )
+  usr_title <- ifelse(exists("dend_title")
+    , dend_title
+    , paste("Dendrogram: ",analysis_title, toupper(wq_parm), toupper(wq_layer)))
 
+  usr_xlab <- ifelse(exists("dend_xlab")
+    , dend_xlab
+    , simpleCap(id_var))
+  
+  usr_ylab <- ifelse(exists("dend_ylab")
+    , dend_ylab
+    , "Distance")
+  
+  p <- plotDendrogram(
+    dend = dend
+    , grp_cnt     = grp_cnt
+    , grp_lbl     = grp_lbl
+    , dend_title  = usr_title
+    , dend_xlab   = usr_xlab
+    , dend_ylab   = usr_ylab
+    , dist_method = dist_method
+    , aggl_method = aggl_method
+  )
+  
   tblFT1(leaves, "Cluster Groups")
   
-  if (all(id_var == "station")) {
+  if (all(id_var == "station") & !is.null(stat_df) ) {
     
     stat_df <- c.spec$stat_df %>%
       select(., stat_vec, latitude, longitude) %>% 

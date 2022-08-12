@@ -4,7 +4,7 @@
 \alias{clusterData}
 \title{Perform basic hierarchical cluster analysis}
 \usage{
-clusterData(c.spec, data, man_dend_grp_lbl = NA)
+clusterData(c.spec, data, man_dend_grp_lbl = NA, ...)
 }
 \arguments{
 \item{c.spec}{list that stores specifications for cluster analysis}

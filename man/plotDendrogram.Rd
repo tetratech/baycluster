@@ -7,7 +7,7 @@
 plotDendrogram(
   dend,
   grp_cnt = NA,
-  dend_lbl = NA,
+  grp_lbl = NA,
   dend_title = NA,
   dend_xlab = NA,
   dend_ylab = "Distance",
@@ -20,7 +20,7 @@ plotDendrogram(
 
 \item{grp_cnt}{grp_cnt}
 
-\item{dend_lbl}{dend_lbl}
+\item{grp_lbl}{grp_lbl}
 
 \item{dend_title}{dend_title}
 
