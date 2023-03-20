@@ -152,8 +152,8 @@ createBasePred <- function(start_year = 1990
         , month_grid = month_grid
         , day_grid = day_grid
         , month_adj = month_adj
-        , first_day = floor_date(min(data$date), unit = "month_num")
-        , last_day = ceiling_date(max(data$date), unit = "month_num")-1
+        , first_day = floor_date(min(data$date), unit = "month")
+        , last_day = ceiling_date(max(data$date), unit = "month")-1
         , month_order = unique(data$month_num)
       )
   } # end ~ Add attributes documenting prediction data set creation
